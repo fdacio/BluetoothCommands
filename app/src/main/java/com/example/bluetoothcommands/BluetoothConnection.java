@@ -36,14 +36,16 @@ public class BluetoothConnection extends AsyncTask<Void, Void, BluetoothDevice> 
         return mmListener;
     }
 
+    public void setListener(BluetoothConnectionListener listener) {
+        mmListener = listener;
+    }
+
     @Override
     protected BluetoothDevice doInBackground(Void... params) {
         BluetoothSocket tmp = null;
-        String _uuid  = "9863bf68-8b8f-11ec-a8a3-0242ac120002";
-        String _uuid2 = "00001101-0000-1000-8000-00805F9B34FB";
+        String _uuid = "00001101-0000-1000-8000-00805F9B34FB";
         try {
-            tmp = mmDevice.createRfcommSocketToServiceRecord(UUID.fromString(_uuid2));
-
+            tmp = mmDevice.createRfcommSocketToServiceRecord(UUID.fromString(_uuid));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,7 +55,6 @@ public class BluetoothConnection extends AsyncTask<Void, Void, BluetoothDevice> 
         try {
             tmpOut = mmSocket.getOutputStream();
             tmpIn = mmSocket.getInputStream();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,8 +95,7 @@ public class BluetoothConnection extends AsyncTask<Void, Void, BluetoothDevice> 
         }
     }
 
-    public void
-    write(byte[] buffer) {
+    public void write(byte[] buffer) {
         try {
             if (mmOutStream != null) {
                 mmOutStream.write(buffer);
@@ -131,19 +131,28 @@ public class BluetoothConnection extends AsyncTask<Void, Void, BluetoothDevice> 
     private class BluetoothConnectionListenerServer implements Runnable {
         @Override
         public void run() {
-            /*
-            while(true) {
-                try {
-                    byte[] buffer = new byte[1024];
-                    mmInputStream.read(buffer);
-                    mmListener.listenerServer(buffer);
-                    Thread.sleep(1000);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            while (connected) {
+                if (mmInputStream != null){
+                    try {
+                        byte[] buffer = new byte[1024];
+                        mmInputStream.read(buffer);
+                        StringBuilder leitura = new StringBuilder();
+                        for (int i = 0; i < 1024; i++) {
+                            if ((buffer[i] != '\n') && (buffer[i] != '\r')) {
+                                leitura.append((char) buffer[i]);
+                            } else {
+                                if (leitura.length() > 0) {
+                                    mmListener.readFromDevicePaired(leitura.toString());
+                                }
+                                break;
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        break;
+                    }
                 }
             }
-            
-             */
         }
     }
 }

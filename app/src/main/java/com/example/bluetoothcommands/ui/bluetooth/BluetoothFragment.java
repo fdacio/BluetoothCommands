@@ -49,6 +49,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     private ProgressDialog mProgressDlg;
     private View root;
     private BluetoothDevice devicePaired;
+    private BluetoothConnection bluetoothConnection;
     private Context mContext;
 
     @Override
@@ -132,10 +133,11 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
                 return true;
             }
             case R.id.action_bluetooth_disconnect: {
-                BluetoothConnection bluetoothConnection = BluetoothInstance.getInstance();
+                bluetoothConnection = BluetoothInstance.getInstance();
                 if (bluetoothConnection != null) {
                     bluetoothConnection.disconnect();
                 }
+                setDisconnected();
                 return true;
             }
             default:
@@ -226,6 +228,9 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onResume() {
         loadDevicesBonded();
+        if (bluetoothConnection != null) {
+            bluetoothConnection.setListener(this);
+        }
         super.onResume();
     }
 
@@ -243,7 +248,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             return;
         }
         devicePaired = listDevices.get(position);
-        BluetoothConnection bluetoothConnection = new BluetoothConnection(devicePaired, this, mContext);
+        bluetoothConnection = new BluetoothConnection(devicePaired, this, mContext);
         BluetoothInstance.setInstance(bluetoothConnection);
         if (bluetoothConnection.getStatus() == AsyncTask.Status.PENDING || bluetoothConnection.getStatus() == AsyncTask.Status.FINISHED) {
             bluetoothConnection.execute();
@@ -266,10 +271,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     @Override
-    public void listenerServer(byte[] dados) {
-        for (int i = 0; i < 1024; i++) {
-            Log.i("DATA_SERVER", String.valueOf((char)dados[i]));
-        }
+    public void readFromDevicePaired(String dataReceiver) {
     }
 
 }

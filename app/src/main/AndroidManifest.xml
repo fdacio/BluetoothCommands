@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_bluetooth_commands_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Esp32Bluetooth">
+        android:theme="@style/Theme.BluetoothCommands">
         <activity
             android:name="com.example.bluetoothcommands.MainActivity"
             android:label="@string/app_name"

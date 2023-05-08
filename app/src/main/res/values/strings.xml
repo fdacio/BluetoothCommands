@@ -5,4 +5,5 @@
     <string name="button_send">OK</string>
     <string name="scan">Procurar</string>
     <string name="disconnect">Desconectar</string>
+    <string name="text_receiver">Dados</string>
 </resources>
