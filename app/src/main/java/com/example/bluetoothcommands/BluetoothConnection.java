@@ -117,7 +117,7 @@ public class BluetoothConnection extends AsyncTask<Void, Void, BluetoothDevice> 
                 mmSocket = null;
             }
             connected = false;
-            mmListener.setDisconnected();
+            mmListener.setDisconnectedInView();
         } catch (IOException e) {
             e.printStackTrace();
         }
