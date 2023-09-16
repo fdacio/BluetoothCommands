@@ -101,7 +101,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
         final BluetoothManager bluetoothManager =  (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
-        //bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         mProgressDlg = new ProgressDialog(mContext);
         mProgressDlg.setTitle("Bluetooth");

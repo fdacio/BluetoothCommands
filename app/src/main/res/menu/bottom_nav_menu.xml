@@ -4,7 +4,7 @@
     <item
         android:id="@+id/navigation_bluetooth"
         android:icon="@drawable/ic_baseline_bluetooth_24"
-        android:title="@string/title_bluetooth" />
+        android:title="@string/title_bluetooth"/>
 
     <item
         android:id="@+id/navigation_commands"
