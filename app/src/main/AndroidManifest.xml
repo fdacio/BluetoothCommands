@@ -17,7 +17,7 @@
         android:theme="@style/Theme.BluetoothCommands">
         <activity
             android:name="com.example.bluetoothcommands.MainActivity"
-            android:screenOrientation="user">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
