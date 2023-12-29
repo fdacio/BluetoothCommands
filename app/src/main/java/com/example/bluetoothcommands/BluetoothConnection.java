@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -99,6 +100,17 @@ public class BluetoothConnection extends AsyncTask<Void, Void, BluetoothDevice> 
         try {
             if (mmOutStream != null) {
                 mmOutStream.write(buffer);
+                StringBuilder leitura = new StringBuilder();
+                for (int i = 0; i < 1024; i++) {
+                    if ((buffer[i] != '\n') && (buffer[i] != '\r')) {
+                        leitura.append((char) buffer[i]);
+                    } else {
+                        if (leitura.length() > 0) {
+                            Log.i("ESCUTADOR", "Dados Enviados: " + leitura.toString());
+                        }
+                        break;
+                    }
+                }
             }
         } catch (IOException e) {
             connected = false;
@@ -131,6 +143,7 @@ public class BluetoothConnection extends AsyncTask<Void, Void, BluetoothDevice> 
     private class BluetoothConnectionListenerServer implements Runnable {
         @Override
         public void run() {
+
             while (connected) {
                 if (mmInputStream != null){
                     try {
@@ -147,6 +160,7 @@ public class BluetoothConnection extends AsyncTask<Void, Void, BluetoothDevice> 
                                 break;
                             }
                         }
+
                     } catch (IOException e) {
                         e.printStackTrace();
                         break;

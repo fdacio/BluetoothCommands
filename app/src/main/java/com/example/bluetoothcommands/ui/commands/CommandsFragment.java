@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,19 +61,20 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
             if (command.isEmpty()) return;
             editTextCommand.setText("");
 
+            bluetoothConnection.write(String.format("%s\n", command).getBytes());
+
             listData.add("Enviado: " + command);
             updateListData();
 
-            bluetoothConnection.write(String.format("%s\n", command).getBytes());
-
         });
+
         mHandler = new Handler() {
             @Override
             public void handleMessage(Message message){
-                super.handleMessage(message);
                 String dataReceiver = message.getData().getString("dados");
                 listData.add("Recebido: " + dataReceiver);
                 updateListData();
+                super.handleMessage(message);
             }
         };
 
