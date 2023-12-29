@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -48,7 +48,7 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
         root = inflater.inflate(R.layout.fragment_commands, container, false);
         editTextCommand = root.findViewById(R.id.editTextCommand);
         listViewData = root.findViewById(R.id.listViewData);
-        Button buttonSend = root.findViewById(R.id.button_send);
+        ImageButton buttonSend = root.findViewById(R.id.button_send);
 
         buttonSend.setOnClickListener(v -> {
             if (!BluetoothInstance.isConnected()) {
