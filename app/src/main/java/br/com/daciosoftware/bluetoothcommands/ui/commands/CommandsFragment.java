@@ -1,4 +1,4 @@
-package com.example.bluetoothcommands.ui.commands;
+package br.com.daciosoftware.bluetoothcommands.ui.commands;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
@@ -6,11 +6,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -19,13 +19,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.bluetoothcommands.BluetoothConnection;
-import com.example.bluetoothcommands.BluetoothConnectionListener;
-import com.example.bluetoothcommands.BluetoothInstance;
-import com.example.bluetoothcommands.R;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.daciosoftware.bluetoothcommands.BluetoothConnection;
+import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionListener;
+import br.com.daciosoftware.bluetoothcommands.BluetoothInstance;
+import br.com.daciosoftware.bluetoothcommands.R;
 
 public class CommandsFragment extends Fragment implements BluetoothConnectionListener {
 
@@ -49,7 +49,9 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
         root = inflater.inflate(R.layout.fragment_commands, container, false);
         editTextCommand = root.findViewById(R.id.editTextCommand);
         listViewData = root.findViewById(R.id.listViewData);
+        listViewData.setEmptyView(root.findViewById(R.id.textViewListEmpty));
         ImageButton buttonSend = root.findViewById(R.id.button_send);
+        Button buttonClear = root.findViewById(R.id.button_clear);
 
         buttonSend.setOnClickListener(v -> {
             if (!BluetoothInstance.isConnected()) {
@@ -66,6 +68,11 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
             listData.add("Enviado: " + command);
             updateListData();
 
+        });
+
+        buttonClear.setOnClickListener( v -> {
+            listData.clear();
+            updateListData();
         });
 
         mHandler = new Handler() {

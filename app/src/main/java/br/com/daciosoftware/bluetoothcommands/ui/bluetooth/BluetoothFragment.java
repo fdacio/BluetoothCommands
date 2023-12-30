@@ -1,4 +1,4 @@
-package com.example.bluetoothcommands.ui.bluetooth;
+package br.com.daciosoftware.bluetoothcommands.ui.bluetooth;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -29,11 +29,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.bluetoothcommands.BluetoothConnection;
-import com.example.bluetoothcommands.BluetoothConnectionListener;
-import com.example.bluetoothcommands.BluetoothInstance;
-import com.example.bluetoothcommands.DevicesBluetoothAdapter;
-import com.example.bluetoothcommands.R;
+import br.com.daciosoftware.bluetoothcommands.BluetoothConnection;
+import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionListener;
+import br.com.daciosoftware.bluetoothcommands.BluetoothInstance;
+import br.com.daciosoftware.bluetoothcommands.DevicesBluetoothAdapter;
+import br.com.daciosoftware.bluetoothcommands.R;
+
 
 import java.util.ArrayList;
 import java.util.Set;

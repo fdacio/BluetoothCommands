@@ -1,4 +1,4 @@
-package com.example.bluetoothcommands;
+package br.com.daciosoftware.bluetoothcommands;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 
 import java.util.List;
 

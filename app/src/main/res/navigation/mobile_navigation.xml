@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_bluetooth"
-        android:name="com.example.bluetoothcommands.ui.bluetooth.BluetoothFragment"
+        android:name="br.com.daciosoftware.bluetoothcommands.ui.bluetooth.BluetoothFragment"
         android:label="@string/title_bluetooth"
         tools:layout="@layout/fragment_bluetooth" />
 
     <fragment
         android:id="@+id/navigation_commands"
-        android:name="com.example.bluetoothcommands.ui.commands.CommandsFragment"
+        android:name="br.com.daciosoftware.bluetoothcommands.ui.commands.CommandsFragment"
         android:label="@string/title_commands"
         tools:layout="@layout/fragment_commands" />
 

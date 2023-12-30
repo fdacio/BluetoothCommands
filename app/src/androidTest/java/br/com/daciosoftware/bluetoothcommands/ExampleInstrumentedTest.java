@@ -1,4 +1,4 @@
-package com.example.bluetoothcommands;
+package br.com.daciosoftware.bluetoothcommands;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.esp32bluetooth", appContext.getPackageName());
+        assertEquals("br.com.daciosoftware.bluetoothcommands", appContext.getPackageName());
     }
 }
