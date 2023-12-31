@@ -172,12 +172,11 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     private void enableBluetooth() {
-
         if (bluetoothAdapter == null) {
             return;
         }
-
         if (!bluetoothAdapter.isEnabled()) {
+
             Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBluetoothIntent, REQUEST_ENABLE_BLUETOOTH);
 
@@ -185,8 +184,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
             startActivity(discoverableIntent);
         }
-
-
     }
 
     //Dispositivo pareados anteriormente
