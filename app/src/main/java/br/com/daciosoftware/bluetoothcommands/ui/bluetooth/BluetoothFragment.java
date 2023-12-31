@@ -1,6 +1,7 @@
 package br.com.daciosoftware.bluetoothcommands.ui.bluetooth;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -184,6 +185,8 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
             startActivity(discoverableIntent);
         }
+
+
     }
 
     //Dispositivo pareados anteriormente

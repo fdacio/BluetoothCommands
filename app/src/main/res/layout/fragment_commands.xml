@@ -9,21 +9,19 @@
     <EditText
         android:id="@+id/editTextCommand"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
         android:background="@drawable/background_edit_command"
-        android:ems="10"
-        android:gravity="start|top"
         android:hint="@string/title_commands"
-        android:importantForAutofill="no"
-        android:minHeight="48dp"
+        android:inputType="text"
         android:singleLine="true"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="Autofill" />
 
     <ImageButton
         android:id="@+id/button_send"
