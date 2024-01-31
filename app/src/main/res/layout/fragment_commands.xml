@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.commands.CommandsFragment">
 
+    <android.widget.Toolbar
+        android:id="@+id/toolbarCommand"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:titleTextColor="@color/white"
+        android:subtitleTextColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </android.widget.Toolbar>
+
     <EditText
         android:id="@+id/editTextCommand"
         android:layout_width="0dp"
@@ -20,7 +32,7 @@
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarCommand"
         tools:ignore="Autofill" />
 
     <ImageButton
@@ -44,26 +56,34 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="64dp"
         android:stackFromBottom="true"
         android:transcriptMode="normal"
-        app:layout_constraintBottom_toTopOf="@+id/button_clear"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextCommand" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextCommand">
 
-    <Button
-        android:id="@+id/button_clear"
-        android:layout_width="0dp"
+    </ListView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fbClearAll"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="64dp"
-        android:text="@string/button_clear"
+        android:clickable="true"
+        android:contentDescription="@string/button_clear"
+        android:focusable="true"
+        android:src="@drawable/ic_baseline_delete_24"
+        android:theme="@style/Theme.BluetoothCommands"
+        app:backgroundTint="@color/black"
+        app:tint="@color/white"
+        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:maxImageSize="32sp"/>
 
     <TextView
         android:id="@+id/textViewListEmpty"

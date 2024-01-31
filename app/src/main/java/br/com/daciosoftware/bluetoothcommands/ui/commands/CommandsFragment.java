@@ -15,9 +15,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,7 @@ import java.util.List;
 import br.com.daciosoftware.bluetoothcommands.BluetoothConnection;
 import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionListener;
 import br.com.daciosoftware.bluetoothcommands.BluetoothInstance;
+import br.com.daciosoftware.bluetoothcommands.MainActivity;
 import br.com.daciosoftware.bluetoothcommands.R;
 
 public class CommandsFragment extends Fragment implements BluetoothConnectionListener {
@@ -36,7 +40,7 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
     private BluetoothConnection bluetoothConnection = BluetoothInstance.getInstance();
     private Handler mHandler;
     private View root;
-
+    private Toolbar toolbar;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -45,13 +49,21 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
 
     @SuppressLint("HandlerLeak")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         root = inflater.inflate(R.layout.fragment_commands, container, false);
+        toolbar = root.findViewById(R.id.toolbarCommand);
+        toolbar.setTitle(R.string.title_commands);
+        MainActivity mainActivity = (MainActivity) mContext;
+        BluetoothDevice devicePaired = mainActivity.getDevicePaired();
+        if (devicePaired != null) {
+            toolbar.setSubtitle(devicePaired.getName());
+        }
         editTextCommand = root.findViewById(R.id.editTextCommand);
         listViewData = root.findViewById(R.id.listViewData);
         listViewData.setEmptyView(root.findViewById(R.id.textViewListEmpty));
         ImageButton buttonSend = root.findViewById(R.id.button_send);
-        Button buttonClear = root.findViewById(R.id.button_clear);
+        FloatingActionButton buttonClear = root.findViewById(R.id.fbClearAll);
 
         buttonSend.setOnClickListener(v -> {
             if (!BluetoothInstance.isConnected()) {

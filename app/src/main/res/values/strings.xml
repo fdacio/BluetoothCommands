@@ -5,7 +5,6 @@
     <string name="button_send">Enviar</string>
     <string name="scan">Procurar</string>
     <string name="disconnect">Desconectar</string>
-    <string name="text_receiver">Dados</string>
     <string name="button_clear">Limpar\t</string>
     <string name="text_list_clear">Lista sem informação</string>
 </resources>

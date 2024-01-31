@@ -1,20 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto">
+xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <item
         android:id="@+id/action_bluetooth_discovery"
-        android:checked="true"
         android:icon="@drawable/ic_baseline_bluetooth_24"
         android:title="@string/scan"
-        android:tooltipText="@string/scan"
-        app:showAsAction="ifRoom|withText" />
+        android:orderInCategory="1"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_bluetooth_disconnect"
-        android:checked="true"
         android:icon="@drawable/ic_baseline_bluetooth_disabled_24"
         android:title="@string/disconnect"
-        android:tooltipText="@string/disconnect"
-        app:showAsAction="ifRoom|withText" />
+        android:orderInCategory="2"
+        app:showAsAction="always" />
 
 </menu>

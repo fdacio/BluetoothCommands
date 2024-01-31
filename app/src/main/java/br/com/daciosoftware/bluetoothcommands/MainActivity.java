@@ -1,6 +1,8 @@
 package br.com.daciosoftware.bluetoothcommands;
 
+import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -12,6 +14,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private BluetoothDevice devicePaired;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,12 +23,17 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_bluetooth, R.id.navigation_commands)
-                .build();
+        //AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_bluetooth, R.id.navigation_commands).build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
 
+    public BluetoothDevice getDevicePaired() {
+        return devicePaired;
+    }
+
+    public void setDevicePaired(BluetoothDevice devicePaired) {
+        this.devicePaired = devicePaired;
+    }
 }
