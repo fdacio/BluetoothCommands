@@ -6,17 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.commands.CommandsFragment">
 
-    <android.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarCommand"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="?attr/colorPrimary"
-        android:titleTextColor="@color/white"
-        android:subtitleTextColor="@color/white"
+        app:title="@string/title_commands"
+        app:subtitleTextColor="@color/white"
+        app:titleTextColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-    </android.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <EditText
         android:id="@+id/editTextCommand"
@@ -26,10 +27,11 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
         android:background="@drawable/background_edit_command"
-        android:hint="@string/title_commands"
+        android:hint="@string/edit_commands"
         android:inputType="text"
         android:singleLine="true"
         android:textColor="@color/black"
+        android:textColorHint="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarCommand"
@@ -46,8 +48,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/editTextCommand"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/editTextCommand"
-        app:layout_constraintTop_toTopOf="@+id/editTextCommand"
-        tools:src="@drawable/ic_baseline_send_24" />
+        app:layout_constraintTop_toTopOf="@+id/editTextCommand" />
 
     <ListView
         android:id="@+id/listViewData"
@@ -66,25 +67,6 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextCommand">
 
     </ListView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fbClearAll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="64dp"
-        android:clickable="true"
-        android:contentDescription="@string/button_clear"
-        android:focusable="true"
-        android:src="@drawable/ic_baseline_delete_24"
-        android:theme="@style/Theme.BluetoothCommands"
-        app:backgroundTint="@color/black"
-        app:tint="@color/white"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="32sp"/>
-
     <TextView
         android:id="@+id/textViewListEmpty"
         android:layout_width="wrap_content"
@@ -96,5 +78,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fbClearAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/button_clear"
+        android:src="@drawable/ic_baseline_delete_24"
+        app:backgroundTint="?attr/colorPrimary"
+        app:maxImageSize="32sp"
+        app:fabSize="normal"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="64dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

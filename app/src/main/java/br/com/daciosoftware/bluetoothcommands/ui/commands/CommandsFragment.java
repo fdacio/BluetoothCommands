@@ -10,12 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -36,29 +35,37 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
     private Context mContext;
     private ListView listViewData;
     private EditText editTextCommand;
-    private List<String> listData = new ArrayList<>();
-    private BluetoothConnection bluetoothConnection = BluetoothInstance.getInstance();
+    private final List<String> listData = new ArrayList<>();
+    private final BluetoothConnection bluetoothConnection = BluetoothInstance.getInstance();
     private Handler mHandler;
-    private View root;
-    private Toolbar toolbar;
+    private Handler handlerUpdateStatusDeviceParead;
+
+   private Toolbar toolbar;
+
+    private String lastCommand;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mContext = context;
     }
 
+
     @SuppressLint("HandlerLeak")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        root = inflater.inflate(R.layout.fragment_commands, container, false);
+        View root = inflater.inflate(R.layout.fragment_commands, container, false);
         toolbar = root.findViewById(R.id.toolbarCommand);
-        toolbar.setTitle(R.string.title_commands);
-        MainActivity mainActivity = (MainActivity) mContext;
-        BluetoothDevice devicePaired = mainActivity.getDevicePaired();
-        if (devicePaired != null) {
-            toolbar.setSubtitle(devicePaired.getName());
-        }
+        toolbar.inflateMenu(R.menu.menu_command);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_command_repeat) {
+                editTextCommand.setText((lastCommand != null) ? lastCommand : "");
+                return true;
+            }
+            return false;
+        });
+        updateStatusDeveiceParead();
+
         editTextCommand = root.findViewById(R.id.editTextCommand);
         listViewData = root.findViewById(R.id.listViewData);
         listViewData.setEmptyView(root.findViewById(R.id.textViewListEmpty));
@@ -66,12 +73,15 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
         FloatingActionButton buttonClear = root.findViewById(R.id.fbClearAll);
 
         buttonSend.setOnClickListener(v -> {
-            if (!BluetoothInstance.isConnected()) {
-                Toast.makeText(mContext, "Não há dispositivo conectado", Toast.LENGTH_LONG).show();
+            MainActivity mainActivity = (MainActivity) mContext;
+            BluetoothDevice devicePaired = mainActivity.getDevicePaired();
+            if (devicePaired == null) {
+                Toast.makeText(mContext, "Não há dispositivo pareado", Toast.LENGTH_LONG).show();
                 return;
             }
 
             String command = editTextCommand.getText().toString();
+            lastCommand = command;
             if (command.isEmpty()) return;
             editTextCommand.setText("");
 
@@ -87,13 +97,24 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
             updateListData();
         });
 
-        mHandler = new Handler() {
+        mHandler =  new Handler() {
             @Override
-            public void handleMessage(Message message){
+            public void handleMessage(@NonNull Message message){
                 String dataReceiver = message.getData().getString("dados");
                 listData.add("Recebido: " + dataReceiver);
                 updateListData();
                 super.handleMessage(message);
+            }
+        };
+
+
+        handlerUpdateStatusDeviceParead = new Handler() {
+            @Override
+            public void handleMessage(@NonNull Message message) {
+                super.handleMessage(message);
+                String msg = message.getData().getString("message");
+                Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+                updateStatusDeveiceParead();
             }
         };
 
@@ -107,11 +128,24 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
         listViewData.setAdapter(itemsAdapter);
     }
 
+    private void updateStatusDeveiceParead() {
+        MainActivity mainActivity = (MainActivity) mContext;
+        BluetoothDevice devicePaired = mainActivity.getDevicePaired();
+        toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
+    }
     @Override
     public void setConnected(BluetoothDevice device) {}
 
     @Override
-    public void setDisconnectedInView() {}
+    public void setDisconnected() {
+        MainActivity mainActivity = (MainActivity) mContext;
+        mainActivity.setDevicePaired(null);
+        Message msg = Message.obtain();
+        Bundle bundle = new Bundle();
+        bundle.putString("message", "Dispositivo despareado.");
+        msg.setData(bundle);
+        handlerUpdateStatusDeviceParead.sendMessage(msg);
+    }
 
     @Override
     public void readFromDevicePaired(String dataReceiver) {

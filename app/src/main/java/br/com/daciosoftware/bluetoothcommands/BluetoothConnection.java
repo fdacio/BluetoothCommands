@@ -27,14 +27,9 @@ public class BluetoothConnection extends AsyncTask<Void, Void, BluetoothDevice> 
     private char[] dados;
 
     public BluetoothConnection(BluetoothDevice device, BluetoothConnectionListener listener, Context context) {
-
         mmDevice = device;
         mmListener = listener;
         mmContext = context;
-    }
-
-    public BluetoothConnectionListener getListener() {
-        return mmListener;
     }
 
     public void setListener(BluetoothConnectionListener listener) {
@@ -129,14 +124,9 @@ public class BluetoothConnection extends AsyncTask<Void, Void, BluetoothDevice> 
                 mmSocket = null;
             }
             connected = false;
-            mmListener.setDisconnectedInView();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean isConnected() {
-        return connected;
     }
 
     //Class thread escuta dados do servidor bluetooth
@@ -167,6 +157,7 @@ public class BluetoothConnection extends AsyncTask<Void, Void, BluetoothDevice> 
                     }
                 }
             }
+            mmListener.setDisconnected();
         }
     }
 }

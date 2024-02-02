@@ -1,6 +1,7 @@
 package br.com.daciosoftware.bluetoothcommands.ui.bluetooth;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -13,10 +14,11 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -45,27 +47,26 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     private static final int REQUEST_PERMISSION_BLUETOOTH = 2;
     private BluetoothAdapter bluetoothAdapter;
     private final static int REQUEST_ENABLE_BLUETOOTH = 1;
-    private ArrayList<BluetoothDevice> listDevices = new ArrayList<BluetoothDevice>();
+    private final ArrayList<BluetoothDevice> listDevices = new ArrayList<BluetoothDevice>();
     private ListView listViewDevices;
     private BroadcastReceiver receiver;
     private ProgressDialog mProgressDlg;
-    private View root;
     private Context mContext;
     private Toolbar toolbar;
-
+    private Handler handlerUpdateStatusDeviceParead;
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mContext = context;
     }
 
+    @SuppressLint({"HandlerLeak", "NonConstantResourceId"})
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        root = inflater.inflate(R.layout.fragment_bluetooth, container, false);
+        View root = inflater.inflate(R.layout.fragment_bluetooth, container, false);
 
         toolbar = root.findViewById(R.id.toolbarBluetooth);
-        toolbar.setTitle(R.string.title_bluetooth);
         toolbar.inflateMenu(R.menu.menu_bluetooth);
         toolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
@@ -78,7 +79,9 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
                     if (bluetoothConnection != null) {
                         bluetoothConnection.disconnect();
                     }
-                    setDisconnectedInView();
+                    MainActivity mainActivity = (MainActivity) mContext;
+                    mainActivity.setDevicePaired(null);
+                    updateMenuBluetooth();
                     return true;
                 }
                 default:
@@ -105,9 +108,9 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
                         listDevices.add(device);
                     }
                 } else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
-                    setDisconnectedInView();
+                    setDisconnected();
                 } else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
-                    setDisconnectedInView();
+                    setDisconnected();
                 }
 
             }
@@ -139,6 +142,16 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             }
         });
 
+        handlerUpdateStatusDeviceParead = new Handler() {
+            @Override
+            public void handleMessage(@NonNull Message message) {
+                super.handleMessage(message);
+                String msg = message.getData().getString("message");
+                Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+                updateMenuBluetooth();
+            }
+        };
+
         enableBluetooth();
         grantAccessLocation();
 
@@ -146,26 +159,18 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_bluetooth, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     public void updateMenuBluetooth() {
-        MenuItem itemDisconnect = toolbar.getMenu().findItem(R.id.action_bluetooth_disconnect);
-        MenuItem itemDiscovery = toolbar.getMenu().findItem(R.id.action_bluetooth_discovery);
-
-        BluetoothConnection bluetoothConnection = BluetoothInstance.getInstance();
-        if (bluetoothConnection == null) {
-            itemDiscovery.setVisible(true);
-            itemDisconnect.setVisible(false);
-        } else {
-            itemDisconnect.setVisible(bluetoothConnection.isConnected());
-            itemDiscovery.setVisible(!bluetoothConnection.isConnected());
-        }
 
         MainActivity mainActivity = (MainActivity) mContext;
         BluetoothDevice devicePaired = mainActivity.getDevicePaired();
+
+        toolbar.getMenu().findItem(R.id.action_bluetooth_disconnect).setVisible(devicePaired != null);
+        toolbar.getMenu().findItem(R.id.action_bluetooth_discovery).setVisible(devicePaired == null);
         toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
 
     }
@@ -204,7 +209,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         devicesBluetoothAdapter.setData(listDevices);
         listViewDevices.setAdapter(devicesBluetoothAdapter);
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -220,7 +224,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
         }
     }
-
     @Override
     public void onPause() {
         if (bluetoothAdapter != null) {
@@ -230,28 +233,32 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         }
         super.onPause();
     }
-
     @Override
     public void onResume() {
         super.onResume();
         loadDevicesBonded();
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mContext.getApplicationContext().unregisterReceiver(receiver);
+        if (receiver != null) {
+            mContext.getApplicationContext().unregisterReceiver(receiver);
+        }
     }
 
     //Pareamento de dispositivos no click do item da listview
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (BluetoothInstance.isConnected()) {
-            Toast.makeText(mContext, "Dispositivo já conectado", Toast.LENGTH_LONG).show();
+
+        MainActivity mainActivity = (MainActivity) mContext;
+        BluetoothDevice devicePaired = mainActivity.getDevicePaired();
+
+        if (devicePaired != null) {
+            Toast.makeText(mContext, "Dispositivo já pareado", Toast.LENGTH_LONG).show();
             return;
         }
-        BluetoothDevice devicePaired = listDevices.get(position);
-        BluetoothConnection bluetoothConnection = new BluetoothConnection(devicePaired, this, mContext);
+        BluetoothDevice newDevicePaired = listDevices.get(position);
+        BluetoothConnection bluetoothConnection = new BluetoothConnection(newDevicePaired, this, mContext);
         BluetoothInstance.setInstance(bluetoothConnection);
         if (bluetoothConnection.getStatus() == AsyncTask.Status.PENDING || bluetoothConnection.getStatus() == AsyncTask.Status.FINISHED) {
             bluetoothConnection.execute();
@@ -266,10 +273,14 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     @Override
-    public void setDisconnectedInView() {
+    public void setDisconnected() {
         MainActivity mainActivity = (MainActivity) mContext;
         mainActivity.setDevicePaired(null);
-        updateMenuBluetooth();
+        Message msg = Message.obtain();
+        Bundle bundle = new Bundle();
+        bundle.putString("message", "Dispositivo despareado.");
+        msg.setData(bundle);
+        handlerUpdateStatusDeviceParead.sendMessage(msg);
     }
 
     @Override

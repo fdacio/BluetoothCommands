@@ -10,14 +10,13 @@
         android:id="@+id/toolbarBluetooth"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:backgroundTint="@color/black"
-        android:background="@color/black"
-        app:titleTextColor="@color/white"
+        android:background="?attr/colorPrimary"
+        app:title="@string/title_bluetooth"
         app:subtitleTextColor="@color/white"
+        app:titleTextColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/title_bluetooth">
+        app:layout_constraintTop_toTopOf="parent">
 
     </androidx.appcompat.widget.Toolbar>
 

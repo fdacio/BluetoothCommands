@@ -2,6 +2,8 @@
     <string name="app_name">Bluetooth Commands</string>
     <string name="title_bluetooth">Bluetooth</string>
     <string name="title_commands">Comandos</string>
+    <string name="edit_commands">Comando</string>
+    <string name="repeat_commands">Repetir o Comando</string>
     <string name="button_send">Enviar</string>
     <string name="scan">Procurar</string>
     <string name="disconnect">Desconectar</string>
