@@ -1,5 +1,6 @@
 package br.com.daciosoftware.bluetoothcommands;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -37,6 +38,7 @@ public class BluetoothConnection extends AsyncTask<Void, Void, BluetoothDevice> 
     }
 
     @Override
+    @SuppressLint({"MissingPermission"})
     protected BluetoothDevice doInBackground(Void... params) {
         BluetoothSocket tmp = null;
         String _uuid = "00001101-0000-1000-8000-00805F9B34FB";

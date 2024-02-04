@@ -1,4 +1,4 @@
-package br.com.daciosoftware.bluetoothcommands;
+package br.com.daciosoftware.bluetoothcommands.ui.bluetooth;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 
 import java.util.List;
+
+import br.com.daciosoftware.bluetoothcommands.R;
 
 public class DevicesBluetoothAdapter extends BaseAdapter {
 

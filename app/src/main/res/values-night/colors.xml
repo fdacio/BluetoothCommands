@@ -6,6 +6,6 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="gray">#B3B3B3</color>
-    <color name="comando_enviado">#0C0C70</color>
-    <color name="comando_recebido">#FF9800</color>
+    <color name="comando_enviado">#2196F3</color>
+    <color name="comando_recebido">#FFEB3B</color>
 </resources>
