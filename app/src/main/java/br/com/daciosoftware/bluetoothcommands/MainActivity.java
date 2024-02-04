@@ -35,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestPermissionBluetooth();
+
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -74,13 +77,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public boolean checkPermissaoScan() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            int permissionBluetoothScan = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_SCAN);
+            return (permissionBluetoothScan == PackageManager.PERMISSION_GRANTED);
+        }
+        return true;
+
+    }
+
     public void requestPermissionBluetooth() {
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-
             int permissionBluetoothScan = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_SCAN);
             int permissionBluetoothConnect = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_CONNECT);
-
             if ((permissionBluetoothScan != PackageManager.PERMISSION_GRANTED) ||
                     (permissionBluetoothConnect != PackageManager.PERMISSION_GRANTED)) {
                 ActivityCompat.requestPermissions((Activity) appContext, new String[]{
@@ -91,10 +101,21 @@ public class MainActivity extends AppCompatActivity {
             checkAndEnableBluetoothAdapter();
             int permissionBluetooth = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH);
             int permissionBluetoothAdmin = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_ADMIN);
-            if ((permissionBluetooth != PackageManager.PERMISSION_GRANTED) || (permissionBluetoothAdmin != PackageManager.PERMISSION_GRANTED)) {
+            int permissionBluetoothAdvertise = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_ADVERTISE);
+            int permissionCoarseLocation = ContextCompat.checkSelfPermission(appContext, Manifest.permission.ACCESS_COARSE_LOCATION);
+            int permissionFineLocation = ContextCompat.checkSelfPermission(appContext, Manifest.permission.ACCESS_FINE_LOCATION);
+            if ((permissionBluetooth != PackageManager.PERMISSION_GRANTED) ||
+                    (permissionBluetoothAdmin != PackageManager.PERMISSION_GRANTED) ||
+                    (permissionBluetoothAdvertise != PackageManager.PERMISSION_GRANTED) ||
+                    (permissionCoarseLocation != PackageManager.PERMISSION_GRANTED) ||
+                    (permissionFineLocation != PackageManager.PERMISSION_GRANTED)
+            ) {
                 ActivityCompat.requestPermissions((Activity) appContext, new String[]{
                         Manifest.permission.BLUETOOTH,
-                        Manifest.permission.BLUETOOTH_ADMIN}, REQUEST_PERMISSION_BLUETOOTH);
+                        Manifest.permission.BLUETOOTH_ADMIN,
+                        Manifest.permission.BLUETOOTH_ADVERTISE,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_PERMISSION_BLUETOOTH);
             }
         }
     }
@@ -106,12 +127,7 @@ public class MainActivity extends AppCompatActivity {
             if (permissionBluetoothConnect != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            int permissionBluetoothScan = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_SCAN);
-            if (permissionBluetoothScan != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
         }
-
         BluetoothManager bluetoothManager = (BluetoothManager) appContext.getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
         if (bluetoothAdapter != null && !bluetoothAdapter.isEnabled()) {
@@ -121,23 +137,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_PERMISSION_BLUETOOTH:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission is granted. Continue the action or workflow
-                    // in your app.
-                    if (permissions[0].equals(Manifest.permission.BLUETOOTH_CONNECT)) {
-                        checkAndEnableBluetoothAdapter();
-                    }
-
-                } else {
-                    // Explain to the user that the feature is unavailable because
-                    // the feature requires a permission that the user has denied.
-                    // At the same time, respect the user's decision. Don't link to
-                    // system settings in an effort to convince the user to change
-                    // their decision.
+        if (requestCode == REQUEST_PERMISSION_BLUETOOTH) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (permissions[0].equals(Manifest.permission.BLUETOOTH_CONNECT)) {
+                    checkAndEnableBluetoothAdapter();
                 }
+            } else {
+                Toast.makeText(appContext, "Permissão solicitada é importante para o uso da aplicação.", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -146,10 +153,10 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUEST_ENABLE_BLUETOOTH) {
-            Toast.makeText(appContext, "Bluetooth ativado com successo.", Toast.LENGTH_LONG).show();
+            Toast.makeText(appContext, "Bluetooth ativado com successo.", Toast.LENGTH_SHORT).show();
         }
         if (resultCode != RESULT_OK) {
-            Toast.makeText(appContext, "Ativar o Bluetooth é fundamental para o uso do aplicativo", Toast.LENGTH_LONG).show();
+            Toast.makeText(appContext, "Ativar o Bluetooth é importante para o uso da aplicação.", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -1,12 +1,9 @@
 package br.com.daciosoftware.bluetoothcommands.ui.bluetooth;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,16 +18,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.Set;
 
 import br.com.daciosoftware.bluetoothcommands.BluetoothBroadcastReceive;
-import br.com.daciosoftware.bluetoothcommands.BluetoothConnection;
+import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionExecutor;
 import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionListener;
-import br.com.daciosoftware.bluetoothcommands.BluetoothInstance;
 import br.com.daciosoftware.bluetoothcommands.MainActivity;
 import br.com.daciosoftware.bluetoothcommands.R;
 
@@ -64,10 +59,8 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
                     mainActivity.requestPermissionBluetooth();
                     mainActivity.requestPermissionAccessLocation();
                     mainActivity.checkAndEnableBluetoothAdapter();
-                    int permissionBluetoothScan = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_SCAN);
-                    if (permissionBluetoothScan == PackageManager.PERMISSION_GRANTED) {
+                    if (mainActivity.checkPermissaoScan()) {
                         BluetoothBroadcastReceive bluetoothBroadcastReceive = mainActivity.getBluetoothBroadcastReceive();
-                        listDevices = new ArrayList<>();
                         bluetoothBroadcastReceive.actionDiscoveryStarted(listDevices, listViewDevices);
                         mainActivity.getBluetoothAdapter().startDiscovery();
                     }
@@ -89,7 +82,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
                     return false;
             }
         });
-
+        listDevices = new ArrayList<>();
         listViewDevices = root.findViewById(R.id.listViewDevices);
         listViewDevices.setOnItemClickListener(this);
 
@@ -121,8 +114,9 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         MainActivity mainActivity = (MainActivity) appContext;
         BluetoothAdapter bluetoothAdapter = mainActivity.getBluetoothAdapter();
         if (bluetoothAdapter == null) return;
+
+        listDevices.clear();
         Set<BluetoothDevice> bondedDevice = bluetoothAdapter.getBondedDevices();
-        listDevices = new ArrayList<>();
         for (BluetoothDevice device : bondedDevice) {
             listDevices.add(device);
         }
@@ -133,14 +127,14 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
     @SuppressLint({"MissingPermission"})
     private void bluetoothAdapterDisconnect() {
-        BluetoothConnection bluetoothConnection = BluetoothInstance.getInstance();
+        BluetoothConnectionExecutor bluetoothConnection = BluetoothConnectionExecutor.getInstance();
         if (bluetoothConnection != null) {
             bluetoothConnection.disconnect();
         }
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_bluetooth, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -155,18 +149,17 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     //Pareamento de dispositivos no click do item da listview
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
         MainActivity mainActivity = (MainActivity) appContext;
-        mainActivity.checkAndEnableBluetoothAdapter();
-        BluetoothDevice devicePaired = mainActivity.getDevicePaired();
-        if (devicePaired != null) {
-            return;
-        }
-        BluetoothDevice newDevicePaired = listDevices.get(position);
-        BluetoothConnection bluetoothConnection = new BluetoothConnection(newDevicePaired, this, appContext);
-        BluetoothInstance.setInstance(bluetoothConnection);
-        if (bluetoothConnection.getStatus() == AsyncTask.Status.PENDING || bluetoothConnection.getStatus() == AsyncTask.Status.FINISHED) {
+        if (mainActivity.getBluetoothAdapter().isEnabled()) {
+            if (mainActivity.getDevicePaired() != null) {
+                Toast.makeText(appContext, "Já existe um dispositivo pareado.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            BluetoothDevice newDevicePaired = listDevices.get(position);
+            BluetoothConnectionExecutor bluetoothConnection = BluetoothConnectionExecutor.builder(newDevicePaired, this, appContext);
             bluetoothConnection.execute();
+        } else {
+            Toast.makeText(appContext, "Bluetooth não ativado.", Toast.LENGTH_LONG).show();
         }
     }
 

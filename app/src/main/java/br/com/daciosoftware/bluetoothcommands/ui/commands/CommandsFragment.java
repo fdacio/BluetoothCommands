@@ -24,9 +24,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.daciosoftware.bluetoothcommands.BluetoothConnection;
+import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionExecutor;
 import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionListener;
-import br.com.daciosoftware.bluetoothcommands.BluetoothInstance;
 import br.com.daciosoftware.bluetoothcommands.MainActivity;
 import br.com.daciosoftware.bluetoothcommands.R;
 
@@ -34,13 +33,15 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
     private Context appContext;
     private ListView listViewComandos;
     private EditText editTextCommand;
-    private final BluetoothConnection bluetoothConnection = BluetoothInstance.getInstance();
     private Handler mHandler;
     private Handler handlerUpdateStatusDeviceParead;
     private Toolbar toolbar;
     private final List<Comando> comandos = new ArrayList<>();
     private final List<Comando> comandosEnviados = new ArrayList<>();
     private int indexCommand = 0;
+
+    private BluetoothConnectionExecutor bluetoothConnection;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -114,7 +115,7 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
                 updateStatusDeveiceParead();
             }
         };
-
+        bluetoothConnection = BluetoothConnectionExecutor.getInstance();
         if (bluetoothConnection != null) bluetoothConnection.setListener(CommandsFragment.this);
 
         return root;

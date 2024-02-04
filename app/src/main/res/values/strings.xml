@@ -8,5 +8,5 @@
     <string name="scan">Procurar</string>
     <string name="disconnect">Desconectar</string>
     <string name="button_clear">Limpar\t</string>
-    <string name="text_list_clear">Lista sem informação</string>
+    <string name="text_list_clear">Lista de Comandos Vazia</string>
 </resources>

@@ -14,6 +14,8 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import br.com.daciosoftware.bluetoothcommands.ui.bluetooth.DevicesBluetoothAdapter;
 
@@ -21,7 +23,7 @@ public class BluetoothBroadcastReceive extends BroadcastReceiver {
 
     private Context context;
     private ProgressDialog progressDialog;
-    private ArrayList<BluetoothDevice> listDevices;
+    private List<BluetoothDevice> listDevices;
     private ListView listViewDevices;
     @SuppressLint("MissingPermission")
     public BluetoothBroadcastReceive(Context context) {
@@ -54,13 +56,14 @@ public class BluetoothBroadcastReceive extends BroadcastReceiver {
             progressDialog.dismiss();
         } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
             BluetoothDevice device =  intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
             if (listDevices != null && !listDevices.contains(device)) {
                 listDevices.add(device);
             }
         }
     }
 
-    public void actionDiscoveryStarted(@NonNull ArrayList<BluetoothDevice> listDevices, @NonNull ListView listViewDevices){
+    public void actionDiscoveryStarted(@NonNull List<BluetoothDevice> listDevices, @NonNull ListView listViewDevices){
         this.listDevices = listDevices;
         this.listViewDevices = listViewDevices;
     }
