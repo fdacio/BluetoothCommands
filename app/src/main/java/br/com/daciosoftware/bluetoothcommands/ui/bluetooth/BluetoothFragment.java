@@ -6,7 +6,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,7 +35,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     private ListView listViewDevices;
     private Context appContext;
     private Toolbar toolbar;
-    private Handler handlerUpdateStatusDeviceParead;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -86,16 +85,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         listViewDevices = root.findViewById(R.id.listViewDevices);
         listViewDevices.setOnItemClickListener(this);
 
-        handlerUpdateStatusDeviceParead = new Handler() {
-            @Override
-            public void handleMessage(@NonNull Message message) {
-                super.handleMessage(message);
-                String msg = message.getData().getString("message");
-                Toast.makeText(appContext, msg, Toast.LENGTH_SHORT).show();
-                updateMenuBluetooth();
-            }
-        };
-
         return root;
     }
 
@@ -113,16 +102,16 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         //Dispositivo pareados anteriormente
         MainActivity mainActivity = (MainActivity) appContext;
         BluetoothAdapter bluetoothAdapter = mainActivity.getBluetoothAdapter();
-        if (bluetoothAdapter == null) return;
-
-        listDevices.clear();
-        Set<BluetoothDevice> bondedDevice = bluetoothAdapter.getBondedDevices();
-        for (BluetoothDevice device : bondedDevice) {
-            listDevices.add(device);
+        if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
+            listDevices.clear();
+            Set<BluetoothDevice> bondedDevice = bluetoothAdapter.getBondedDevices();
+            for (BluetoothDevice device : bondedDevice) {
+                listDevices.add(device);
+            }
+            DevicesBluetoothAdapter devicesBluetoothAdapter = new DevicesBluetoothAdapter(appContext);
+            devicesBluetoothAdapter.setData(listDevices);
+            listViewDevices.setAdapter(devicesBluetoothAdapter);
         }
-        DevicesBluetoothAdapter devicesBluetoothAdapter = new DevicesBluetoothAdapter(appContext);
-        devicesBluetoothAdapter.setData(listDevices);
-        listViewDevices.setAdapter(devicesBluetoothAdapter);
     }
 
     @SuppressLint({"MissingPermission"})
@@ -152,14 +141,14 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         MainActivity mainActivity = (MainActivity) appContext;
         if (mainActivity.getBluetoothAdapter().isEnabled()) {
             if (mainActivity.getDevicePaired() != null) {
-                Toast.makeText(appContext, "Já existe um dispositivo pareado.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(appContext, R.string.message_paired_device_already_exists, Toast.LENGTH_SHORT).show();
                 return;
             }
             BluetoothDevice newDevicePaired = listDevices.get(position);
             BluetoothConnectionExecutor bluetoothConnection = BluetoothConnectionExecutor.builder(newDevicePaired, this, appContext);
             bluetoothConnection.execute();
         } else {
-            Toast.makeText(appContext, "Bluetooth não ativado.", Toast.LENGTH_LONG).show();
+            Toast.makeText(appContext, R.string.message_bluetooth_adapter_dont_active, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -174,11 +163,10 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     public void setDisconnected() {
         MainActivity mainActivity = (MainActivity) appContext;
         mainActivity.setDevicePaired(null);
-        Message msg = Message.obtain();
-        Bundle bundle = new Bundle();
-        bundle.putString("message", "Dispositivo despareado.");
-        msg.setData(bundle);
-        handlerUpdateStatusDeviceParead.sendMessage(msg);
+        new Handler(Looper.getMainLooper()).post(() -> {
+            Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
+            updateMenuBluetooth();
+        });
     }
 
     @Override

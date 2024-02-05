@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         requestPermissionBluetooth();
+        setBluetoothAdapter();
 
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -52,16 +53,21 @@ public class MainActivity extends AppCompatActivity {
         return devicePaired;
     }
 
+    public void setDevicePaired(BluetoothDevice devicePaired) {
+        this.devicePaired = devicePaired;
+    }
+
+    public void setBluetoothAdapter() {
+        BluetoothManager bluetoothManager = (BluetoothManager) appContext.getSystemService(Context.BLUETOOTH_SERVICE);
+        bluetoothAdapter = bluetoothManager.getAdapter();
+    }
+
     public BluetoothAdapter getBluetoothAdapter() {
         return bluetoothAdapter;
     }
 
     public BluetoothBroadcastReceive getBluetoothBroadcastReceive() {
         return bluetoothBroadcastReceiver;
-    }
-
-    public void setDevicePaired(BluetoothDevice devicePaired) {
-        this.devicePaired = devicePaired;
     }
 
     public void requestPermissionAccessLocation() {
@@ -143,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                     checkAndEnableBluetoothAdapter();
                 }
             } else {
-                Toast.makeText(appContext, "Permissão solicitada é importante para o uso da aplicação.", Toast.LENGTH_LONG).show();
+                Toast.makeText(appContext, R.string.message_permission_important, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -153,10 +159,10 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUEST_ENABLE_BLUETOOTH) {
-            Toast.makeText(appContext, "Bluetooth ativado com successo.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(appContext, R.string.message_bluetooth_activate_success, Toast.LENGTH_SHORT).show();
         }
         if (resultCode != RESULT_OK) {
-            Toast.makeText(appContext, "Ativar o Bluetooth é importante para o uso da aplicação.", Toast.LENGTH_LONG).show();
+            Toast.makeText(appContext, R.string.message_bluetooth_activate_important, Toast.LENGTH_LONG).show();
         }
     }
 

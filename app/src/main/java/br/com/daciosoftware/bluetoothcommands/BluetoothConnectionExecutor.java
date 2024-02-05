@@ -1,15 +1,12 @@
 package br.com.daciosoftware.bluetoothcommands;
 
 import android.annotation.SuppressLint;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AlertDialog;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,41 +15,42 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogProgress;
+
 public class BluetoothConnectionExecutor {
-    private BluetoothDevice mmDevice;
+    private final BluetoothDevice mmDevice;
     private BluetoothConnectionListener mmListener;
-    private Context mmContext;
+    private final Context mmContext;
     private boolean connected = false;
     private BluetoothSocket mmSocket;
     private OutputStream mmOutStream;
     private InputStream mmInputStream;
-    private AlertDialog dialog;
     private static BluetoothConnectionExecutor instance;
     private BluetoothConnectionExecutor(BluetoothDevice device, BluetoothConnectionListener listener, Context context){
         mmDevice = device;
         mmListener = listener;
         mmContext = context;
     }
+
     public static BluetoothConnectionExecutor builder (BluetoothDevice device, BluetoothConnectionListener listener, Context context) {
         instance = new BluetoothConnectionExecutor(device, listener, context);
         return instance;
     }
+
     public static BluetoothConnectionExecutor getInstance() {
         return instance;
     }
+
     public void setListener(BluetoothConnectionListener listener) {
         mmListener = listener;
     }
+
     @SuppressLint("MissingPermission")
     public void execute () {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mmContext);
-        builder.setCancelable(false); // if you want user to wait for some process to finish,
-        builder.setTitle(mmDevice.getName());
-        builder.setMessage("Aguarde, pareando ...");
-        dialog = builder.create();
+        AlertDialogProgress dialog = new AlertDialogProgress(mmContext, AlertDialogProgress.TypeDialog.PAIR_DEVICE);
         dialog.show();
 
         executor.execute(() -> {
@@ -75,8 +73,6 @@ public class BluetoothConnectionExecutor {
             mmOutStream = tmpOut;
             mmInputStream = tmpIn;
 
-            BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-
             try {
                 mmSocket.connect();
                 connected = true;
@@ -89,41 +85,31 @@ public class BluetoothConnectionExecutor {
                     e2.printStackTrace();
                 }
             }
+
+            //Aqui seta a conexao
             handler.post(() -> {
                 dialog.dismiss();
                 if (connected) {
                     mmListener.setConnected(mmDevice);
-                    Thread bluetoothConnectionListenerServer = new Thread(new BluetoothConnectionListenerServer());
-                    bluetoothConnectionListenerServer.start();
+                    new Thread(new BluetoothConnectionListenerServer()).start();
                 } else {
-                    Toast.makeText(mmContext, "Não foi possível conectar.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mmContext, "Não foi possível conectar", Toast.LENGTH_LONG).show();
                 }
             });
         });
     }
+
     public void write(byte[] buffer) {
         try {
             if (mmOutStream != null) {
                 mmOutStream.write(buffer);
-                /*
-                StringBuilder leitura = new StringBuilder();
-                for (int i = 0; i < 1024; i++) {
-                    if ((buffer[i] != '\n') && (buffer[i] != '\r')) {
-                        leitura.append((char) buffer[i]);
-                    } else {
-                        if (leitura.length() > 0) {
-                            Log.i("ESCUTADOR", "Dados Enviados: " + leitura.toString());
-                        }
-                        break;
-                    }
-                }
-                 */
             }
         } catch (IOException e) {
             connected = false;
             e.printStackTrace();
         }
     }
+
     public void disconnect() {
         try {
             if (mmOutStream != null) {
@@ -139,6 +125,7 @@ public class BluetoothConnectionExecutor {
             e.printStackTrace();
         }
     }
+
     private class BluetoothConnectionListenerServer implements Runnable {
         @Override
         public void run() {
@@ -146,21 +133,22 @@ public class BluetoothConnectionExecutor {
                 if (mmInputStream != null){
                     try {
                         byte[] buffer = new byte[1024];
-                        mmInputStream.read(buffer);
-                        StringBuilder leitura = new StringBuilder();
-                        for (int i = 0; i < 1024; i++) {
-                            if ((buffer[i] != '\n') && (buffer[i] != '\r')) {
-                                leitura.append((char) buffer[i]);
-                            } else {
-                                if (leitura.length() > 0) {
-                                    mmListener.readFromDevicePaired(leitura.toString());
+                        int byteLidos = mmInputStream.read(buffer);
+                        if (byteLidos > 0) {
+                            StringBuilder leitura = new StringBuilder();
+                            for (int i = 0; i < 1024; i++) {
+                                if ((buffer[i] != '\n') && (buffer[i] != '\r')) {
+                                    leitura.append((char) buffer[i]);
+                                } else {
+                                    if (leitura.length() > 0) {
+                                        mmListener.readFromDevicePaired(leitura.toString());
+                                    }
+                                    break;
                                 }
-                                break;
                             }
                         }
 
                     } catch (IOException e) {
-                        e.printStackTrace();
                         break;
                     }
                 }
@@ -168,4 +156,5 @@ public class BluetoothConnectionExecutor {
             mmListener.setDisconnected();
         }
     }
+
 }

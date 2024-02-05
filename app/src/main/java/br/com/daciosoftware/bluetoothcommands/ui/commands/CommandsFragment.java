@@ -5,7 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +14,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
-
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -33,13 +32,10 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
     private Context appContext;
     private ListView listViewComandos;
     private EditText editTextCommand;
-    private Handler mHandler;
-    private Handler handlerUpdateStatusDeviceParead;
     private Toolbar toolbar;
     private final List<Comando> comandos = new ArrayList<>();
     private final List<Comando> comandosEnviados = new ArrayList<>();
     private int indexCommand = 0;
-
     private BluetoothConnectionExecutor bluetoothConnection;
 
     @Override
@@ -96,6 +92,7 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
             updateListData();
         });
 
+        /*
         mHandler = new Handler() {
             @Override
             public void handleMessage(@NonNull Message message) {
@@ -105,7 +102,9 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
                 super.handleMessage(message);
             }
         };
+         */
 
+        /*
         handlerUpdateStatusDeviceParead = new Handler() {
             @Override
             public void handleMessage(@NonNull Message message) {
@@ -115,40 +114,46 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
                 updateStatusDeveiceParead();
             }
         };
+        */
+
         bluetoothConnection = BluetoothConnectionExecutor.getInstance();
         if (bluetoothConnection != null) bluetoothConnection.setListener(CommandsFragment.this);
 
         return root;
     }
+
     private void updateListData() {
         ComandoAdapter adapter = new ComandoAdapter(appContext, comandos);
         listViewComandos.setAdapter(adapter);
     }
+
     @SuppressLint({"MissingPermission"})
     private void updateStatusDeveiceParead() {
         MainActivity mainActivity = (MainActivity) appContext;
         BluetoothDevice devicePaired = mainActivity.getDevicePaired();
         toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
     }
+
     @Override
     public void setConnected(BluetoothDevice device) {
     }
+
     @Override
     public void setDisconnected() {
         MainActivity mainActivity = (MainActivity) appContext;
         mainActivity.setDevicePaired(null);
-        Message msg = Message.obtain();
-        Bundle bundle = new Bundle();
-        bundle.putString("message", "Dispositivo despareado.");
-        msg.setData(bundle);
-        handlerUpdateStatusDeviceParead.sendMessage(msg);
+        new Handler(Looper.getMainLooper()).post(() -> {
+            Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
+            updateStatusDeveiceParead();
+        });
     }
+
     @Override
     public void readFromDevicePaired(String dataReceiver) {
-        Message msg = Message.obtain();
-        Bundle bundle = new Bundle();
-        bundle.putString("dados", dataReceiver);
-        msg.setData(bundle);
-        mHandler.sendMessage(msg);
+         new Handler(Looper.getMainLooper()).post(() -> {
+            comandos.add(new Comando(dataReceiver, Comando.TypeCommand.RECEBIDO));
+            updateListData();
+        });
     }
+
 }
