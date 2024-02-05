@@ -28,6 +28,7 @@ import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionExecutor;
 import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionListener;
 import br.com.daciosoftware.bluetoothcommands.MainActivity;
 import br.com.daciosoftware.bluetoothcommands.R;
+import br.com.daciosoftware.bluetoothcommands.ui.commands.CommandsFragment;
 
 public class BluetoothFragment extends Fragment implements AdapterView.OnItemClickListener, BluetoothConnectionListener {
 
@@ -35,6 +36,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     private ListView listViewDevices;
     private Context appContext;
     private Toolbar toolbar;
+    private BluetoothConnectionExecutor bluetoothConnection;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -81,9 +83,13 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
                     return false;
             }
         });
+
         listDevices = new ArrayList<>();
         listViewDevices = root.findViewById(R.id.listViewDevices);
         listViewDevices.setOnItemClickListener(this);
+
+        bluetoothConnection = BluetoothConnectionExecutor.getInstance();
+        if (bluetoothConnection != null) bluetoothConnection.setListener(BluetoothFragment.this);
 
         return root;
     }

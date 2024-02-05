@@ -75,7 +75,7 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
             BluetoothDevice devicePaired = mainActivity.getDevicePaired();
             if (command.isEmpty()) return;
             if (devicePaired == null) {
-                Toast.makeText(appContext, "Não há dispositivo pareado", Toast.LENGTH_LONG).show();
+                Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
                 return;
             }
             Comando comando = new Comando(command, Comando.TypeCommand.ENVIADO);
@@ -91,30 +91,6 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
             comandos.clear();
             updateListData();
         });
-
-        /*
-        mHandler = new Handler() {
-            @Override
-            public void handleMessage(@NonNull Message message) {
-                String texto = message.getData().getString("dados");
-                comandos.add(new Comando(texto, Comando.TypeCommand.RECEBIDO));
-                updateListData();
-                super.handleMessage(message);
-            }
-        };
-         */
-
-        /*
-        handlerUpdateStatusDeviceParead = new Handler() {
-            @Override
-            public void handleMessage(@NonNull Message message) {
-                super.handleMessage(message);
-                String msg = message.getData().getString("message");
-                Toast.makeText(appContext, msg, Toast.LENGTH_SHORT).show();
-                updateStatusDeveiceParead();
-            }
-        };
-        */
 
         bluetoothConnection = BluetoothConnectionExecutor.getInstance();
         if (bluetoothConnection != null) bluetoothConnection.setListener(CommandsFragment.this);

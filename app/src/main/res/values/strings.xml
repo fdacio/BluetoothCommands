@@ -18,4 +18,5 @@
     <string name="message_permission_important">Permissão solicitada é importante para o uso da aplicação</string>
     <string name="message_bluetooth_activate_success">Bluetooth ativida com sucesso</string>
     <string name="message_bluetooth_activate_important">Ativar o Bluetooth é importante para o uso da aplicação</string>
+    <string name="message_dont_device_pair">Não há dispositivo pareado</string>
 </resources>
