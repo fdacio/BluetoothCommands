@@ -17,15 +17,6 @@ import br.com.daciosoftware.bluetoothcommands.ui.bluetooth.DevicesBluetoothAdapt
 
 public abstract class BluetoothBroadcastReceive extends BroadcastReceiver {
 
-    private AlertDialogProgress dialog;
-    private List<BluetoothDevice> listDevices;
-    private ListView listViewDevices;
-
-    @SuppressLint("MissingPermission")
-    public BluetoothBroadcastReceive(Context context) {
-        dialog = new AlertDialogProgress(context, AlertDialogProgress.TypeDialog.SEARCH_DEVICE);
-    }
-
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
@@ -38,12 +29,6 @@ public abstract class BluetoothBroadcastReceive extends BroadcastReceiver {
             actionFoundDevice(device);
         }
     }
-
-    public void actionDiscoveryStarted(@NonNull List<BluetoothDevice> listDevices, @NonNull ListView listViewDevices){
-        this.listDevices = listDevices;
-        this.listViewDevices = listViewDevices;
-    }
-
 
     public abstract void actionDiscoveryStarted();
     public abstract void actionDiscoveryFinished();

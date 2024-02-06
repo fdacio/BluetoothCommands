@@ -1,5 +1,6 @@
 package br.com.daciosoftware.bluetoothcommands.ui.bluetooth;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -18,11 +19,8 @@ public class DevicesBluetoothAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private List<BluetoothDevice> mData;
 
-    public DevicesBluetoothAdapter(Context context) {
+    public DevicesBluetoothAdapter(Context context, List<BluetoothDevice> data) {
         mInflater = LayoutInflater.from(context);
-    }
-
-    public void setData(List<BluetoothDevice> data) {
         mData = data;
     }
 
@@ -37,6 +35,7 @@ public class DevicesBluetoothAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+
 
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -56,6 +55,7 @@ public class DevicesBluetoothAdapter extends BaseAdapter {
         }
 
         BluetoothDevice device = mData.get(position);
+        @SuppressLint("MissingPermission")
         String nameDevice = (device.getName() == null) ? "Dispositivo " + position : device.getName();
         holder.nameTv.setText(nameDevice);
         holder.addressTv.setText(device.getAddress());

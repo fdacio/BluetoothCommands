@@ -69,6 +69,7 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
         FloatingActionButton buttonClear = root.findViewById(R.id.fbClearAll);
 
         buttonSend.setOnClickListener(v -> {
+            /*
             String command = editTextCommand.getText().toString();
             editTextCommand.setText("");
             MainActivity mainActivity = (MainActivity) appContext;
@@ -84,6 +85,8 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
             comandosEnviados.add(comando);
             indexCommand = comandosEnviados.size() - 1;
             updateListData();
+
+             */
 
         });
 
@@ -105,9 +108,12 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
 
     @SuppressLint({"MissingPermission"})
     private void updateStatusDeveiceParead() {
+        /*
         MainActivity mainActivity = (MainActivity) appContext;
         BluetoothDevice devicePaired = mainActivity.getDevicePaired();
         toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
+
+         */
     }
 
     @Override
@@ -116,12 +122,15 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
 
     @Override
     public void setDisconnected() {
+        /*
         MainActivity mainActivity = (MainActivity) appContext;
         mainActivity.setDevicePaired(null);
         new Handler(Looper.getMainLooper()).post(() -> {
             Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
             updateStatusDeveiceParead();
         });
+
+         */
     }
 
     @Override

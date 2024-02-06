@@ -25,40 +25,53 @@ public class BluetoothManagerControl {
     private final static int REQUEST_ENABLE_BLUETOOTH = 1;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice devicePaired;
-    private BluetoothBroadcastReceive bluetoothBroadcastReceiver;
-    private BluetoothManagerControlDiscoveryDevices listenerDiscoveryDevices;
+    private static BluetoothBroadcastReceive bluetoothBroadcastReceiver;
+    private DiscoveryDevices listenerDiscoveryDevices;
     private static BluetoothManagerControl instance;
     private List<BluetoothDevice> listDevices;
-    private IntentFilter filter;
     private Context appContext;
     private Activity activity;
 
     private BluetoothManagerControl(Context context) {
         appContext = context;
-        activity = (Activity) context;
-        bluetoothBroadcastReceiver = new BluetoothBroadcastReceive(context) {
-            @Override
-            public void actionDiscoveryStarted() {
-                listenerDiscoveryDevices.initDiscoveryDevices();
-            }
-
-            @Override
-            public void actionDiscoveryFinished() {
-                listenerDiscoveryDevices.finishDiscoveryDevices(listDevices);
-            }
-
-            @Override
-            public void actionFoundDevice(BluetoothDevice device) {
-                listenerDiscoveryDevices.foundDevice(device);
-            }
-        };
+        listenerDiscoveryDevices = (DiscoveryDevices) context;
     }
-
-    public BluetoothManagerControl getInstance(Context context) {
+    public static BluetoothManagerControl getInstance(Context context) {
         if (instance == null) {
             instance = new BluetoothManagerControl(context);
         }
         return instance;
+    }
+
+    public static void registerBluetoothBroadcastReceive(Context context) {
+        bluetoothBroadcastReceiver = new BluetoothBroadcastReceive() {
+            @Override
+            public void actionDiscoveryStarted() {
+                //listenerDiscoveryDevices.initDiscoveryDevices();
+            }
+            @Override
+            public void actionDiscoveryFinished() {
+                //listenerDiscoveryDevices.finishDiscoveryDevices();
+            }
+            @Override
+            public void actionFoundDevice(BluetoothDevice device) {
+                //listenerDiscoveryDevices.foundDevice(device);
+            }
+        };
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        filter.addAction(BluetoothDevice.ACTION_FOUND);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        context.registerReceiver(bluetoothBroadcastReceiver, filter);
+    }
+
+    public static void unregisterBluetoothBroadcastReceive(Context context) {
+        context.unregisterReceiver(bluetoothBroadcastReceiver);
+    }
+
+    public void initDiscovery() {
+
     }
 
     public BluetoothAdapter getBluetoothAdapter() {
@@ -124,20 +137,6 @@ public class BluetoothManagerControl {
         }
     }
 
-    public void registerBluetoothBroadcastReceive() {
-        filter = new IntentFilter();
-        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-        filter.addAction(BluetoothDevice.ACTION_FOUND);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        activity.registerReceiver(bluetoothBroadcastReceiver, filter);
-    }
-
-    public void unregisterBluetoothBroadcastReceive() {
-        activity.unregisterReceiver(bluetoothBroadcastReceiver);
-    }
-
-
     @SuppressLint("MissingPermission")
     public void checkAndEnableBluetoothAdapter() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -164,6 +163,7 @@ public class BluetoothManagerControl {
         }
         return null;
     }
+
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_PERMISSION_BLUETOOTH) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -192,13 +192,13 @@ public class BluetoothManagerControl {
         return true;
     }
 
-    public interface BluetoothManagerControlDiscoveryDevices {
+    public interface DiscoveryDevices {
         void initDiscoveryDevices();
-        void finishDiscoveryDevices(List<BluetoothDevice> listDevices);
+        void finishDiscoveryDevices();
         void foundDevice(BluetoothDevice device);
     }
 
-    public interface BluetoothManagerControlConnection {
+    public interface Connection {
         void postDeviceConnect(BluetoothDevice device);
         void postDeviceDisconnect();
         void postDataReceive(String dataReceive);
