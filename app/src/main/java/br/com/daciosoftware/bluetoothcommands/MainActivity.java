@@ -174,27 +174,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint({"MissingPermission"})
-    private void createBluetoothRegisterReceive() {
-        bluetoothBroadcastReceiver = new BluetoothBroadcastReceive(appContext);
-        filter = new IntentFilter();
-        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-        filter.addAction(BluetoothDevice.ACTION_FOUND);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        registerReceiver(bluetoothBroadcastReceiver, filter);
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        createBluetoothRegisterReceive();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(bluetoothBroadcastReceiver);
     }
 
 }

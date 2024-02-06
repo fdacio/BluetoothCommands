@@ -15,7 +15,7 @@ import java.util.List;
 import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogProgress;
 import br.com.daciosoftware.bluetoothcommands.ui.bluetooth.DevicesBluetoothAdapter;
 
-public class BluetoothBroadcastReceive extends BroadcastReceiver {
+public abstract class BluetoothBroadcastReceive extends BroadcastReceiver {
 
     private AlertDialogProgress dialog;
     private List<BluetoothDevice> listDevices;
@@ -30,22 +30,12 @@ public class BluetoothBroadcastReceive extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-            if (listDevices != null) {
-                listDevices.clear();
-            }
-            dialog.show();
+            actionDiscoveryStarted();
         } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-            DevicesBluetoothAdapter devicesBluetoothAdapter = new DevicesBluetoothAdapter(context);
-            if (listDevices != null) {
-                devicesBluetoothAdapter.setData(listDevices);
-                listViewDevices.setAdapter(devicesBluetoothAdapter);
-            }
-            dialog.dismiss();
+            actionDiscoveryFinished();
         } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
             BluetoothDevice device =  intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            if (listDevices != null && !listDevices.contains(device)) {
-                listDevices.add(device);
-            }
+            actionFoundDevice(device);
         }
     }
 
@@ -53,4 +43,9 @@ public class BluetoothBroadcastReceive extends BroadcastReceiver {
         this.listDevices = listDevices;
         this.listViewDevices = listViewDevices;
     }
+
+
+    public abstract void actionDiscoveryStarted();
+    public abstract void actionDiscoveryFinished();
+    public abstract void actionFoundDevice(BluetoothDevice device);
 }

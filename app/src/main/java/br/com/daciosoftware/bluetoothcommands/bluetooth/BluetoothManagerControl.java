@@ -26,14 +26,39 @@ public class BluetoothManagerControl {
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice devicePaired;
     private BluetoothBroadcastReceive bluetoothBroadcastReceiver;
+    private BluetoothManagerControlDiscoveryDevices listenerDiscoveryDevices;
+    private static BluetoothManagerControl instance;
+    private List<BluetoothDevice> listDevices;
     private IntentFilter filter;
     private Context appContext;
     private Activity activity;
 
-    public BluetoothManagerControl(Context context) {
+    private BluetoothManagerControl(Context context) {
         appContext = context;
         activity = (Activity) context;
-        bluetoothBroadcastReceiver = new BluetoothBroadcastReceive(context);
+        bluetoothBroadcastReceiver = new BluetoothBroadcastReceive(context) {
+            @Override
+            public void actionDiscoveryStarted() {
+                listenerDiscoveryDevices.initDiscoveryDevices();
+            }
+
+            @Override
+            public void actionDiscoveryFinished() {
+                listenerDiscoveryDevices.finishDiscoveryDevices(listDevices);
+            }
+
+            @Override
+            public void actionFoundDevice(BluetoothDevice device) {
+                listenerDiscoveryDevices.foundDevice(device);
+            }
+        };
+    }
+
+    public BluetoothManagerControl getInstance(Context context) {
+        if (instance == null) {
+            instance = new BluetoothManagerControl(context);
+        }
+        return instance;
     }
 
     public BluetoothAdapter getBluetoothAdapter() {
@@ -98,9 +123,8 @@ public class BluetoothManagerControl {
 
         }
     }
-    @SuppressLint({"MissingPermission"})
-    private void createBluetoothRegisterReceive() {
-        bluetoothBroadcastReceiver = new BluetoothBroadcastReceive(appContext);
+
+    public void registerBluetoothBroadcastReceive() {
         filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         filter.addAction(BluetoothDevice.ACTION_FOUND);
@@ -108,6 +132,11 @@ public class BluetoothManagerControl {
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         activity.registerReceiver(bluetoothBroadcastReceiver, filter);
     }
+
+    public void unregisterBluetoothBroadcastReceive() {
+        activity.unregisterReceiver(bluetoothBroadcastReceiver);
+    }
+
 
     @SuppressLint("MissingPermission")
     public void checkAndEnableBluetoothAdapter() {
