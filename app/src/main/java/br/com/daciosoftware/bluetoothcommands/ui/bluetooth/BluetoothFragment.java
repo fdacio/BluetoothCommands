@@ -28,7 +28,6 @@ import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothConnectionExecu
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothConnectionListener;
 import br.com.daciosoftware.bluetoothcommands.MainActivity;
 import br.com.daciosoftware.bluetoothcommands.R;
-import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManager;
 
 public class BluetoothFragment extends Fragment implements AdapterView.OnItemClickListener, BluetoothConnectionListener {
 
@@ -38,12 +37,9 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     private Toolbar toolbar;
     private BluetoothConnectionExecutor bluetoothConnection;
 
-    private BluetoothManager bluetoothManager;
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        bluetoothManager = new BluetoothManager(context);
         appContext = context;
     }
 
@@ -60,10 +56,10 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             switch (item.getItemId()) {
                 case R.id.action_bluetooth_discovery: {
                     MainActivity mainActivity = (MainActivity) appContext;
-                    bluetoothManager.requestPermissionBluetooth();
-                    bluetoothManager.requestPermissionAccessLocation();
-                    bluetoothManager.checkAndEnableBluetoothAdapter();
-                    if (bluetoothManager.checkBluetoothPermissionScan()) {
+                    mainActivity.requestPermissionBluetooth();
+                    mainActivity.requestPermissionAccessLocation();
+                    mainActivity.checkAndEnableBluetoothAdapter();
+                    if (mainActivity.checkPermissaoScan()) {
                         BluetoothBroadcastReceive bluetoothBroadcastReceive = mainActivity.getBluetoothBroadcastReceive();
                         bluetoothBroadcastReceive.actionDiscoveryStarted(listDevices, listViewDevices);
                         mainActivity.getBluetoothAdapter().startDiscovery();
