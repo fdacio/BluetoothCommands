@@ -163,5 +163,17 @@ public class BluetoothManagerControl {
         return true;
     }
 
+    public interface BluetoothManagerControlDiscoveryDevices {
+        void initDiscoveryDevices();
+        void finishDiscoveryDevices(List<BluetoothDevice> listDevices);
+        void foundDevice(BluetoothDevice device);
+    }
+
+    public interface BluetoothManagerControlConnection {
+        void postDeviceConnect(BluetoothDevice device);
+        void postDeviceDisconnect();
+        void postDataReceive(String dataReceive);
+
+    }
 
 }
