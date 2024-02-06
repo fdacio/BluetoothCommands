@@ -1,4 +1,4 @@
-package br.com.daciosoftware.bluetoothcommands;
+package br.com.daciosoftware.bluetoothcommands.bluetooth;
 
 import android.bluetooth.BluetoothDevice;
 

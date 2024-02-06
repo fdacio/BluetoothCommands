@@ -22,10 +22,10 @@
     <EditText
         android:id="@+id/editTextCommand"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/background_edit_command"
         android:hint="@string/edit_commands"
         android:inputType="text"
@@ -41,13 +41,11 @@
         android:id="@+id/button_send"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
         android:background="@drawable/background_ic_send_button"
         android:contentDescription="@string/button_send"
         android:src="@drawable/ic_baseline_send_24"
         app:layout_constraintBottom_toBottomOf="@+id/editTextCommand"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextCommand"
+        app:layout_constraintEnd_toEndOf="@+id/editTextCommand"
         app:layout_constraintTop_toTopOf="@+id/editTextCommand" />
 
     <ListView

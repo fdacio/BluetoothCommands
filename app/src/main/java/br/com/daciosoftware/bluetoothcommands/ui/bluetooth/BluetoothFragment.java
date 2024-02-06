@@ -23,12 +23,12 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.Set;
 
-import br.com.daciosoftware.bluetoothcommands.BluetoothBroadcastReceive;
-import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionExecutor;
-import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionListener;
+import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothBroadcastReceive;
+import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothConnectionExecutor;
+import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothConnectionListener;
 import br.com.daciosoftware.bluetoothcommands.MainActivity;
 import br.com.daciosoftware.bluetoothcommands.R;
-import br.com.daciosoftware.bluetoothcommands.ui.commands.CommandsFragment;
+import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManager;
 
 public class BluetoothFragment extends Fragment implements AdapterView.OnItemClickListener, BluetoothConnectionListener {
 
@@ -38,9 +38,12 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     private Toolbar toolbar;
     private BluetoothConnectionExecutor bluetoothConnection;
 
+    private BluetoothManager bluetoothManager;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        bluetoothManager = new BluetoothManager(context);
         appContext = context;
     }
 
@@ -57,10 +60,10 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             switch (item.getItemId()) {
                 case R.id.action_bluetooth_discovery: {
                     MainActivity mainActivity = (MainActivity) appContext;
-                    mainActivity.requestPermissionBluetooth();
-                    mainActivity.requestPermissionAccessLocation();
-                    mainActivity.checkAndEnableBluetoothAdapter();
-                    if (mainActivity.checkPermissaoScan()) {
+                    bluetoothManager.requestPermissionBluetooth();
+                    bluetoothManager.requestPermissionAccessLocation();
+                    bluetoothManager.checkAndEnableBluetoothAdapter();
+                    if (bluetoothManager.checkBluetoothPermissionScan()) {
                         BluetoothBroadcastReceive bluetoothBroadcastReceive = mainActivity.getBluetoothBroadcastReceive();
                         bluetoothBroadcastReceive.actionDiscoveryStarted(listDevices, listViewDevices);
                         mainActivity.getBluetoothAdapter().startDiscovery();
@@ -107,16 +110,18 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     private void loadDevicesBonded() {
         //Dispositivo pareados anteriormente
         MainActivity mainActivity = (MainActivity) appContext;
-        BluetoothAdapter bluetoothAdapter = mainActivity.getBluetoothAdapter();
-        if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
-            listDevices.clear();
-            Set<BluetoothDevice> bondedDevice = bluetoothAdapter.getBondedDevices();
-            for (BluetoothDevice device : bondedDevice) {
-                listDevices.add(device);
+        if (mainActivity.checkBlutoothPermissionConnect()) {
+            BluetoothAdapter bluetoothAdapter = mainActivity.getBluetoothAdapter();
+            if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
+                listDevices.clear();
+                Set<BluetoothDevice> bondedDevice = bluetoothAdapter.getBondedDevices();
+                for (BluetoothDevice device : bondedDevice) {
+                    listDevices.add(device);
+                }
+                DevicesBluetoothAdapter devicesBluetoothAdapter = new DevicesBluetoothAdapter(appContext);
+                devicesBluetoothAdapter.setData(listDevices);
+                listViewDevices.setAdapter(devicesBluetoothAdapter);
             }
-            DevicesBluetoothAdapter devicesBluetoothAdapter = new DevicesBluetoothAdapter(appContext);
-            devicesBluetoothAdapter.setData(listDevices);
-            listViewDevices.setAdapter(devicesBluetoothAdapter);
         }
     }
 

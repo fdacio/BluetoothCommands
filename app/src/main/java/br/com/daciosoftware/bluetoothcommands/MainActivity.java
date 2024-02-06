@@ -23,6 +23,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothBroadcastReceive;
+
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSION_BLUETOOTH = 2;
     private final static int REQUEST_ENABLE_BLUETOOTH = 1;
@@ -125,7 +127,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
+    public boolean checkBlutoothPermissionConnect() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            int permissionBluetoothConnect= ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_CONNECT);
+            return (permissionBluetoothConnect == PackageManager.PERMISSION_GRANTED);
+        }
+        return true;
+    }
     @SuppressLint("MissingPermission")
     public void checkAndEnableBluetoothAdapter() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

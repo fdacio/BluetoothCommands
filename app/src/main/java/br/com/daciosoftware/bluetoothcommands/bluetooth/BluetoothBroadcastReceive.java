@@ -1,4 +1,4 @@
-package br.com.daciosoftware.bluetoothcommands;
+package br.com.daciosoftware.bluetoothcommands.bluetooth;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -17,14 +17,12 @@ import br.com.daciosoftware.bluetoothcommands.ui.bluetooth.DevicesBluetoothAdapt
 
 public class BluetoothBroadcastReceive extends BroadcastReceiver {
 
-    private Context context;
     private AlertDialogProgress dialog;
     private List<BluetoothDevice> listDevices;
     private ListView listViewDevices;
 
     @SuppressLint("MissingPermission")
     public BluetoothBroadcastReceive(Context context) {
-        this.context = context;
         dialog = new AlertDialogProgress(context, AlertDialogProgress.TypeDialog.SEARCH_DEVICE);
     }
 

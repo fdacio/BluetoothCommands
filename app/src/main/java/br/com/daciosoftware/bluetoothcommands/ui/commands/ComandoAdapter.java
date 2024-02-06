@@ -39,7 +39,6 @@ public class ComandoAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-
         Comando comando = lista.get(position);
         LayoutInflater inflater = (LayoutInflater.from(context));
         view = inflater.inflate(R.layout.comandos_adapter, null);
@@ -51,13 +50,13 @@ public class ComandoAdapter extends BaseAdapter {
         }
         if (comando.getTipo().equals(Comando.TypeCommand.RECEBIDO)) {
             texto.setTextColor(context.getResources().getColor(R.color.comando_recebido));
+            //Se for o ultimo comando alinha a direita por causa do float button de limpar a lista
             if (position == getCount() - 1) {
-                texto.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                texto.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
             } else {
                 texto.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
             }
         }
-
         return view;
     }
 }

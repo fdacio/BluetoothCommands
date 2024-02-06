@@ -23,8 +23,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionExecutor;
-import br.com.daciosoftware.bluetoothcommands.BluetoothConnectionListener;
+import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothConnectionExecutor;
+import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothConnectionListener;
 import br.com.daciosoftware.bluetoothcommands.MainActivity;
 import br.com.daciosoftware.bluetoothcommands.R;
 
