@@ -1,12 +1,12 @@
 package br.com.daciosoftware.bluetoothcommands.ui.bluetooth;
 
 import android.annotation.SuppressLint;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,16 +21,17 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogProgress;
-import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothConnectionExecutor;
 import br.com.daciosoftware.bluetoothcommands.R;
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 
-public class BluetoothFragment extends Fragment implements AdapterView.OnItemClickListener, BluetoothManagerControl.DiscoveryDevices, BluetoothManagerControl.Connection {
+public class BluetoothFragment extends Fragment implements AdapterView.OnItemClickListener, BluetoothManagerControl.DiscoveryDevices, BluetoothManagerControl.ConnectionDevice {
 
-    private ArrayList<BluetoothDevice> listDevices;
+    private List<BluetoothDevice> listDevices = new ArrayList<>();
     private ListView listViewDevices;
     private Context appContext;
     private Toolbar toolbar;
@@ -38,12 +39,19 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
     private AlertDialogProgress alertDialogProgressStartDiscovery;
 
+    private AlertDialogProgress alertDialogProgressPairDevice;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         appContext = context;
+
         bluetoothManagerControl = BluetoothManagerControl.getInstance(context);
+        bluetoothManagerControl.setListenerDiscoveryDevices(BluetoothFragment.this);
+        bluetoothManagerControl.setListenerConnectionDevice(BluetoothFragment.this);
+
         alertDialogProgressStartDiscovery = new AlertDialogProgress(context, AlertDialogProgress.TypeDialog.SEARCH_DEVICE);
+        alertDialogProgressPairDevice = new AlertDialogProgress(context, AlertDialogProgress.TypeDialog.PAIR_DEVICE);
     }
 
     @SuppressLint({"HandlerLeak", "NonConstantResourceId", "MissingPermission"})
@@ -58,11 +66,11 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         toolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.action_bluetooth_discovery: {
-                    initDiscoveryDevices();
+                    bluetoothManagerControl.initDiscovery();
                     return true;
                 }
                 case R.id.action_bluetooth_disconnect: {
-                    //aqui
+                    bluetoothManagerControl.disconnect();
                     return true;
                 }
                 default:
@@ -70,9 +78,10 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             }
         });
 
-        listDevices = new ArrayList<>();
         listViewDevices = root.findViewById(R.id.listViewDevices);
         listViewDevices.setOnItemClickListener(this);
+
+
 
         return root;
     }
@@ -87,27 +96,9 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
     @SuppressLint({"MissingPermission"})
     private void loadDevicesBonded() {
-        //Dispositivo pareados anteriormente
-        if (bluetoothManagerControl.checkBlutoothPermissionConnect()) {
-            BluetoothAdapter bluetoothAdapter = bluetoothManagerControl.getBluetoothAdapter();
-            if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
-                listDevices.clear();
-                Set<BluetoothDevice> bondedDevice = bluetoothAdapter.getBondedDevices();
-                for (BluetoothDevice device : bondedDevice) {
-                    listDevices.add(device);
-                }
-                DevicesBluetoothAdapter devicesBluetoothAdapter = new DevicesBluetoothAdapter(appContext, listDevices);
-                listViewDevices.setAdapter(devicesBluetoothAdapter);
-            }
-        }
-    }
-
-    @SuppressLint({"MissingPermission"})
-    private void bluetoothAdapterDisconnect() {
-        BluetoothConnectionExecutor bluetoothConnection = BluetoothConnectionExecutor.getInstance();
-        if (bluetoothConnection != null) {
-            bluetoothConnection.disconnect();
-        }
+        listDevices = bluetoothManagerControl.getBoundedDevices();
+        DevicesBluetoothAdapter devicesBluetoothAdapter = new DevicesBluetoothAdapter(appContext, listDevices);
+        listViewDevices.setAdapter(devicesBluetoothAdapter);
     }
 
     @Override
@@ -123,64 +114,55 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         updateMenuBluetooth();
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
     //Pareamento de dispositivos no click do item da listview
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        if (bluetoothManagerControl.getBluetoothAdapter().isEnabled()) {
-            if (bluetoothManagerControl.getDevicePaired() != null) {
-                Toast.makeText(appContext, R.string.message_paired_device_already_exists, Toast.LENGTH_SHORT).show();
-                return;
-            }
-            //BluetoothDevice newDevicePaired = listDevices.get(position);
-            //bluetoothManagerControl.setBluetoothAdapter(newDevicePaired);
-            //BluetoothConnectionExecutor bluetoothConnection = BluetoothConnectionExecutor.builder(newDevicePaired, this, appContext);
-            //bluetoothConnection.execute();
-        } else {
-            Toast.makeText(appContext, R.string.message_bluetooth_adapter_dont_active, Toast.LENGTH_LONG).show();
+        if (bluetoothManagerControl.getDevicePaired() != null) {
+            Toast.makeText(appContext, R.string.message_paired_device_already_exists, Toast.LENGTH_SHORT).show();
+            return;
         }
+        BluetoothDevice newDevicePaired = listDevices.get(position);
+        bluetoothManagerControl.connect(newDevicePaired);
+
     }
 
     @Override
     public void initDiscoveryDevices() {
-
         alertDialogProgressStartDiscovery.show();
     }
 
     @Override
     public void finishDiscoveryDevices() {
-        DevicesBluetoothAdapter  adapter = new DevicesBluetoothAdapter(appContext, listDevices);
+        DevicesBluetoothAdapter adapter = new DevicesBluetoothAdapter(appContext, listDevices);
         listViewDevices.setAdapter(adapter);
         alertDialogProgressStartDiscovery.dismiss();
     }
 
     @Override
     public void foundDevice(BluetoothDevice device) {
-        listDevices.add(device);
+        if (!listDevices.contains(device)) {
+            listDevices.add(device);
+        }
     }
 
     @Override
-    public void postDeviceConnect(BluetoothDevice device) {
-        bluetoothManagerControl.setDevicePaired(device);
+    public void initConnection() {
+        alertDialogProgressPairDevice.show();
+    }
+
+    @Override
+    public void postDeviceConnect() {
         updateMenuBluetooth();
+        alertDialogProgressPairDevice.dismiss();
     }
 
     @Override
     public void postDeviceDisconnect() {
-        bluetoothManagerControl.setDevicePaired(null);
-        new Handler(Looper.getMainLooper()).post(() -> {
-            Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
-            updateMenuBluetooth();
-        });
+        Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
+        updateMenuBluetooth();
     }
 
     @Override
     public void postDataReceive(String dataReceive) {
-
     }
 }

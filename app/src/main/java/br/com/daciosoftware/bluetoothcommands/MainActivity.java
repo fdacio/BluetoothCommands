@@ -1,29 +1,18 @@
 package br.com.daciosoftware.bluetoothcommands;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothBroadcastReceive;
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -54,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_PERMISSION_BLUETOOTH) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (permissions[0].equals(Manifest.permission.BLUETOOTH_CONNECT)) {
-                    //checkAndEnableBluetoothAdapter();
+                    bluetoothManagerControl.requestEnableBluetoothAdapter();
                 }
             } else {
                 Toast.makeText(MainActivity.this, R.string.message_permission_important, Toast.LENGTH_LONG).show();
@@ -76,13 +64,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        BluetoothManagerControl.registerBluetoothBroadcastReceive(this);
+        bluetoothManagerControl.registerBluetoothBroadcastReceive();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        BluetoothManagerControl.unregisterBluetoothBroadcastReceive(this);
+        bluetoothManagerControl.unregisterBluetoothBroadcastReceive();
     }
 
 }

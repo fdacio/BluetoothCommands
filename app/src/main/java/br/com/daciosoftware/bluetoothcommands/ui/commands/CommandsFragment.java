@@ -23,12 +23,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothConnectionExecutor;
-import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothConnectionListener;
-import br.com.daciosoftware.bluetoothcommands.MainActivity;
 import br.com.daciosoftware.bluetoothcommands.R;
+import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 
-public class CommandsFragment extends Fragment implements BluetoothConnectionListener {
+public class CommandsFragment extends Fragment implements BluetoothManagerControl.ConnectionDevice {
     private Context appContext;
     private ListView listViewComandos;
     private EditText editTextCommand;
@@ -36,13 +34,17 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
     private final List<Comando> comandos = new ArrayList<>();
     private final List<Comando> comandosEnviados = new ArrayList<>();
     private int indexCommand = 0;
-    private BluetoothConnectionExecutor bluetoothConnection;
+
+    private BluetoothManagerControl bluetoothManagerControl;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         appContext = context;
+        bluetoothManagerControl = BluetoothManagerControl.getInstance(context);
+        bluetoothManagerControl.setListenerConnectionDevice(CommandsFragment.this);
     }
+
     @SuppressLint("HandlerLeak")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +57,7 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
                 //List<Comando> comandosEnviados = comandos.stream().filter(c -> c.getTipo().equals(Comando.TypeCommand.ENVIADO)).collect(Collectors.toList());
                 editTextCommand.setText((comandosEnviados.size() > 0) ? comandosEnviados.get(indexCommand).getTexto() : "");
                 indexCommand--;
-                if(indexCommand < 0) indexCommand = comandosEnviados.size() - 1;
+                if (indexCommand < 0) indexCommand = comandosEnviados.size() - 1;
                 return true;
             }
             return false;
@@ -69,34 +71,26 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
         FloatingActionButton buttonClear = root.findViewById(R.id.fbClearAll);
 
         buttonSend.setOnClickListener(v -> {
-            /*
             String command = editTextCommand.getText().toString();
             editTextCommand.setText("");
-            MainActivity mainActivity = (MainActivity) appContext;
-            BluetoothDevice devicePaired = mainActivity.getDevicePaired();
+            BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
             if (command.isEmpty()) return;
             if (devicePaired == null) {
                 Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
                 return;
             }
             Comando comando = new Comando(command, Comando.TypeCommand.ENVIADO);
-            bluetoothConnection.write(String.format("%s\n", command).getBytes());
+            bluetoothManagerControl.write(String.format("%s\n", command).getBytes());
             comandos.add(comando);
             comandosEnviados.add(comando);
             indexCommand = comandosEnviados.size() - 1;
             updateListData();
-
-             */
-
         });
 
         buttonClear.setOnClickListener(v -> {
             comandos.clear();
             updateListData();
         });
-
-        bluetoothConnection = BluetoothConnectionExecutor.getInstance();
-        if (bluetoothConnection != null) bluetoothConnection.setListener(CommandsFragment.this);
 
         return root;
     }
@@ -108,37 +102,31 @@ public class CommandsFragment extends Fragment implements BluetoothConnectionLis
 
     @SuppressLint({"MissingPermission"})
     private void updateStatusDeveiceParead() {
-        /*
-        MainActivity mainActivity = (MainActivity) appContext;
-        BluetoothDevice devicePaired = mainActivity.getDevicePaired();
+        BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
         toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
-
-         */
     }
 
     @Override
-    public void setConnected(BluetoothDevice device) {
+    public void initConnection() {
+
     }
 
     @Override
-    public void setDisconnected() {
-        /*
-        MainActivity mainActivity = (MainActivity) appContext;
-        mainActivity.setDevicePaired(null);
-        new Handler(Looper.getMainLooper()).post(() -> {
-            Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
-            updateStatusDeveiceParead();
-        });
-
-         */
+    public void postDeviceConnect() {
     }
 
     @Override
-    public void readFromDevicePaired(String dataReceiver) {
-         new Handler(Looper.getMainLooper()).post(() -> {
+    public void postDeviceDisconnect() {
+        Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
+        updateStatusDeveiceParead();
+    }
+
+    @Override
+    public void postDataReceive(String dataReceiver) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(()-> {
             comandos.add(new Comando(dataReceiver, Comando.TypeCommand.RECEBIDO));
             updateListData();
         });
     }
-
 }
