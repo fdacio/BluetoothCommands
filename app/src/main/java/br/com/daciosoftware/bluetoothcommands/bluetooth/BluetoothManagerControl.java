@@ -11,16 +11,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import br.com.daciosoftware.bluetoothcommands.R;
-import br.com.daciosoftware.bluetoothcommands.ui.bluetooth.BluetoothFragment;
 
 public class BluetoothManagerControl {
 
@@ -31,11 +27,11 @@ public class BluetoothManagerControl {
     private BluetoothBroadcastReceive bluetoothBroadcastReceiver;
     private DiscoveryDevices listenerDiscoveryDevices;
     private ConnectionDevice listenerConnection;
-    private Context appContext;
+    private final Context appContext;
 
     private static BluetoothManagerControl bluetoothManagerControl;
 
-    private BluetoothConnectionExecutor bluetoothConnectionExecutor;
+    private final BluetoothConnectionExecutor bluetoothConnectionExecutor;
 
     private BluetoothManagerControl(Context context) {
         appContext = context;
@@ -69,7 +65,8 @@ public class BluetoothManagerControl {
     public void setListenerDiscoveryDevices(DiscoveryDevices listenerDiscoveryDevices) {
         this.listenerDiscoveryDevices = listenerDiscoveryDevices;
     }
-    public ConnectionDevice getListenerConnectonDevice() {
+
+    public ConnectionDevice getListenerConnectionDevice() {
         return this.listenerConnection;
     }
     public void setListenerConnectionDevice(ConnectionDevice listenerConnection) {
@@ -122,14 +119,6 @@ public class BluetoothManagerControl {
 
     public void write(byte[] dados) {
         bluetoothConnectionExecutor.write(dados);
-    }
-
-    public BluetoothAdapter getBluetoothAdapter() {
-        return bluetoothAdapter;
-    }
-
-    private void setBluetoothAdapter(BluetoothAdapter bluetoothAdapter) {
-        this.bluetoothAdapter = bluetoothAdapter;
     }
 
     public BluetoothDevice getDevicePaired() {
@@ -189,18 +178,6 @@ public class BluetoothManagerControl {
         if (bluetoothAdapter != null && !bluetoothAdapter.isEnabled()) {
             Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             ((Activity) appContext).startActivityForResult(enableBluetoothIntent, REQUEST_ENABLE_BLUETOOTH);
-        }
-    }
-
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == REQUEST_PERMISSION_BLUETOOTH) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (permissions[0].equals(Manifest.permission.BLUETOOTH_CONNECT)) {
-                    requestEnableBluetoothAdapter();
-                }
-            } else {
-                Toast.makeText(appContext, R.string.message_permission_important, Toast.LENGTH_LONG).show();
-            }
         }
     }
 

@@ -4,9 +4,6 @@ import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,12 +18,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogProgress;
 import br.com.daciosoftware.bluetoothcommands.R;
+import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogProgress;
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 
 public class BluetoothFragment extends Fragment implements AdapterView.OnItemClickListener, BluetoothManagerControl.DiscoveryDevices, BluetoothManagerControl.ConnectionDevice {
@@ -54,7 +49,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         alertDialogProgressPairDevice = new AlertDialogProgress(context, AlertDialogProgress.TypeDialog.PAIR_DEVICE);
     }
 
-    @SuppressLint({"HandlerLeak", "NonConstantResourceId", "MissingPermission"})
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
@@ -80,8 +74,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
         listViewDevices = root.findViewById(R.id.listViewDevices);
         listViewDevices.setOnItemClickListener(this);
-
-
 
         return root;
     }
@@ -114,9 +106,9 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         updateMenuBluetooth();
     }
 
-    //Pareamento de dispositivos no click do item da listview
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //Pareamento de dispositivos no click do item da listview
         if (bluetoothManagerControl.getDevicePaired() != null) {
             Toast.makeText(appContext, R.string.message_paired_device_already_exists, Toast.LENGTH_SHORT).show();
             return;
@@ -165,4 +157,5 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void postDataReceive(String dataReceive) {
     }
+
 }

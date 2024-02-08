@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -16,10 +17,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 
 public class MainActivity extends AppCompatActivity {
-
     private static final int REQUEST_PERMISSION_BLUETOOTH = 2;
     private final static int REQUEST_ENABLE_BLUETOOTH = 1;
-
     private BluetoothManagerControl bluetoothManagerControl;
 
     @Override
@@ -37,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
         bluetoothManagerControl = BluetoothManagerControl.getInstance(this);
     }
 
-
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_PERMISSION_BLUETOOTH) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (permissions[0].equals(Manifest.permission.BLUETOOTH_CONNECT)) {

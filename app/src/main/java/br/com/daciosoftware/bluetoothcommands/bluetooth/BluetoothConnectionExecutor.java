@@ -10,10 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class BluetoothConnectionExecutor {
 
@@ -24,7 +22,7 @@ public class BluetoothConnectionExecutor {
     private InputStream mmInputStream;
     private BluetoothConnectionExecutor instance;
 
-    public BluetoothConnectionExecutor(BluetoothManagerControl bluetoothManagerControl) {
+    protected BluetoothConnectionExecutor(BluetoothManagerControl bluetoothManagerControl) {
         mmBluetoothManagerControl = bluetoothManagerControl;
     }
 
@@ -71,9 +69,9 @@ public class BluetoothConnectionExecutor {
                 handlerConnection.post(() -> {
                     if (connected) {
                         mmBluetoothManagerControl.setDevicePaired(device);
-                        mmBluetoothManagerControl.getListenerConnectonDevice().postDeviceConnect();
-                        //new BluetoothConnectionWriteServer().executeWriteServer();
-                        new Thread(new BluetoothConnectionListenerServer()).start();
+                        mmBluetoothManagerControl.getListenerConnectionDevice().postDeviceConnect();
+                        new BluetoothConnectionWriteServer().executeWriteServer();
+                        //new Thread(new BluetoothConnectionListenerServer()).start();
                     }
                 });
             });
@@ -92,7 +90,7 @@ public class BluetoothConnectionExecutor {
                 closeSocketAndStream();
                 handlerDisconnect.post(() -> {
                     mmBluetoothManagerControl.setDevicePaired(null);
-                    mmBluetoothManagerControl.getListenerConnectonDevice().postDeviceDisconnect();
+                    mmBluetoothManagerControl.getListenerConnectionDevice().postDeviceDisconnect();
                 });
             });
         } catch (Exception e) {
@@ -128,48 +126,51 @@ public class BluetoothConnectionExecutor {
         }
     }
 
-    private class BluetoothConnectionWriteServer implements Callable<String> {
+    private class BluetoothConnectionWriteServer {
         ExecutorService executorWriteServer = Executors.newSingleThreadExecutor();
         Handler handlerWriteServer = new Handler(Looper.getMainLooper());
-
-        StringBuilder leitura;
+        StringBuilder dataReceiver;
 
         public void executeWriteServer() {
-
-            executorWriteServer.execute(() -> {
-                while (connected) {
-                    if (mmInputStream != null) {
-                        try {
-                            byte[] buffer = new byte[1024];
-                            int byteLidos = mmInputStream.read(buffer);
-                            if (byteLidos > 0) {
-                                leitura = new StringBuilder();
-                                for (int i = 0; i < 1024; i++) {
-                                    if ((buffer[i] != '\n') && (buffer[i] != '\r')) {
-                                        leitura.append((char) buffer[i]);
-                                    } else {
-                                        break;
+            try {
+                executorWriteServer.execute(() -> {
+                    while (connected) {
+                        if (mmInputStream != null) {
+                            try {
+                                byte[] buffer = new byte[1024];
+                                int byteLidos = mmInputStream.read(buffer);
+                                if (byteLidos > 0) {
+                                    dataReceiver = new StringBuilder();
+                                    for (int i = 0; i < 1024; i++) {
+                                        if ((buffer[i] != '\n') && (buffer[i] != '\r')) {
+                                            dataReceiver.append((char) buffer[i]);
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                    if (dataReceiver.length() > 0) {
+                                        handlerWriteServer.post(() -> {
+                                            mmBluetoothManagerControl.getListenerConnectionDevice().postDataReceive(dataReceiver.toString());
+                                        });
                                     }
                                 }
+                            } catch (IOException e) {
+                                break;
                             }
-                        } catch (IOException e) {
-                            break;
                         }
                     }
-                    if (!connected) {
-                        executeDisconnect();
-                    }
-                }
-
-            });
+                    executeDisconnect();
+                });
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            } finally {
+                executorWriteServer.shutdown();
+            }
         }
 
-        @Override
-        public String call() throws Exception {
-            return null;
-        }
     }
 
+    @Deprecated
     private class BluetoothConnectionListenerServer implements Runnable {
         @Override
         public void run() {
@@ -185,7 +186,7 @@ public class BluetoothConnectionExecutor {
                                     leitura.append((char) buffer[i]);
                                 } else {
                                     if (leitura.length() > 0) {
-                                        mmBluetoothManagerControl.getListenerConnectonDevice().postDataReceive(leitura.toString());
+                                        mmBluetoothManagerControl.getListenerConnectionDevice().postDataReceive(leitura.toString());
                                     }
                                     break;
                                 }

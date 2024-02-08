@@ -13,7 +13,6 @@ import br.com.daciosoftware.bluetoothcommands.R;
 import java.util.List;
 
 public class ComandoAdapter extends BaseAdapter {
-
     private List<Comando> lista;
     private Context context;
 

@@ -36,7 +36,6 @@ public class BluetoothBroadcastReceive extends BroadcastReceiver {
         } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
             BluetoothDevice device =  intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             listenerDiscoveryDevices.foundDevice(device);
-
         }
     }
 

@@ -28,11 +28,11 @@ import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 
 public class CommandsFragment extends Fragment implements BluetoothManagerControl.ConnectionDevice {
     private Context appContext;
-    private ListView listViewComandos;
+    private ListView listViewCommands;
     private EditText editTextCommand;
     private Toolbar toolbar;
-    private final List<Comando> comandos = new ArrayList<>();
-    private final List<Comando> comandosEnviados = new ArrayList<>();
+    private final List<Comando> commands = new ArrayList<>();
+    private final List<Comando> commandsSender = new ArrayList<>();
     private int indexCommand = 0;
 
     private BluetoothManagerControl bluetoothManagerControl;
@@ -55,18 +55,17 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_command_repeat) {
                 //List<Comando> comandosEnviados = comandos.stream().filter(c -> c.getTipo().equals(Comando.TypeCommand.ENVIADO)).collect(Collectors.toList());
-                editTextCommand.setText((comandosEnviados.size() > 0) ? comandosEnviados.get(indexCommand).getTexto() : "");
+                editTextCommand.setText((commandsSender.size() > 0) ? commandsSender.get(indexCommand).getTexto() : "");
                 indexCommand--;
-                if (indexCommand < 0) indexCommand = comandosEnviados.size() - 1;
+                if (indexCommand < 0) indexCommand = commandsSender.size() - 1;
                 return true;
             }
             return false;
         });
-        updateStatusDeveiceParead();
 
         editTextCommand = root.findViewById(R.id.editTextCommand);
-        listViewComandos = root.findViewById(R.id.listViewData);
-        listViewComandos.setEmptyView(root.findViewById(R.id.textViewListEmpty));
+        listViewCommands = root.findViewById(R.id.listViewData);
+        listViewCommands.setEmptyView(root.findViewById(R.id.textViewListEmpty));
         ImageButton buttonSend = root.findViewById(R.id.button_send);
         FloatingActionButton buttonClear = root.findViewById(R.id.fbClearAll);
 
@@ -81,23 +80,25 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
             }
             Comando comando = new Comando(command, Comando.TypeCommand.ENVIADO);
             bluetoothManagerControl.write(String.format("%s\n", command).getBytes());
-            comandos.add(comando);
-            comandosEnviados.add(comando);
-            indexCommand = comandosEnviados.size() - 1;
+            commands.add(comando);
+            commandsSender.add(comando);
+            indexCommand = commandsSender.size() - 1;
             updateListData();
         });
 
         buttonClear.setOnClickListener(v -> {
-            comandos.clear();
+            commands.clear();
             updateListData();
         });
+
+        updateStatusDeveiceParead();
 
         return root;
     }
 
     private void updateListData() {
-        ComandoAdapter adapter = new ComandoAdapter(appContext, comandos);
-        listViewComandos.setAdapter(adapter);
+        ComandoAdapter adapter = new ComandoAdapter(appContext, commands);
+        listViewCommands.setAdapter(adapter);
     }
 
     @SuppressLint({"MissingPermission"})
@@ -123,10 +124,7 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
 
     @Override
     public void postDataReceive(String dataReceiver) {
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(()-> {
-            comandos.add(new Comando(dataReceiver, Comando.TypeCommand.RECEBIDO));
-            updateListData();
-        });
+        commands.add(new Comando(dataReceiver, Comando.TypeCommand.RECEBIDO));
+        updateListData();
     }
 }
