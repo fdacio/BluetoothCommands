@@ -2,21 +2,41 @@
     <string name="app_name">Bluetooth Commands</string>
     <string name="title_bluetooth">Bluetooth</string>
     <string name="title_commands">Comandos</string>
+    <string name="title_on_off">On/Off</string>
     <string name="edit_commands">Comando</string>
     <string name="repeat_commands">Repetir o Comando</string>
     <string name="button_send">Enviar</string>
     <string name="scan">Procurar</string>
     <string name="disconnect">Desconectar</string>
     <string name="button_clear">Limpar</string>
+    <string name="button_on">On</string>
+    <string name="button_off">Off</string>
     <string name="text_list_clear">Lista de Comandos Vazia</string>
     <string name="message_search_device">Aguarde, procurando por dispositivos</string>
     <string name="message_pair_device">Aguarde, pareando dispositivo</string>
-    <string name="dialog_negatica_button">Cancelar</string>
+    <string name="dialog_negative_button">Cancelar</string>
     <string name="message_despair_device">Dispositivo despareado</string>
-    <string name="message_bluetooth_adapter_dont_active">Bluetooth não ativado</string>
+    <string name="message_fail_connection">Não foi possível parear com dispositivo</string>
     <string name="message_paired_device_already_exists">Já existe um dispositivo pareado</string>
     <string name="message_permission_important">Permissão solicitada é importante para o uso da aplicação</string>
     <string name="message_bluetooth_activate_success">Bluetooth ativida com sucesso</string>
     <string name="message_bluetooth_activate_important">Ativar o Bluetooth é importante para o uso da aplicação</string>
     <string name="message_dont_device_pair">Não há dispositivo pareado</string>
+
+    <string name="label_pin">Porta</string>
+    <string-array name="spinner_portas">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
 </resources>

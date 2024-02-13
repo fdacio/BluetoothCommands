@@ -1,27 +1,19 @@
 package br.com.daciosoftware.bluetoothcommands.bluetooth;
 
-import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 
-import java.util.List;
-
-import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogProgress;
-import br.com.daciosoftware.bluetoothcommands.ui.bluetooth.DevicesBluetoothAdapter;
-
 public class BluetoothBroadcastReceive extends BroadcastReceiver {
 
-    private Context appContext;
-    private BluetoothManagerControl.DiscoveryDevices listenerDiscoveryDevices;
+    private final Context appContext;
+    private final BluetoothManagerControl.DiscoveryDevices listenerDiscoveryDevices;
 
-    public BluetoothBroadcastReceive (Context context, BluetoothManagerControl.DiscoveryDevices listenerDiscoveryDevices ) {
+    public BluetoothBroadcastReceive (Context context, @NonNull BluetoothManagerControl.DiscoveryDevices listenerDiscoveryDevices ) {
         this.appContext = context;
         this.listenerDiscoveryDevices = listenerDiscoveryDevices;
     }

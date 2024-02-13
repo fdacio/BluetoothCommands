@@ -16,8 +16,8 @@ import br.com.daciosoftware.bluetoothcommands.R;
 
 public class DevicesBluetoothAdapter extends BaseAdapter {
 
-    private LayoutInflater mInflater;
-    private List<BluetoothDevice> mData;
+    private final LayoutInflater mInflater;
+    private final List<BluetoothDevice> mData;
 
     public DevicesBluetoothAdapter(Context context, List<BluetoothDevice> data) {
         mInflater = LayoutInflater.from(context);
@@ -36,7 +36,6 @@ public class DevicesBluetoothAdapter extends BaseAdapter {
         return position;
     }
 
-
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
@@ -48,8 +47,8 @@ public class DevicesBluetoothAdapter extends BaseAdapter {
             holder.nameTv = (TextView) convertView.findViewById(R.id.textViewDeviceName);
             holder.addressTv = (TextView) convertView.findViewById(R.id.textViewDeviceAddress);
             //holder.pairBtn		= (Button) convertView.findViewById(R.id.btn_pair);
-
             convertView.setTag(holder);
+
         } else {
             holder = (ViewHolder) convertView.getTag();
         }

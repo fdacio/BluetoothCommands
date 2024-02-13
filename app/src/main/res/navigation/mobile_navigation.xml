@@ -16,4 +16,10 @@
         android:label="@string/title_commands"
         tools:layout="@layout/fragment_commands" />
 
+    <fragment
+        android:id="@+id/navigation_on_off"
+        android:name="br.com.daciosoftware.bluetoothcommands.ui.onoff.OnOffFragment"
+        android:label="@string/title_on_off"
+        tools:layout="@layout/fragment_on_off"/>
+
 </navigation>

@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +21,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.daciosoftware.bluetoothcommands.MainActivity;
 import br.com.daciosoftware.bluetoothcommands.R;
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
+import br.com.daciosoftware.bluetoothcommands.database.AppDatabase;
+import br.com.daciosoftware.bluetoothcommands.database.dao.CommandDao;
+import br.com.daciosoftware.bluetoothcommands.database.entity.Command;
 
 public class CommandsFragment extends Fragment implements BluetoothManagerControl.ConnectionDevice {
     private Context appContext;
@@ -34,7 +36,6 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     private final List<Comando> commands = new ArrayList<>();
     private final List<Comando> commandsSender = new ArrayList<>();
     private int indexCommand = 0;
-
     private BluetoothManagerControl bluetoothManagerControl;
 
     @Override
@@ -54,7 +55,6 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
         toolbar.inflateMenu(R.menu.menu_command);
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_command_repeat) {
-                //List<Comando> comandosEnviados = comandos.stream().filter(c -> c.getTipo().equals(Comando.TypeCommand.ENVIADO)).collect(Collectors.toList());
                 editTextCommand.setText((commandsSender.size() > 0) ? commandsSender.get(indexCommand).getTexto() : "");
                 indexCommand--;
                 if (indexCommand < 0) indexCommand = commandsSender.size() - 1;
@@ -113,18 +113,47 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     }
 
     @Override
-    public void postDeviceConnect() {
+    public void postDeviceConnection() {
     }
 
     @Override
-    public void postDeviceDisconnect() {
+    public void postDeviceDisconnection() {
         Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
         updateStatusDeveiceParead();
     }
 
     @Override
-    public void postDataReceive(String dataReceiver) {
-        commands.add(new Comando(dataReceiver, Comando.TypeCommand.RECEBIDO));
+    public void postFailConnection() {
+    }
+
+    @Override
+    public void postDataReceived(String dataReceived) {
+        commands.add(new Comando(dataReceived, Comando.TypeCommand.RECEBIDO));
         updateListData();
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MainActivity mainActivity = (MainActivity) appContext;
+        AppDatabase db =  mainActivity.getDatabase();
+        for(Comando comando: commandsSender) {
+            Command command = new Command();
+            command.command = comando.getTexto();
+            db.commandDao().insertAll(command);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainActivity mainActivity = (MainActivity) appContext;
+        AppDatabase db =  mainActivity.getDatabase();
+        CommandDao commandDao = db.commandDao();
+        for(Command command: commandDao.getAll()) {
+            Comando comando = new Comando(command.command, Comando.TypeCommand.ENVIADO);
+            commandsSender.add(comando);
+        }
+    }
+
 }

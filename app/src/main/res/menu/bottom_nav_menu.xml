@@ -11,4 +11,9 @@
         android:icon="@drawable/ic_baseline_keyboard_24"
         android:title="@string/title_commands" />
 
+    <item
+        android:id="@+id/navigation_on_off"
+        android:icon="@drawable/ic_baseline_toggle_on_off_24"
+        android:title="@string/title_on_off"/>
+
 </menu>

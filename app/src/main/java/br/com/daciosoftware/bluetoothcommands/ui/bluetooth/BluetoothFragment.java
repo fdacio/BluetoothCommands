@@ -31,9 +31,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     private Context appContext;
     private Toolbar toolbar;
     private BluetoothManagerControl bluetoothManagerControl;
-
     private AlertDialogProgress alertDialogProgressStartDiscovery;
-
     private AlertDialogProgress alertDialogProgressPairDevice;
 
     @Override
@@ -107,6 +105,12 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Pareamento de dispositivos no click do item da listview
         if (bluetoothManagerControl.getDevicePaired() != null) {
@@ -115,7 +119,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         }
         BluetoothDevice newDevicePaired = listDevices.get(position);
         bluetoothManagerControl.connect(newDevicePaired);
-
     }
 
     @Override
@@ -143,19 +146,25 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     @Override
-    public void postDeviceConnect() {
+    public void postDeviceConnection() {
         updateMenuBluetooth();
         alertDialogProgressPairDevice.dismiss();
     }
 
     @Override
-    public void postDeviceDisconnect() {
+    public void postDeviceDisconnection() {
         Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
         updateMenuBluetooth();
     }
 
     @Override
-    public void postDataReceive(String dataReceive) {
+    public void postFailConnection() {
+        Toast.makeText(appContext, R.string.message_fail_connection, Toast.LENGTH_SHORT).show();
+        alertDialogProgressPairDevice.dismiss();
+    }
+
+    @Override
+    public void postDataReceived(String dataReceived) {
     }
 
 }

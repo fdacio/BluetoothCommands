@@ -40,7 +40,7 @@ public class BluetoothManagerControl {
 
     public static BluetoothManagerControl getInstance(Context context) {
         if (bluetoothManagerControl == null) {
-            bluetoothManagerControl= new BluetoothManagerControl(context);
+            bluetoothManagerControl = new BluetoothManagerControl(context);
         }
         return bluetoothManagerControl;
     }
@@ -62,6 +62,7 @@ public class BluetoothManagerControl {
     public DiscoveryDevices getListenerDiscoveryDevice() {
         return this.listenerDiscoveryDevices;
     }
+
     public void setListenerDiscoveryDevices(DiscoveryDevices listenerDiscoveryDevices) {
         this.listenerDiscoveryDevices = listenerDiscoveryDevices;
     }
@@ -69,6 +70,7 @@ public class BluetoothManagerControl {
     public ConnectionDevice getListenerConnectionDevice() {
         return this.listenerConnection;
     }
+
     public void setListenerConnectionDevice(ConnectionDevice listenerConnection) {
         this.listenerConnection = listenerConnection;
     }
@@ -112,9 +114,7 @@ public class BluetoothManagerControl {
     }
 
     public void disconnect() {
-        if (bluetoothConnectionExecutor != null) {
-            bluetoothConnectionExecutor.executeDisconnect();
-        }
+       bluetoothConnectionExecutor.executeDisconnect();
     }
 
     public void write(byte[] dados) {
@@ -220,13 +220,10 @@ public class BluetoothManagerControl {
 
     public interface ConnectionDevice {
         void initConnection();
-
-        void postDeviceConnect();
-
-        void postDeviceDisconnect();
-
-        void postDataReceive(String dataReceive);
-
+        void postDeviceConnection();
+        void postDeviceDisconnection();
+        void postFailConnection();
+        void postDataReceived(String dataReceived);
     }
 
 }

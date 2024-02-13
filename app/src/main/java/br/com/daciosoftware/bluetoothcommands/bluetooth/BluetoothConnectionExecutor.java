@@ -15,12 +15,11 @@ import java.util.concurrent.Executors;
 
 public class BluetoothConnectionExecutor {
 
-    private BluetoothManagerControl mmBluetoothManagerControl;
+    private final BluetoothManagerControl mmBluetoothManagerControl;
     private boolean connected = false;
     private BluetoothSocket mmSocket;
     private OutputStream mmOutStream;
     private InputStream mmInputStream;
-    private BluetoothConnectionExecutor instance;
 
     protected BluetoothConnectionExecutor(BluetoothManagerControl bluetoothManagerControl) {
         mmBluetoothManagerControl = bluetoothManagerControl;
@@ -41,6 +40,7 @@ public class BluetoothConnectionExecutor {
                     e.printStackTrace();
                 }
                 mmSocket = tmp;
+                boolean failConnection = false;
                 OutputStream tmpOut = null;
                 InputStream tmpIn = null;
                 try {
@@ -56,22 +56,23 @@ public class BluetoothConnectionExecutor {
                     mmSocket.connect();
                     connected = true;
                 } catch (IOException e) {
-                    e.printStackTrace();
                     connected = false;
                     try {
                         mmSocket.close();
                     } catch (IOException e2) {
-                        e2.printStackTrace();
+                        e.printStackTrace();
                     }
+                    e.printStackTrace();
                 }
 
                 //Aqui seta a conexao
                 handlerConnection.post(() -> {
                     if (connected) {
                         mmBluetoothManagerControl.setDevicePaired(device);
-                        mmBluetoothManagerControl.getListenerConnectionDevice().postDeviceConnect();
-                        new BluetoothConnectionWriteServer().executeWriteServer();
-                        //new Thread(new BluetoothConnectionListenerServer()).start();
+                        mmBluetoothManagerControl.getListenerConnectionDevice().postDeviceConnection();
+                        new BluetoothConnectionDataReceived().executeDataReceived();
+                    } else {
+                        mmBluetoothManagerControl.getListenerConnectionDevice().postFailConnection();
                     }
                 });
             });
@@ -87,10 +88,11 @@ public class BluetoothConnectionExecutor {
         Handler handlerDisconnect = new Handler(Looper.getMainLooper());
         try {
             executorDisconnect.execute(() -> {
+                connected = false;
                 closeSocketAndStream();
                 handlerDisconnect.post(() -> {
                     mmBluetoothManagerControl.setDevicePaired(null);
-                    mmBluetoothManagerControl.getListenerConnectionDevice().postDeviceDisconnect();
+                    mmBluetoothManagerControl.getListenerConnectionDevice().postDeviceDisconnection();
                 });
             });
         } catch (Exception e) {
@@ -121,36 +123,35 @@ public class BluetoothConnectionExecutor {
                 mmSocket.close();
                 mmSocket = null;
             }
-            connected = false;
         } catch (IOException e) {
         }
     }
 
-    private class BluetoothConnectionWriteServer {
-        ExecutorService executorWriteServer = Executors.newSingleThreadExecutor();
-        Handler handlerWriteServer = new Handler(Looper.getMainLooper());
-        StringBuilder dataReceiver;
+    private class BluetoothConnectionDataReceived {
+        ExecutorService executorDataReceived = Executors.newSingleThreadExecutor();
+        Handler handlerDataReceived = new Handler(Looper.getMainLooper());
+        StringBuilder dataReceived;
 
-        public void executeWriteServer() {
+        public void executeDataReceived() {
             try {
-                executorWriteServer.execute(() -> {
+                executorDataReceived.execute(() -> {
                     while (connected) {
                         if (mmInputStream != null) {
                             try {
                                 byte[] buffer = new byte[1024];
                                 int byteLidos = mmInputStream.read(buffer);
                                 if (byteLidos > 0) {
-                                    dataReceiver = new StringBuilder();
+                                    dataReceived = new StringBuilder();
                                     for (int i = 0; i < 1024; i++) {
                                         if ((buffer[i] != '\n') && (buffer[i] != '\r')) {
-                                            dataReceiver.append((char) buffer[i]);
+                                            dataReceived.append((char) buffer[i]);
                                         } else {
                                             break;
                                         }
                                     }
-                                    if (dataReceiver.length() > 0) {
-                                        handlerWriteServer.post(() -> {
-                                            mmBluetoothManagerControl.getListenerConnectionDevice().postDataReceive(dataReceiver.toString());
+                                    if (dataReceived.length() > 0) {
+                                        handlerDataReceived.post(() -> {
+                                            mmBluetoothManagerControl.getListenerConnectionDevice().postDataReceived(dataReceived.toString());
                                         });
                                     }
                                 }
@@ -164,7 +165,7 @@ public class BluetoothConnectionExecutor {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             } finally {
-                executorWriteServer.shutdown();
+                executorDataReceived.shutdown();
             }
         }
 
@@ -186,7 +187,7 @@ public class BluetoothConnectionExecutor {
                                     leitura.append((char) buffer[i]);
                                 } else {
                                     if (leitura.length() > 0) {
-                                        mmBluetoothManagerControl.getListenerConnectionDevice().postDataReceive(leitura.toString());
+                                        mmBluetoothManagerControl.getListenerConnectionDevice().postDataReceived(leitura.toString());
                                     }
                                     break;
                                 }

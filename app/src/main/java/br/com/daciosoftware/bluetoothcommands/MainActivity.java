@@ -11,16 +11,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+import androidx.room.Room;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
+import br.com.daciosoftware.bluetoothcommands.database.AppDatabase;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSION_BLUETOOTH = 2;
     private final static int REQUEST_ENABLE_BLUETOOTH = 1;
     private BluetoothManagerControl bluetoothManagerControl;
 
+    private AppDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         bluetoothManagerControl = BluetoothManagerControl.getInstance(this);
+
+        db = Room.databaseBuilder(MainActivity.this, AppDatabase.class, "bluetooth-commands-database").allowMainThreadQueries().build();
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -69,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         bluetoothManagerControl.unregisterBluetoothBroadcastReceive();
+    }
+
+    public AppDatabase getDatabase() {
+        return db;
     }
 
 }
