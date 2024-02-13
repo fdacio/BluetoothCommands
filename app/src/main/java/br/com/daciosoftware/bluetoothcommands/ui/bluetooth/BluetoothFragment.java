@@ -92,22 +92,10 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_bluetooth, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         loadDevicesBonded();
         updateMenuBluetooth();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
     }
 
     @Override

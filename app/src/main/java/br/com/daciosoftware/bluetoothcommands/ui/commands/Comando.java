@@ -7,16 +7,13 @@ public class Comando {
     public enum TypeCommand {
         ENVIADO, RECEBIDO
     }
-
     public Comando(String texto, TypeCommand tipo) {
         this.texto = texto;
         this.tipo = tipo;
     }
-
     public String getTexto() {
         return texto;
     }
-
     public TypeCommand getTipo() {
         return tipo;
     }

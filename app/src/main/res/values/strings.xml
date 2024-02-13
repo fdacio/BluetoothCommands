@@ -11,10 +11,12 @@
     <string name="button_clear">Limpar</string>
     <string name="button_on">On</string>
     <string name="button_off">Off</string>
+
     <string name="text_list_clear">Lista de Comandos Vazia</string>
     <string name="message_search_device">Aguarde, procurando por dispositivos</string>
     <string name="message_pair_device">Aguarde, pareando dispositivo</string>
     <string name="dialog_negative_button">Cancelar</string>
+    <string name="dialog_neutral_button">OK</string>
     <string name="message_despair_device">Dispositivo despareado</string>
     <string name="message_fail_connection">Não foi possível parear com dispositivo</string>
     <string name="message_paired_device_already_exists">Já existe um dispositivo pareado</string>
@@ -22,6 +24,7 @@
     <string name="message_bluetooth_activate_success">Bluetooth ativida com sucesso</string>
     <string name="message_bluetooth_activate_important">Ativar o Bluetooth é importante para o uso da aplicação</string>
     <string name="message_dont_device_pair">Não há dispositivo pareado</string>
+    <string name="information_commands">Informações</string>
 
     <string name="label_pin">Porta</string>
     <string-array name="spinner_portas">
@@ -39,4 +42,8 @@
         <item>11</item>
         <item>12</item>
     </string-array>
+
+    <string name="title_information_command">Informações sobre o camando enviado</string>
+    <string name="text_information_command">O Aplicativo envia para o dispositivo pareado o camando no padrão <b>"porta;sinal</b>\n\nPor exemplo:\n1) Ao clicar no botão em estado <b>ON</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13;1</b>\n"2) Ao clicar no botão em estado <b>OFF</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13;0</b>\n"
+    </string>
 </resources>

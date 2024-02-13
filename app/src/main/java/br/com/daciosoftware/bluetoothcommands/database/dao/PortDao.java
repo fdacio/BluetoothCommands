@@ -15,7 +15,7 @@ public interface PortDao {
     List<Port> getAll();
     @Insert
     void insertAll(Port ...ports);
-    @Update
-    public void updatePorts(Port... ports);
+    @Query("DELETE FROM port WHERE id > 0")
+    public void deleteAll();
 
 }

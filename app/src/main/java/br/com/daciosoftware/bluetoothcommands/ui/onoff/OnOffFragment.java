@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -17,10 +18,11 @@ import androidx.fragment.app.Fragment;
 
 import java.util.List;
 
-import br.com.daciosoftware.bluetoothcommands.MainActivity;
 import br.com.daciosoftware.bluetoothcommands.R;
+import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogInformation;
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 import br.com.daciosoftware.bluetoothcommands.database.AppDatabase;
+import br.com.daciosoftware.bluetoothcommands.database.BluetoothCommandDatabase;
 import br.com.daciosoftware.bluetoothcommands.database.dao.PortDao;
 import br.com.daciosoftware.bluetoothcommands.database.entity.Port;
 
@@ -47,14 +49,24 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View root = inflater.inflate(R.layout.fragment_on_off, container, false);
         toolbar = root.findViewById(R.id.toolbarOnOff);
+        toolbar.inflateMenu(R.menu.menu_on_off);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_information_command) {
+                AlertDialogInformation dialogInformation = new AlertDialogInformation(appContext);
+                dialogInformation.show();
+                Toast.makeText(appContext, "Aqui exibir informação dos comandos", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            return false;
+        });
 
         int MAX_PORT = 40;
         Integer[] ports = new Integer[MAX_PORT];
         for (int p = 0; p < MAX_PORT; p++) {
-            ports[p]  = Integer.valueOf(p);
+            ports[p] = Integer.valueOf(p);
         }
         ArrayAdapter<Integer> adapterPorts = new ArrayAdapter<>(appContext, android.R.layout.simple_spinner_item, ports);
 
@@ -71,19 +83,46 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         spinnerPort4.setAdapter(adapterPorts);
 
         toggleButton1 = root.findViewById(R.id.toggleButton1);
+        toggleButton1.setOnClickListener(v -> {
+            if (bluetoothManagerControl.getDevicePaired() == null) return;
+            int port = (Integer) spinnerPort1.getSelectedItem();
+            int signal = !toggleButton1.isChecked() ? 1 : 0;
+            byte[] dado = (port + ";" + signal + "\n").getBytes();
+            bluetoothManagerControl.write(dado);
+        });
         toggleButton2 = root.findViewById(R.id.toggleButton2);
+        toggleButton2.setOnClickListener(v -> {
+            if (bluetoothManagerControl.getDevicePaired() == null) return;
+            int port = (Integer) spinnerPort2.getSelectedItem();
+            int signal = !toggleButton2.isChecked() ? 1 : 0;
+            byte[] dado = (port + ";" + signal + "\n").getBytes();
+            bluetoothManagerControl.write(dado);
+        });
         toggleButton3 = root.findViewById(R.id.toggleButton3);
+        toggleButton3.setOnClickListener(v -> {
+            if (bluetoothManagerControl.getDevicePaired() == null) return;
+            int port = (Integer) spinnerPort3.getSelectedItem();
+            int signal = !toggleButton3.isChecked() ? 1 : 0;
+            byte[] dado = (port + ";" + signal + "\n").getBytes();
+            bluetoothManagerControl.write(dado);
+        });
         toggleButton4 = root.findViewById(R.id.toggleButton4);
+        toggleButton4.setOnClickListener(v -> {
+            if (bluetoothManagerControl.getDevicePaired() == null) return;
+            int port = (Integer) spinnerPort4.getSelectedItem();
+            int signal = !toggleButton4.isChecked() ? 1 : 0;
+            byte[] dado = (port + ";" + signal + "\n").getBytes();
+            bluetoothManagerControl.write(dado);
+        });
 
         updateStatusDeveiceParead();
 
-        MainActivity mainActivity = (MainActivity) appContext;
-        AppDatabase db =  mainActivity.getDatabase();
+        AppDatabase db = BluetoothCommandDatabase.getInstance(appContext);
         PortDao portDao = db.portDao();
         List<Port> listPorts = portDao.getAll();
 
         if (listPorts.size() > 0) {
-            if (listPorts.get(0) != null){
+            if (listPorts.get(0) != null) {
                 Port port1 = listPorts.get(0);
                 int selectionPosition = adapterPorts.getPosition(port1.pin);
                 spinnerPort1.setSelection(selectionPosition);
@@ -117,69 +156,59 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
         toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
     }
+
     @Override
     public void initConnection() {
 
     }
+
     @Override
     public void postDeviceConnection() {
 
     }
+
     @Override
     public void postDeviceDisconnection() {
-
+        Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
+        updateStatusDeveiceParead();
     }
+
     @Override
     public void postFailConnection() {
 
     }
+
     @Override
     public void postDataReceived(String dataReceived) {
 
     }
+
     @Override
     public void onStop() {
         super.onStop();
-        MainActivity mainActivity = (MainActivity) appContext;
-        AppDatabase db =  mainActivity.getDatabase();
+        AppDatabase db = BluetoothCommandDatabase.getInstance(appContext);
         PortDao portDao = db.portDao();
-        if (portDao.getAll().size() == 0) {
-            Port port1 = new Port();
-            port1.pin = (Integer) spinnerPort1.getSelectedItem();
-            port1.signal = toggleButton1.isChecked();
 
-            Port port2 = new Port();
-            port2.pin = (Integer) spinnerPort2.getSelectedItem();
-            port2.signal = toggleButton2.isChecked();
+        portDao.deleteAll();
 
-            Port port3 = new Port();
-            port3.pin = (Integer) spinnerPort3.getSelectedItem();
-            port3.signal = toggleButton3.isChecked();
+        Port port1 = new Port();
+        port1.pin = (Integer) spinnerPort1.getSelectedItem();
+        port1.signal = toggleButton1.isChecked();
 
-            Port port4 = new Port();
-            port4.pin = (Integer) spinnerPort4.getSelectedItem();
-            port4.signal = toggleButton4.isChecked();
+        Port port2 = new Port();
+        port2.pin = (Integer) spinnerPort2.getSelectedItem();
+        port2.signal = toggleButton2.isChecked();
 
-            portDao.insertAll(port1, port2, port3, port4);
+        Port port3 = new Port();
+        port3.pin = (Integer) spinnerPort3.getSelectedItem();
+        port3.signal = toggleButton3.isChecked();
 
-        } else {
-            Port port1 = portDao.getAll().get(0);
-            port1.pin = (Integer) spinnerPort1.getSelectedItem();
-            port1.signal = toggleButton1.isChecked();
+        Port port4 = new Port();
+        port4.pin = (Integer) spinnerPort4.getSelectedItem();
+        port4.signal = toggleButton4.isChecked();
 
-            Port port2 = portDao.getAll().get(1);
-            port2.pin = (Integer) spinnerPort2.getSelectedItem();
-            port2.signal = toggleButton2.isChecked();
+        portDao.insertAll(port1, port2, port3, port4);
 
-            Port port3 = portDao.getAll().get(2);
-            port3.pin = (Integer) spinnerPort3.getSelectedItem();
-            port3.signal = toggleButton3.isChecked();
-
-            Port port4 = portDao.getAll().get(3);
-            port4.pin = (Integer) spinnerPort4.getSelectedItem();
-            port4.signal = toggleButton4.isChecked();
-            portDao.updatePorts(port1, port2, port3, port4);
-        }
     }
 
 }

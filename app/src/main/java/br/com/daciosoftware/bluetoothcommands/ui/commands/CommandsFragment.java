@@ -21,10 +21,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.daciosoftware.bluetoothcommands.MainActivity;
 import br.com.daciosoftware.bluetoothcommands.R;
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 import br.com.daciosoftware.bluetoothcommands.database.AppDatabase;
+import br.com.daciosoftware.bluetoothcommands.database.BluetoothCommandDatabase;
 import br.com.daciosoftware.bluetoothcommands.database.dao.CommandDao;
 import br.com.daciosoftware.bluetoothcommands.database.entity.Command;
 
@@ -56,8 +56,8 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_command_repeat) {
                 editTextCommand.setText((commandsSender.size() > 0) ? commandsSender.get(indexCommand).getTexto() : "");
-                indexCommand--;
-                if (indexCommand < 0) indexCommand = commandsSender.size() - 1;
+                indexCommand++;
+                if (indexCommand > commandsSender.size()-1) indexCommand = 0;
                 return true;
             }
             return false;
@@ -82,7 +82,7 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
             bluetoothManagerControl.write(String.format("%s\n", command).getBytes());
             commands.add(comando);
             commandsSender.add(comando);
-            indexCommand = commandsSender.size() - 1;
+            indexCommand = 0;
             updateListData();
         });
 
@@ -92,6 +92,14 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
         });
 
         updateStatusDeveiceParead();
+
+        AppDatabase db =  BluetoothCommandDatabase.getInstance(appContext);
+        CommandDao commandDao = db.commandDao();
+        List<Command> commandsList = commandDao.getAllOrderDesc();
+        for(Command command: commandsList) {
+            Comando comando = new Comando(command.command, Comando.TypeCommand.ENVIADO);
+            commandsSender.add(comando);
+        }
 
         return root;
     }
@@ -135,24 +143,18 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     @Override
     public void onStop() {
         super.onStop();
-        MainActivity mainActivity = (MainActivity) appContext;
-        AppDatabase db =  mainActivity.getDatabase();
-        for(Comando comando: commandsSender) {
-            Command command = new Command();
-            command.command = comando.getTexto();
-            db.commandDao().insertAll(command);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        MainActivity mainActivity = (MainActivity) appContext;
-        AppDatabase db =  mainActivity.getDatabase();
+        AppDatabase db =  BluetoothCommandDatabase.getInstance(appContext);
         CommandDao commandDao = db.commandDao();
-        for(Command command: commandDao.getAll()) {
-            Comando comando = new Comando(command.command, Comando.TypeCommand.ENVIADO);
-            commandsSender.add(comando);
+        commandDao.deleteAll();
+        List<Comando> comandos = commandsSender;
+        int i = 0;
+        for (Comando c: comandos) {
+            if (i <= 10) {
+                Command command = new Command();
+                command.command = c.getTexto();
+                commandDao.insert(command);
+            }
+            i++;
         }
     }
 

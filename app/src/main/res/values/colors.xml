@@ -8,4 +8,6 @@
     <color name="gray">#B3B3B3</color>
     <color name="comando_enviado">#0C0C70</color>
     <color name="comando_recebido">#FF9800</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#00633C</color>
 </resources>
