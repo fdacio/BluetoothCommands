@@ -24,7 +24,7 @@ import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 import br.com.daciosoftware.bluetoothcommands.database.AppDatabase;
 import br.com.daciosoftware.bluetoothcommands.database.BluetoothCommandDatabase;
 import br.com.daciosoftware.bluetoothcommands.database.dao.PortDao;
-import br.com.daciosoftware.bluetoothcommands.database.entity.Port;
+import br.com.daciosoftware.bluetoothcommands.database.entity.PortEntity;
 
 public class OnOffFragment extends Fragment implements BluetoothManagerControl.ConnectionDevice {
     private Context appContext;
@@ -143,29 +143,29 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
     private void updatePortsFromDatabase() {
         AppDatabase db = BluetoothCommandDatabase.getInstance(appContext);
         PortDao portDao = db.portDao();
-        List<Port> listPorts = portDao.getAll();
+        List<PortEntity> listPorts = portDao.getAll();
 
         if (listPorts.size() > 0) {
             if (listPorts.get(0) != null) {
-                Port port1 = listPorts.get(0);
+                PortEntity port1 = listPorts.get(0);
                 int selectionPosition = adapterPorts.getPosition(port1.pin);
                 spinnerPort1.setSelection(selectionPosition);
                 toggleButton1.setChecked(port1.signal);
             }
             if (listPorts.get(1) != null) {
-                Port port2 = listPorts.get(1);
+                PortEntity port2 = listPorts.get(1);
                 int selectionPosition = adapterPorts.getPosition(port2.pin);
                 spinnerPort2.setSelection(selectionPosition);
                 toggleButton2.setChecked(port2.signal);
             }
             if (listPorts.get(2) != null) {
-                Port port3 = listPorts.get(2);
+                PortEntity port3 = listPorts.get(2);
                 int selectionPosition = adapterPorts.getPosition(port3.pin);
                 spinnerPort3.setSelection(selectionPosition);
                 toggleButton3.setChecked(port3.signal);
             }
             if (listPorts.get(3) != null) {
-                Port port4 = listPorts.get(3);
+                PortEntity port4 = listPorts.get(3);
                 int selectionPosition = adapterPorts.getPosition(port4.pin);
                 spinnerPort4.setSelection(selectionPosition);
                 toggleButton4.setChecked(port4.signal);
@@ -180,19 +180,19 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
 
         portDao.deleteAll();
 
-        Port port1 = new Port();
+        PortEntity port1 = new PortEntity();
         port1.pin = (Integer) spinnerPort1.getSelectedItem();
         port1.signal = toggleButton1.isChecked();
 
-        Port port2 = new Port();
+        PortEntity port2 = new PortEntity();
         port2.pin = (Integer) spinnerPort2.getSelectedItem();
         port2.signal = toggleButton2.isChecked();
 
-        Port port3 = new Port();
+        PortEntity port3 = new PortEntity();
         port3.pin = (Integer) spinnerPort3.getSelectedItem();
         port3.signal = toggleButton3.isChecked();
 
-        Port port4 = new Port();
+        PortEntity port4 = new PortEntity();
         port4.pin = (Integer) spinnerPort4.getSelectedItem();
         port4.signal = toggleButton4.isChecked();
 

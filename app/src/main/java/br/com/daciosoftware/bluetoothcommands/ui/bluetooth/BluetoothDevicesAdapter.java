@@ -14,12 +14,12 @@ import java.util.List;
 
 import br.com.daciosoftware.bluetoothcommands.R;
 
-public class DevicesBluetoothAdapter extends BaseAdapter {
+public class BluetoothDevicesAdapter extends BaseAdapter {
 
     private final LayoutInflater mInflater;
     private final List<BluetoothDevice> mData;
 
-    public DevicesBluetoothAdapter(Context context, List<BluetoothDevice> data) {
+    public BluetoothDevicesAdapter(Context context, List<BluetoothDevice> data) {
         mInflater = LayoutInflater.from(context);
         mData = data;
     }
@@ -37,6 +37,7 @@ public class DevicesBluetoothAdapter extends BaseAdapter {
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
+
         ViewHolder holder;
 
         if (convertView == null) {
@@ -44,9 +45,8 @@ public class DevicesBluetoothAdapter extends BaseAdapter {
 
             holder = new ViewHolder();
 
-            holder.nameTv = (TextView) convertView.findViewById(R.id.textViewDeviceName);
-            holder.addressTv = (TextView) convertView.findViewById(R.id.textViewDeviceAddress);
-            //holder.pairBtn		= (Button) convertView.findViewById(R.id.btn_pair);
+            holder.nameTv =  convertView.findViewById(R.id.textViewDeviceName);
+            holder.addressTv =  convertView.findViewById(R.id.textViewDeviceAddress);
             convertView.setTag(holder);
 
         } else {

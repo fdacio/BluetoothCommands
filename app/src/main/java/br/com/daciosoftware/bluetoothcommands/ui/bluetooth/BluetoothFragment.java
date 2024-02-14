@@ -5,8 +5,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -86,16 +84,18 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
     @SuppressLint({"MissingPermission"})
     private void loadDevicesBonded() {
-        listDevices = bluetoothManagerControl.getBoundedDevices();
-        DevicesBluetoothAdapter devicesBluetoothAdapter = new DevicesBluetoothAdapter(appContext, listDevices);
+        if (listDevices.size() == 0 ) {
+            listDevices = bluetoothManagerControl.getBoundedDevices();
+        }
+        BluetoothDevicesAdapter devicesBluetoothAdapter = new BluetoothDevicesAdapter(appContext, listDevices);
         listViewDevices.setAdapter(devicesBluetoothAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadDevicesBonded();
         updateMenuBluetooth();
+        loadDevicesBonded();
     }
 
     @Override
@@ -111,12 +111,13 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
     @Override
     public void initDiscoveryDevices() {
+        listDevices.clear();
         alertDialogProgressStartDiscovery.show();
     }
 
     @Override
     public void finishDiscoveryDevices() {
-        DevicesBluetoothAdapter adapter = new DevicesBluetoothAdapter(appContext, listDevices);
+        BluetoothDevicesAdapter adapter = new BluetoothDevicesAdapter(appContext, listDevices);
         listViewDevices.setAdapter(adapter);
         alertDialogProgressStartDiscovery.dismiss();
     }

@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "command")
-public class Command {
+public class CommandEntity {
     @PrimaryKey(autoGenerate = true)
     public int id;
     @ColumnInfo(name="command")

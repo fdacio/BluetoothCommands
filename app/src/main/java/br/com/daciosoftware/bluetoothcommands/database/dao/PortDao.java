@@ -3,18 +3,17 @@ package br.com.daciosoftware.bluetoothcommands.database.dao;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import java.util.List;
 
-import br.com.daciosoftware.bluetoothcommands.database.entity.Port;
+import br.com.daciosoftware.bluetoothcommands.database.entity.PortEntity;
 
 @Dao
 public interface PortDao {
     @Query("SELECT * FROM port")
-    List<Port> getAll();
+    List<PortEntity> getAll();
     @Insert
-    void insertAll(Port ...ports);
+    void insertAll(PortEntity...ports);
     @Query("DELETE FROM port WHERE id > 0")
     public void deleteAll();
 

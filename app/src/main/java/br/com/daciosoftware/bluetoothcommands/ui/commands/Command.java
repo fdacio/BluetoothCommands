@@ -1,13 +1,13 @@
 package br.com.daciosoftware.bluetoothcommands.ui.commands;
 
-public class Comando {
+public class Command {
     private final String texto;
     private final TypeCommand tipo;
 
     public enum TypeCommand {
         ENVIADO, RECEBIDO
     }
-    public Comando(String texto, TypeCommand tipo) {
+    public Command(String texto, TypeCommand tipo) {
         this.texto = texto;
         this.tipo = tipo;
     }

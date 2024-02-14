@@ -5,10 +5,10 @@ import androidx.room.RoomDatabase;
 
 import br.com.daciosoftware.bluetoothcommands.database.dao.CommandDao;
 import br.com.daciosoftware.bluetoothcommands.database.dao.PortDao;
-import br.com.daciosoftware.bluetoothcommands.database.entity.Command;
-import br.com.daciosoftware.bluetoothcommands.database.entity.Port;
+import br.com.daciosoftware.bluetoothcommands.database.entity.CommandEntity;
+import br.com.daciosoftware.bluetoothcommands.database.entity.PortEntity;
 
-@Database(entities = {Command.class, Port.class}, version = 1)
+@Database(entities = {CommandEntity.class, PortEntity.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract CommandDao commandDao();
     public abstract PortDao portDao();

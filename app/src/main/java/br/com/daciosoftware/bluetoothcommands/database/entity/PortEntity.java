@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "port")
-public class Port {
+public class PortEntity {
     @PrimaryKey(autoGenerate = true)
     public int id;
     @ColumnInfo(name="pin")
