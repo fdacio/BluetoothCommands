@@ -56,22 +56,24 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
         View root = inflater.inflate(R.layout.fragment_commands, container, false);
         toolbar = root.findViewById(R.id.toolbarCommand);
         toolbar.inflateMenu(R.menu.menu_command);
-        toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.action_command_repeat) {
-                editTextCommand.setText((commandsSender.size() > 0) ? commandsSender.get(indexCommand).getTexto() : "");
-                indexCommand++;
-                if (indexCommand > commandsSender.size()-1) indexCommand = 0;
-                return true;
-            }
-            return false;
-        });
-
         editTextCommand = root.findViewById(R.id.editTextCommand);
         listViewCommands = root.findViewById(R.id.listViewData);
         listViewCommands.setEmptyView(root.findViewById(R.id.textViewListEmpty));
         ImageButton buttonSend = root.findViewById(R.id.button_send);
         FloatingActionButton buttonClear = root.findViewById(R.id.fbClearAll);
 
+        //Menu repetir comandos
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_command_repeat) {
+                editTextCommand.setText((commandsSender.size() > 0) ? commandsSender.get(indexCommand).getTexto() : "");
+                indexCommand--;
+                if (indexCommand < 0) indexCommand = commandsSender.size() - 1;
+                return true;
+            }
+            return false;
+        });
+
+        //Botão enviar comando
         buttonSend.setOnClickListener(v -> {
             String command = editTextCommand.getText().toString();
             editTextCommand.setText("");
@@ -84,10 +86,13 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
             Comando comando = new Comando(command, Comando.TypeCommand.ENVIADO);
             bluetoothManagerControl.write(String.format("%s\n", command).getBytes());
             commands.add(comando);
+            commandsSender.add(comando);
+            indexCommand = commandsSender.size() - 1;
             updateListData();
             updateCommandsToDatabase(comando);
         });
 
+        //Botão deletar comandos
         buttonClear.setOnClickListener(v -> {
             commands.clear();
             updateListData();
@@ -99,15 +104,15 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
         return root;
     }
 
-    private void updateListData() {
-        ComandoAdapter adapter = new ComandoAdapter(appContext, commands);
-        listViewCommands.setAdapter(adapter);
-    }
-
     @SuppressLint({"MissingPermission"})
     private void updateStatusDevicePaired() {
         BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
         toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
+    }
+
+    private void updateListData() {
+        ComandoAdapter adapter = new ComandoAdapter(appContext, commands);
+        listViewCommands.setAdapter(adapter);
     }
 
     private void updateCommandsFromDatabase() {
@@ -120,7 +125,7 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
 
     private void updateCommandsToDatabase(Comando c) {
         List<Command> listCommands = commandDao.getAll();
-        if (listCommands.size() > 10) {
+        if (listCommands.size() == 10) {
             Command command = listCommands.get(0);
             commandDao.delete(command);
         }

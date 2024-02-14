@@ -55,11 +55,19 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         View root = inflater.inflate(R.layout.fragment_on_off, container, false);
         toolbar = root.findViewById(R.id.toolbarOnOff);
         toolbar.inflateMenu(R.menu.menu_on_off);
+        spinnerPort1 = root.findViewById(R.id.spinnerPort1);
+        spinnerPort2 = root.findViewById(R.id.spinnerPort2);
+        spinnerPort3 = root.findViewById(R.id.spinnerPort3);
+        spinnerPort4 = root.findViewById(R.id.spinnerPort4);
+        toggleButton1 = root.findViewById(R.id.toggleButton1);
+        toggleButton2 = root.findViewById(R.id.toggleButton2);
+        toggleButton3 = root.findViewById(R.id.toggleButton3);
+        toggleButton4 = root.findViewById(R.id.toggleButton4);
+
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_information_command) {
                 AlertDialogInformation dialogInformation = new AlertDialogInformation(appContext);
                 dialogInformation.show();
-                Toast.makeText(appContext, "Aqui exibir informação dos comandos", Toast.LENGTH_SHORT).show();
                 return true;
             }
             return false;
@@ -71,20 +79,12 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
             ports[p] = Integer.valueOf(p);
         }
         adapterPorts = new ArrayAdapter<>(appContext, android.R.layout.simple_spinner_item, ports);
-
-        spinnerPort1 = root.findViewById(R.id.spinnerPort1);
         spinnerPort1.setAdapter(adapterPorts);
-
-        spinnerPort2 = root.findViewById(R.id.spinnerPort2);
         spinnerPort2.setAdapter(adapterPorts);
-
-        spinnerPort3 = root.findViewById(R.id.spinnerPort3);
         spinnerPort3.setAdapter(adapterPorts);
-
-        spinnerPort4 = root.findViewById(R.id.spinnerPort4);
         spinnerPort4.setAdapter(adapterPorts);
 
-        toggleButton1 = root.findViewById(R.id.toggleButton1);
+
         toggleButton1.setOnClickListener(v -> {
             if (bluetoothManagerControl.getDevicePaired() == null) {
                 Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
@@ -95,7 +95,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
             byte[] dado = (port + ";" + signal + "\n").getBytes();
             bluetoothManagerControl.write(dado);
         });
-        toggleButton2 = root.findViewById(R.id.toggleButton2);
+
         toggleButton2.setOnClickListener(v -> {
             if (bluetoothManagerControl.getDevicePaired() == null) {
                 Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
@@ -106,7 +106,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
             byte[] dado = (port + ";" + signal + "\n").getBytes();
             bluetoothManagerControl.write(dado);
         });
-        toggleButton3 = root.findViewById(R.id.toggleButton3);
+
         toggleButton3.setOnClickListener(v -> {
             if (bluetoothManagerControl.getDevicePaired() == null) {
                 Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
@@ -117,7 +117,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
             byte[] dado = (port + ";" + signal + "\n").getBytes();
             bluetoothManagerControl.write(dado);
         });
-        toggleButton4 = root.findViewById(R.id.toggleButton4);
+
         toggleButton4.setOnClickListener(v -> {
             if (bluetoothManagerControl.getDevicePaired() == null) {
                 Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
