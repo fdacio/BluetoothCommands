@@ -38,6 +38,8 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
     private ToggleButton toggleButton2;
     private ToggleButton toggleButton3;
     private ToggleButton toggleButton4;
+    private ArrayAdapter<Integer> adapterPorts;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -68,7 +70,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         for (int p = 0; p < MAX_PORT; p++) {
             ports[p] = Integer.valueOf(p);
         }
-        ArrayAdapter<Integer> adapterPorts = new ArrayAdapter<>(appContext, android.R.layout.simple_spinner_item, ports);
+        adapterPorts = new ArrayAdapter<>(appContext, android.R.layout.simple_spinner_item, ports);
 
         spinnerPort1 = root.findViewById(R.id.spinnerPort1);
         spinnerPort1.setAdapter(adapterPorts);
@@ -84,7 +86,10 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
 
         toggleButton1 = root.findViewById(R.id.toggleButton1);
         toggleButton1.setOnClickListener(v -> {
-            if (bluetoothManagerControl.getDevicePaired() == null) return;
+            if (bluetoothManagerControl.getDevicePaired() == null) {
+                Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
+                return;
+            }
             int port = (Integer) spinnerPort1.getSelectedItem();
             int signal = !toggleButton1.isChecked() ? 1 : 0;
             byte[] dado = (port + ";" + signal + "\n").getBytes();
@@ -92,7 +97,10 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         });
         toggleButton2 = root.findViewById(R.id.toggleButton2);
         toggleButton2.setOnClickListener(v -> {
-            if (bluetoothManagerControl.getDevicePaired() == null) return;
+            if (bluetoothManagerControl.getDevicePaired() == null) {
+                Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
+                return;
+            }
             int port = (Integer) spinnerPort2.getSelectedItem();
             int signal = !toggleButton2.isChecked() ? 1 : 0;
             byte[] dado = (port + ";" + signal + "\n").getBytes();
@@ -100,7 +108,10 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         });
         toggleButton3 = root.findViewById(R.id.toggleButton3);
         toggleButton3.setOnClickListener(v -> {
-            if (bluetoothManagerControl.getDevicePaired() == null) return;
+            if (bluetoothManagerControl.getDevicePaired() == null) {
+                Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
+                return;
+            }
             int port = (Integer) spinnerPort3.getSelectedItem();
             int signal = !toggleButton3.isChecked() ? 1 : 0;
             byte[] dado = (port + ";" + signal + "\n").getBytes();
@@ -108,15 +119,29 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         });
         toggleButton4 = root.findViewById(R.id.toggleButton4);
         toggleButton4.setOnClickListener(v -> {
-            if (bluetoothManagerControl.getDevicePaired() == null) return;
+            if (bluetoothManagerControl.getDevicePaired() == null) {
+                Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
+                return;
+            }
             int port = (Integer) spinnerPort4.getSelectedItem();
             int signal = !toggleButton4.isChecked() ? 1 : 0;
             byte[] dado = (port + ";" + signal + "\n").getBytes();
             bluetoothManagerControl.write(dado);
         });
 
-        updateStatusDeveiceParead();
+        updateStatusDevicePaired();
+        updatePortsFromDatabase();
 
+        return root;
+    }
+
+    @SuppressLint({"MissingPermission"})
+    private void updateStatusDevicePaired() {
+        BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
+        toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
+    }
+
+    private void updatePortsFromDatabase() {
         AppDatabase db = BluetoothCommandDatabase.getInstance(appContext);
         PortDao portDao = db.portDao();
         List<Port> listPorts = portDao.getAll();
@@ -148,44 +173,9 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
             }
         }
 
-        return root;
     }
 
-    @SuppressLint({"MissingPermission"})
-    private void updateStatusDeveiceParead() {
-        BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
-        toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
-    }
-
-    @Override
-    public void initConnection() {
-
-    }
-
-    @Override
-    public void postDeviceConnection() {
-
-    }
-
-    @Override
-    public void postDeviceDisconnection() {
-        Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
-        updateStatusDeveiceParead();
-    }
-
-    @Override
-    public void postFailConnection() {
-
-    }
-
-    @Override
-    public void postDataReceived(String dataReceived) {
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+    private void updatePortsToDatabase() {
         AppDatabase db = BluetoothCommandDatabase.getInstance(appContext);
         PortDao portDao = db.portDao();
 
@@ -209,6 +199,38 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
 
         portDao.insertAll(port1, port2, port3, port4);
 
+    }
+
+    @Override
+    public void initConnection() {
+
+    }
+
+    @Override
+    public void postDeviceConnection() {
+
+    }
+
+    @Override
+    public void postDeviceDisconnection() {
+        Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
+        updateStatusDevicePaired();
+    }
+
+    @Override
+    public void postFailConnection() {
+
+    }
+
+    @Override
+    public void postDataReceived(String dataReceived) {
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        updatePortsToDatabase();
     }
 
 }

@@ -12,15 +12,17 @@ import br.com.daciosoftware.bluetoothcommands.database.entity.Command;
 @Dao
 public interface CommandDao {
 
-    @Query("SELECT * FROM command")
+    @Query("SELECT * FROM command ORDER BY id ASC")
     List<Command> getAll();
 
-    @Query("SELECT * FROM command ORDER BY id DESC")
-    List<Command> getAllOrderDesc();
+    @Query("DELETE FROM command WHERE id > 0")
+    void deleteAll();
 
     @Insert
     void insert(Command command);
 
-    @Query("DELETE FROM command WHERE id > 0")
-    void deleteAll();
+    @Delete
+    void delete(Command command);
+
+
 }

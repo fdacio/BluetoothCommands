@@ -37,13 +37,16 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     private final List<Comando> commandsSender = new ArrayList<>();
     private int indexCommand = 0;
     private BluetoothManagerControl bluetoothManagerControl;
-
+    private AppDatabase db;
+    private CommandDao commandDao;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         appContext = context;
         bluetoothManagerControl = BluetoothManagerControl.getInstance(context);
         bluetoothManagerControl.setListenerConnectionDevice(CommandsFragment.this);
+        db =  BluetoothCommandDatabase.getInstance(appContext);
+        commandDao = db.commandDao();
     }
 
     @SuppressLint("HandlerLeak")
@@ -81,9 +84,8 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
             Comando comando = new Comando(command, Comando.TypeCommand.ENVIADO);
             bluetoothManagerControl.write(String.format("%s\n", command).getBytes());
             commands.add(comando);
-            commandsSender.add(comando);
-            indexCommand = 0;
             updateListData();
+            updateCommandsToDatabase(comando);
         });
 
         buttonClear.setOnClickListener(v -> {
@@ -91,15 +93,8 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
             updateListData();
         });
 
-        updateStatusDeveiceParead();
-
-        AppDatabase db =  BluetoothCommandDatabase.getInstance(appContext);
-        CommandDao commandDao = db.commandDao();
-        List<Command> commandsList = commandDao.getAllOrderDesc();
-        for(Command command: commandsList) {
-            Comando comando = new Comando(command.command, Comando.TypeCommand.ENVIADO);
-            commandsSender.add(comando);
-        }
+        updateStatusDevicePaired();
+        updateCommandsFromDatabase();
 
         return root;
     }
@@ -110,9 +105,28 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     }
 
     @SuppressLint({"MissingPermission"})
-    private void updateStatusDeveiceParead() {
+    private void updateStatusDevicePaired() {
         BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
         toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
+    }
+
+    private void updateCommandsFromDatabase() {
+        List<Command> commandsList = commandDao.getAll();
+        for(Command command: commandsList) {
+            Comando comando = new Comando(command.command, Comando.TypeCommand.ENVIADO);
+            commandsSender.add(comando);
+        }
+    }
+
+    private void updateCommandsToDatabase(Comando c) {
+        List<Command> listCommands = commandDao.getAll();
+        if (listCommands.size() > 10) {
+            Command command = listCommands.get(0);
+            commandDao.delete(command);
+        }
+        Command command = new Command();
+        command.command = c.getTexto();
+        commandDao.insert(command);
     }
 
     @Override
@@ -127,7 +141,7 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     @Override
     public void postDeviceDisconnection() {
         Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
-        updateStatusDeveiceParead();
+        updateStatusDevicePaired();
     }
 
     @Override
@@ -138,24 +152,6 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     public void postDataReceived(String dataReceived) {
         commands.add(new Comando(dataReceived, Comando.TypeCommand.RECEBIDO));
         updateListData();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        AppDatabase db =  BluetoothCommandDatabase.getInstance(appContext);
-        CommandDao commandDao = db.commandDao();
-        commandDao.deleteAll();
-        List<Comando> comandos = commandsSender;
-        int i = 0;
-        for (Comando c: comandos) {
-            if (i <= 10) {
-                Command command = new Command();
-                command.command = c.getTexto();
-                commandDao.insert(command);
-            }
-            i++;
-        }
     }
 
 }
