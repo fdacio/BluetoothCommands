@@ -40,7 +40,6 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
     private ToggleButton toggleButton4;
     private ArrayAdapter<Integer> adapterPorts;
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -76,7 +75,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         int MAX_PORT = 40;
         Integer[] ports = new Integer[MAX_PORT];
         for (int p = 0; p < MAX_PORT; p++) {
-            ports[p] = Integer.valueOf(p);
+            ports[p] = p;
         }
         adapterPorts = new ArrayAdapter<>(appContext, android.R.layout.simple_spinner_item, ports);
         spinnerPort1.setAdapter(adapterPorts);

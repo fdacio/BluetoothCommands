@@ -37,7 +37,6 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     private final List<Comando> commandsSender = new ArrayList<>();
     private int indexCommand = 0;
     private BluetoothManagerControl bluetoothManagerControl;
-    private AppDatabase db;
     private CommandDao commandDao;
     @Override
     public void onAttach(@NonNull Context context) {
@@ -45,7 +44,7 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
         appContext = context;
         bluetoothManagerControl = BluetoothManagerControl.getInstance(context);
         bluetoothManagerControl.setListenerConnectionDevice(CommandsFragment.this);
-        db =  BluetoothCommandDatabase.getInstance(appContext);
+        AppDatabase db =  BluetoothCommandDatabase.getInstance(appContext);
         commandDao = db.commandDao();
     }
 
