@@ -134,9 +134,7 @@ public class BluetoothManagerControl {
         List<BluetoothDevice> listDevices = new ArrayList<>();
         if (checkBlutoothPermissionConnect()) {
             BluetoothManager bluetoothManager = (BluetoothManager) appContext.getSystemService(Context.BLUETOOTH_SERVICE);
-            for (BluetoothDevice device : bluetoothManager.getAdapter().getBondedDevices()) {
-                listDevices.add(device);
-            }
+            listDevices.addAll(bluetoothManager.getAdapter().getBondedDevices());
         }
         return listDevices;
     }
