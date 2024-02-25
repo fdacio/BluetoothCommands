@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -31,15 +31,18 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
     private Context appContext;
     private BluetoothManagerControl bluetoothManagerControl;
     private Toolbar toolbar;
-    private Spinner spinnerPort1;
-    private Spinner spinnerPort2;
-    private Spinner spinnerPort3;
-    private Spinner spinnerPort4;
+    private TextView textViewLabelPort1;
+    private TextView textViewLabelPort2;
+    private TextView textViewLabelPort3;
+    private TextView textViewLabelPort4;
+    private EditText editTextPort1;
+    private EditText editTextPort2;
+    private EditText editTextPort3;
+    private EditText editTextPort4;
     private ToggleButton toggleButton1;
     private ToggleButton toggleButton2;
     private ToggleButton toggleButton3;
     private ToggleButton toggleButton4;
-    private ArrayAdapter<Integer> adapterPorts;
     private final boolean appPlus = true;
 
     @Override
@@ -51,15 +54,19 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_on_off, container, false);
         toolbar = root.findViewById(R.id.toolbarOnOff);
         toolbar.inflateMenu(R.menu.menu_on_off);
-        spinnerPort1 = root.findViewById(R.id.spinnerPort1);
-        spinnerPort2 = root.findViewById(R.id.spinnerPort2);
-        spinnerPort3 = root.findViewById(R.id.spinnerPort3);
-        spinnerPort4 = root.findViewById(R.id.spinnerPort4);
+        textViewLabelPort1 = root.findViewById(R.id.textViewLabelPort1);
+        textViewLabelPort2 = root.findViewById(R.id.textViewLabelPort2);
+        textViewLabelPort3 = root.findViewById(R.id.textViewLabelPort3);
+        textViewLabelPort4 = root.findViewById(R.id.textViewLabelPort4);
+        editTextPort1 = root.findViewById(R.id.editTextPort1);
+        editTextPort2 = root.findViewById(R.id.editTextPort2);
+        editTextPort3 = root.findViewById(R.id.editTextPort3);
+        editTextPort4 = root.findViewById(R.id.editTextPort4);
         toggleButton1 = root.findViewById(R.id.toggleButton1);
         toggleButton2 = root.findViewById(R.id.toggleButton2);
         toggleButton3 = root.findViewById(R.id.toggleButton3);
@@ -78,16 +85,22 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
             return false;
         });
 
-        int MAX_PORT = 40;
-        Integer[] ports = new Integer[MAX_PORT];
-        for (int p = 0; p < MAX_PORT; p++) {
-            ports[p] = p;
-        }
-        adapterPorts = new ArrayAdapter<>(appContext, android.R.layout.simple_spinner_item, ports);
-        spinnerPort1.setAdapter(adapterPorts);
-        spinnerPort2.setAdapter(adapterPorts);
-        spinnerPort3.setAdapter(adapterPorts);
-        spinnerPort4.setAdapter(adapterPorts);
+        editTextPort1.setOnClickListener(v -> {
+            DialogPorts dialogPorts = new DialogPorts(appContext, editTextPort1, textViewLabelPort1.getText().toString());
+            dialogPorts.show();
+        });
+        editTextPort2.setOnClickListener(v -> {
+            DialogPorts dialogPorts = new DialogPorts(appContext, editTextPort2, textViewLabelPort2.getText().toString());
+            dialogPorts.show();
+        });
+        editTextPort3.setOnClickListener(v -> {
+            DialogPorts dialogPorts = new DialogPorts(appContext, editTextPort3, textViewLabelPort3.getText().toString());
+            dialogPorts.show();
+        });
+        editTextPort4.setOnClickListener(v -> {
+            DialogPorts dialogPorts = new DialogPorts(appContext, editTextPort4, textViewLabelPort4.getText().toString());
+            dialogPorts.show();
+        });
 
         toggleButton1.setOnClickListener(v -> {
             if (!appPlus) {
@@ -100,7 +113,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
                 toggleButton1.setChecked(true);
                 return;
             }
-            int port = (Integer) spinnerPort1.getSelectedItem();
+            String port = editTextPort1.getText().toString();
             int signal = !toggleButton1.isChecked() ? 1 : 0;
             byte[] dado = (port + ";" + signal + "\n").getBytes();
             bluetoothManagerControl.write(dado);
@@ -117,7 +130,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
                 toggleButton2.setChecked(true);
                 return;
             }
-            int port = (Integer) spinnerPort2.getSelectedItem();
+            String port = editTextPort2.getText().toString();
             int signal = !toggleButton2.isChecked() ? 1 : 0;
             byte[] dado = (port + ";" + signal + "\n").getBytes();
             bluetoothManagerControl.write(dado);
@@ -134,7 +147,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
                 toggleButton3.setChecked(true);
                 return;
             }
-            int port = (Integer) spinnerPort3.getSelectedItem();
+            String port = editTextPort3.getText().toString();
             int signal = !toggleButton3.isChecked() ? 1 : 0;
             byte[] dado = (port + ";" + signal + "\n").getBytes();
             bluetoothManagerControl.write(dado);
@@ -151,7 +164,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
                 toggleButton4.setChecked(true);
                 return;
             }
-            int port = (Integer) spinnerPort4.getSelectedItem();
+            String port = editTextPort4.getText().toString();
             int signal = !toggleButton4.isChecked() ? 1 : 0;
             byte[] dado = (port + ";" + signal + "\n").getBytes();
             bluetoothManagerControl.write(dado);
@@ -173,34 +186,32 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         AppDatabase db = BluetoothCommandDatabase.getInstance(appContext);
         PortDao portDao = db.portDao();
         List<PortEntity> listPorts = portDao.getAll();
-
+        editTextPort1.setText("0");
+        editTextPort2.setText("0");
+        editTextPort3.setText("0");
+        editTextPort4.setText("0");
         if (listPorts.size() > 0) {
             if (listPorts.get(0) != null) {
                 PortEntity port1 = listPorts.get(0);
-                int selectionPosition = adapterPorts.getPosition(port1.pin);
-                spinnerPort1.setSelection(selectionPosition);
+                editTextPort1.setText(String.valueOf(port1.pin));
                 toggleButton1.setChecked(port1.signal);
             }
             if (listPorts.get(1) != null) {
                 PortEntity port2 = listPorts.get(1);
-                int selectionPosition = adapterPorts.getPosition(port2.pin);
-                spinnerPort2.setSelection(selectionPosition);
+                editTextPort2.setText(String.valueOf(port2.pin));
                 toggleButton2.setChecked(port2.signal);
             }
             if (listPorts.get(2) != null) {
                 PortEntity port3 = listPorts.get(2);
-                int selectionPosition = adapterPorts.getPosition(port3.pin);
-                spinnerPort3.setSelection(selectionPosition);
+                editTextPort3.setText(String.valueOf(port3.pin));
                 toggleButton3.setChecked(port3.signal);
             }
             if (listPorts.get(3) != null) {
                 PortEntity port4 = listPorts.get(3);
-                int selectionPosition = adapterPorts.getPosition(port4.pin);
-                spinnerPort4.setSelection(selectionPosition);
+                editTextPort4.setText(String.valueOf(port4.pin));
                 toggleButton4.setChecked(port4.signal);
             }
         }
-
     }
 
     private void updatePortsToDatabase() {
@@ -210,19 +221,40 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         portDao.deleteAll();
 
         PortEntity port1 = new PortEntity();
-        port1.pin = (Integer) spinnerPort1.getSelectedItem();
+        String pinPort1 = editTextPort1.getText().toString();
+        try {
+            port1.pin = Integer.parseInt(pinPort1);
+        } catch (Exception e) {
+            port1.pin = 0;
+        }
         port1.signal = toggleButton1.isChecked();
 
         PortEntity port2 = new PortEntity();
-        port2.pin = (Integer) spinnerPort2.getSelectedItem();
+        String pinPort2 = editTextPort2.getText().toString();
+        try {
+            port2.pin = Integer.parseInt(pinPort2);
+        } catch (Exception e) {
+            port2.pin = 0;
+        }
         port2.signal = toggleButton2.isChecked();
 
         PortEntity port3 = new PortEntity();
-        port3.pin = (Integer) spinnerPort3.getSelectedItem();
+        String pinPort3 = editTextPort3.getText().toString();
+        try {
+            port3.pin = Integer.parseInt(pinPort3);
+        } catch (Exception e) {
+            port3.pin = 0;
+        }
         port3.signal = toggleButton3.isChecked();
 
         PortEntity port4 = new PortEntity();
-        port4.pin = (Integer) spinnerPort4.getSelectedItem();
+        String pinPort4 = editTextPort4.getText().toString();
+        try {
+            port4.pin = Integer.parseInt(pinPort4);
+
+        } catch (Exception e) {
+            port4.pin = 0;
+        }
         port4.signal = toggleButton4.isChecked();
 
         portDao.insertAll(port1, port2, port3, port4);

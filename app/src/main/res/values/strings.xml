@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bluetooth Commands Plus</string>
+    <string name="app_name">Bluetooth Commands</string>
     <string name="title_bluetooth">Bluetooth</string>
     <string name="title_commands">Comandos</string>
     <string name="title_on_off">On/Off</string>
@@ -18,6 +18,7 @@
     <string name="dialog_negative_button">Cancelar</string>
     <string name="dialog_neutral_button">OK</string>
     <string name="message_despair_device">Dispositivo despareado</string>
+    <string name="message_pair_device_sucess">Dispositivo pareado com sucesso</string>
     <string name="message_fail_connection">Não foi possível parear com dispositivo</string>
     <string name="message_paired_device_already_exists">Já existe um dispositivo pareado</string>
     <string name="message_permission_important">Permissão solicitada é importante para o uso da aplicação</string>
@@ -25,26 +26,15 @@
     <string name="message_bluetooth_activate_important">Ativar o Bluetooth é importante para o uso da aplicação</string>
     <string name="message_dont_device_pair">Não há dispositivo pareado</string>
     <string name="information_commands">Informações</string>
-
-    <string name="label_pin">Porta</string>
-    <string-array name="spinner_portas">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-    </string-array>
-
+    <string name="text_name_device">Nome do Dispositivo</string>
+    <string name="text_address_device">Endereço do Dispositivo</string>
+    <string name="text_port">Porta</string>
+    <string name="label_port1">Porta 1</string>
+    <string name="label_port2">Porta 2</string>
+    <string name="label_port3">Porta 3</string>
+    <string name="label_port4">Porta 4</string>
     <string name="title_information_command">Informações sobre o camando enviado</string>
     <string name="text_information_command">O Aplicativo envia para o dispositivo pareado o comando no padrão <b>"porta;sinal</b>\n\nPor exemplo:\n1) Ao clicar no botão em estado <b>ON</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13;1</b>\n"2) Ao clicar no botão em estado <b>OFF</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13;0</b>\n"
     </string>
-    <string name="text_app_plus" formatted="true">Funcionalidade disponível somente na versão <b>Bluetooth Commands Plus</b>. Baixe &lt;a href=\"https://play.google.com/store/apps/details?id=br.com.daciosoftware.bluetoothcommandplus\"&gt;aqui&lt;/a&gt;  no Google Play Store</string>
+    <string name="text_app_plus" formatted="true">Funcionalidade disponível somente na versão <b>Bluetooth Commands Plus</b>. Baixe &lt;a href=\"https://play.google.com/store/apps/details?id=br.com.daciosoftware.bluetoothcommandsplus\"&gt;aqui&lt;/a&gt;  no Google Play Store</string>
 </resources>

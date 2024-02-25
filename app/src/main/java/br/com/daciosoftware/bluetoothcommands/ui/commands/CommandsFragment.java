@@ -33,7 +33,7 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     private ListView listViewCommands;
     private EditText editTextCommand;
     private Toolbar toolbar;
-    private final List<Command> commands = new ArrayList<>();
+    private final List<Command> listCommands = new ArrayList<>();
     private final List<Command> commandsSender = new ArrayList<>();
     private int indexCommand = 0;
     private BluetoothManagerControl bluetoothManagerControl;
@@ -85,16 +85,20 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
             }
             bluetoothManagerControl.write(String.format("%s\n", commandInput).getBytes());
             Command command = new Command(commandInput, Command.TypeCommand.ENVIADO);
-            commands.add(command);
-            commandsSender.add(command);
-            indexCommand = commandsSender.size() - 1;
+            listCommands.add(command);
+
+            boolean addNewCommand = !commandsSender.contains(command);
+            if (addNewCommand) {
+                commandsSender.add(command);
+                indexCommand = commandsSender.size() - 1;
+            }
             updateListData();
             updateCommandsToDatabase(command);
         });
 
         //Botão deletar comandos
         buttonClear.setOnClickListener(v -> {
-            commands.clear();
+            listCommands.clear();
             updateListData();
         });
 
@@ -111,7 +115,7 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     }
 
     private void updateListData() {
-        CommandAdapter adapter = new CommandAdapter(appContext, commands);
+        CommandAdapter adapter = new CommandAdapter(appContext, listCommands);
         listViewCommands.setAdapter(adapter);
     }
 
@@ -124,14 +128,16 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     }
 
     private void updateCommandsToDatabase(Command c) {
-        List<CommandEntity> listCommands = commandDao.getAll();
-        if (listCommands.size() == 10) {
-            CommandEntity command = listCommands.get(0);
-            commandDao.delete(command);
-        }
         CommandEntity commandEntity = new CommandEntity();
         commandEntity.command = c.getTexto();
-        commandDao.insert(commandEntity);
+        List<CommandEntity> listCommands = commandDao.getAll();
+        boolean addNewCommand = !listCommands.contains(commandEntity);
+        if (addNewCommand) {
+            if (listCommands.size() == 10) {
+                commandDao.delete(listCommands.get(0));
+            }
+            commandDao.insert(commandEntity);
+        }
     }
 
     @Override
@@ -155,7 +161,7 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
 
     @Override
     public void postDataReceived(String dataReceived) {
-        commands.add(new Command(dataReceived, Command.TypeCommand.RECEBIDO));
+        listCommands.add(new Command(dataReceived, Command.TypeCommand.RECEBIDO));
         updateListData();
     }
 

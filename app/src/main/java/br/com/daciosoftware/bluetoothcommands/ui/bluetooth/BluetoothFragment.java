@@ -138,6 +138,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     public void postDeviceConnection() {
         updateMenuBluetooth();
         alertDialogProgressPairDevice.dismiss();
+        Toast.makeText(appContext, R.string.message_pair_device_sucess, Toast.LENGTH_SHORT).show();
     }
 
     @Override

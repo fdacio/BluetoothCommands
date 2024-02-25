@@ -15,7 +15,6 @@ import java.util.List;
 import br.com.daciosoftware.bluetoothcommands.R;
 
 public class BluetoothDevicesAdapter extends BaseAdapter {
-
     private final LayoutInflater mInflater;
     private final List<BluetoothDevice> mData;
 
@@ -42,13 +41,10 @@ public class BluetoothDevicesAdapter extends BaseAdapter {
 
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.devices_adapter, null);
-
             holder = new ViewHolder();
-
-            holder.nameTv =  convertView.findViewById(R.id.textViewDeviceName);
-            holder.addressTv =  convertView.findViewById(R.id.textViewDeviceAddress);
+            holder.deviceName =  convertView.findViewById(R.id.textViewDeviceName);
+            holder.deviceAddress =  convertView.findViewById(R.id.textViewDeviceAddress);
             convertView.setTag(holder);
-
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -56,15 +52,15 @@ public class BluetoothDevicesAdapter extends BaseAdapter {
         BluetoothDevice device = mData.get(position);
         @SuppressLint("MissingPermission")
         String nameDevice = (device.getName() == null) ? "Dispositivo " + position : device.getName();
-        holder.nameTv.setText(nameDevice);
-        holder.addressTv.setText(device.getAddress());
+        holder.deviceName.setText(nameDevice);
+        holder.deviceAddress.setText(device.getAddress());
 
         return convertView;
     }
 
     static class ViewHolder {
-        TextView nameTv;
-        TextView addressTv;
+        TextView deviceName;
+        TextView deviceAddress;
     }
 
 
