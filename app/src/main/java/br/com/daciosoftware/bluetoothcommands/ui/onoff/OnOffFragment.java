@@ -77,28 +77,35 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         }
 
         toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_edit_label) {
+                PortsEditLabelDialog portsEditLabelDialog = new PortsEditLabelDialog(appContext);
+                portsEditLabelDialog.show();
+                return true;
+            }
+
             if (item.getItemId() == R.id.action_information_command) {
                 AlertDialogInformation dialogInformation = new AlertDialogInformation(appContext);
                 dialogInformation.show();
                 return true;
             }
+
             return false;
         });
 
         editTextPort1.setOnClickListener(v -> {
-            DialogPorts dialogPorts = new DialogPorts(appContext, editTextPort1, textViewLabelPort1.getText().toString());
+            PortsDialog dialogPorts = new PortsDialog(appContext, editTextPort1, textViewLabelPort1.getText().toString());
             dialogPorts.show();
         });
         editTextPort2.setOnClickListener(v -> {
-            DialogPorts dialogPorts = new DialogPorts(appContext, editTextPort2, textViewLabelPort2.getText().toString());
+            PortsDialog dialogPorts = new PortsDialog(appContext, editTextPort2, textViewLabelPort2.getText().toString());
             dialogPorts.show();
         });
         editTextPort3.setOnClickListener(v -> {
-            DialogPorts dialogPorts = new DialogPorts(appContext, editTextPort3, textViewLabelPort3.getText().toString());
+            PortsDialog dialogPorts = new PortsDialog(appContext, editTextPort3, textViewLabelPort3.getText().toString());
             dialogPorts.show();
         });
         editTextPort4.setOnClickListener(v -> {
-            DialogPorts dialogPorts = new DialogPorts(appContext, editTextPort4, textViewLabelPort4.getText().toString());
+            PortsDialog dialogPorts = new PortsDialog(appContext, editTextPort4, textViewLabelPort4.getText().toString());
             dialogPorts.show();
         });
 

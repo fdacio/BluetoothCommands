@@ -1,5 +1,7 @@
 package br.com.daciosoftware.bluetoothcommands.ui.onoff;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +16,7 @@ import java.util.List;
 
 import br.com.daciosoftware.bluetoothcommands.R;
 
-public class DialogPorts implements AdapterView.OnItemClickListener {
+public class PortsDialog implements AdapterView.OnItemClickListener {
 
     private final AlertDialog.Builder builder;
     private final AlertDialog dialog;
@@ -22,12 +24,15 @@ public class DialogPorts implements AdapterView.OnItemClickListener {
     private EditText editText;
     private PortsAdapter adapterPorts;
 
-    public DialogPorts(Context context, EditText editText, String label) {
+    public PortsDialog(Context context, EditText editText, String label) {
 
         this.editText = editText;
 
         builder = new AlertDialog.Builder(context);
         builder.setTitle(label);
+        builder.setNegativeButton(R.string.dialog_negative_button, (d, w) -> {
+            d.dismiss();
+        });
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = inflater.inflate(R.layout.ports_dialog,null);
         ListView listView = convertView.findViewById(R.id.listViewPorts);

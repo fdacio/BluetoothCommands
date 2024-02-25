@@ -17,6 +17,7 @@
     <string name="message_pair_device">Aguarde, pareando dispositivo</string>
     <string name="dialog_negative_button">Cancelar</string>
     <string name="dialog_neutral_button">OK</string>
+    <string name="dialog_save_button">Salvar</string>
     <string name="message_despair_device">Dispositivo despareado</string>
     <string name="message_pair_device_sucess">Dispositivo pareado com sucesso</string>
     <string name="message_fail_connection">Não foi possível parear com dispositivo</string>
@@ -33,6 +34,7 @@
     <string name="label_port2">Porta 2</string>
     <string name="label_port3">Porta 3</string>
     <string name="label_port4">Porta 4</string>
+    <string name="edit_label">Editar Rótulos</string>
     <string name="title_information_command">Informações sobre o camando enviado</string>
     <string name="text_information_command">O Aplicativo envia para o dispositivo pareado o comando no padrão <b>"porta;sinal</b>\n\nPor exemplo:\n1) Ao clicar no botão em estado <b>ON</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13;1</b>\n"2) Ao clicar no botão em estado <b>OFF</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13;0</b>\n"
     </string>
