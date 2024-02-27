@@ -71,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        bluetoothManagerControl.disconnect();
+        if (bluetoothManagerControl.getDevicePaired() != null) {
+            bluetoothManagerControl.disconnect();
+        }
     }
 
 }
