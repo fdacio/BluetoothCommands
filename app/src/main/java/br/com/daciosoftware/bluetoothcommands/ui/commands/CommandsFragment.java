@@ -38,7 +38,6 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     private int indexCommand = 0;
     private BluetoothManagerControl bluetoothManagerControl;
     private CommandDao commandDao;
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -48,7 +47,6 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
         AppDatabase db =  BluetoothCommandDatabase.getInstance(appContext);
         commandDao = db.commandDao();
     }
-
     @SuppressLint("HandlerLeak")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

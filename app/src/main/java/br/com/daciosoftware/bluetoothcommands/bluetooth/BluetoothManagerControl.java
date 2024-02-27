@@ -46,12 +46,13 @@ public class BluetoothManagerControl {
     }
 
     public void registerBluetoothBroadcastReceive() {
-        bluetoothBroadcastReceiver = new BluetoothBroadcastReceive(appContext, listenerDiscoveryDevices);
+        bluetoothBroadcastReceiver = new BluetoothBroadcastReceive(appContext, listenerDiscoveryDevices, listenerConnection);
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         filter.addAction(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         appContext.registerReceiver(bluetoothBroadcastReceiver, filter);
     }
 
@@ -145,15 +146,12 @@ public class BluetoothManagerControl {
             ActivityCompat.requestPermissions((Activity) appContext, new String[]{
                     Manifest.permission.BLUETOOTH_CONNECT,
                     Manifest.permission.BLUETOOTH_SCAN}, REQUEST_PERMISSION_BLUETOOTH);
-
         } else {
-
             ActivityCompat.requestPermissions((Activity) appContext, new String[]{
                     Manifest.permission.BLUETOOTH,
                     Manifest.permission.BLUETOOTH_ADMIN,
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_PERMISSION_BLUETOOTH);
-
         }
     }
 

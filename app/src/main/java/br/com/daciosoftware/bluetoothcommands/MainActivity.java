@@ -66,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         bluetoothManagerControl.unregisterBluetoothBroadcastReceive();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         bluetoothManagerControl.disconnect();
     }
 

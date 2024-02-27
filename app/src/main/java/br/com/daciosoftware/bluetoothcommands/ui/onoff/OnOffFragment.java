@@ -30,6 +30,7 @@ import br.com.daciosoftware.bluetoothcommands.database.entity.PortEntity;
 public class OnOffFragment extends Fragment implements BluetoothManagerControl.ConnectionDevice {
     private Context appContext;
     private BluetoothManagerControl bluetoothManagerControl;
+    private PortDao portDao;
     private Toolbar toolbar;
     private TextView textViewLabelPort1;
     private TextView textViewLabelPort2;
@@ -51,6 +52,8 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         appContext = context;
         bluetoothManagerControl = BluetoothManagerControl.getInstance(context);
         bluetoothManagerControl.setListenerConnectionDevice(OnOffFragment.this);
+        AppDatabase db = BluetoothCommandDatabase.getInstance(appContext);
+        portDao = db.portDao();
     }
 
     @Override
@@ -78,7 +81,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
 
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_edit_label) {
-                PortsEditLabelDialog portsEditLabelDialog = new PortsEditLabelDialog(appContext);
+                PortsEditLabelDialog portsEditLabelDialog = new PortsEditLabelDialog(appContext, OnOffFragment.this);
                 portsEditLabelDialog.show();
                 return true;
             }
@@ -178,7 +181,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         });
 
         updateStatusDevicePaired();
-        updatePortsFromDatabase();
+        insertPortsToDatabase();
 
         return root;
     }
@@ -189,83 +192,122 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
     }
 
-    private void updatePortsFromDatabase() {
-        AppDatabase db = BluetoothCommandDatabase.getInstance(appContext);
-        PortDao portDao = db.portDao();
+    private void updatePortsToDatabase() {
+
         List<PortEntity> listPorts = portDao.getAll();
-        editTextPort1.setText("0");
-        editTextPort2.setText("0");
-        editTextPort3.setText("0");
-        editTextPort4.setText("0");
+
+        if (listPorts.size() > 0) {
+            if (listPorts.get(0) != null) {
+                PortEntity port1 = listPorts.get(0);
+                port1.pin = Integer.parseInt(editTextPort1.getText().toString());
+                port1.signal = toggleButton1.isChecked();
+                port1.label = textViewLabelPort1.getText().toString();
+                portDao.update(port1);
+            }
+            if (listPorts.get(1) != null) {
+                PortEntity port2 = listPorts.get(1);
+                port2.pin = Integer.parseInt(editTextPort2.getText().toString());
+                port2.signal = toggleButton2.isChecked();
+                port2.label = textViewLabelPort2.getText().toString();
+                portDao.update(port2);
+            }
+            if (listPorts.get(2) != null) {
+                PortEntity port3 = listPorts.get(2);
+                port3.pin = Integer.parseInt(editTextPort3.getText().toString());
+                port3.signal = toggleButton3.isChecked();
+                port3.label = textViewLabelPort3.getText().toString();
+                portDao.update(port3);
+            }
+            if (listPorts.get(3) != null) {
+                PortEntity port4 = listPorts.get(3);
+                port4.pin = Integer.parseInt(editTextPort4.getText().toString());
+                port4.signal = toggleButton4.isChecked();
+                port4.label = textViewLabelPort4.getText().toString();
+                portDao.update(port4);
+            }
+        }
+    }
+
+    private void updatePortsToView() {
+
+        List<PortEntity> listPorts = portDao.getAll();
+
         if (listPorts.size() > 0) {
             if (listPorts.get(0) != null) {
                 PortEntity port1 = listPorts.get(0);
                 editTextPort1.setText(String.valueOf(port1.pin));
                 toggleButton1.setChecked(port1.signal);
+                textViewLabelPort1.setText(port1.label);
             }
             if (listPorts.get(1) != null) {
                 PortEntity port2 = listPorts.get(1);
                 editTextPort2.setText(String.valueOf(port2.pin));
                 toggleButton2.setChecked(port2.signal);
+                textViewLabelPort2.setText(port2.label);
             }
             if (listPorts.get(2) != null) {
                 PortEntity port3 = listPorts.get(2);
                 editTextPort3.setText(String.valueOf(port3.pin));
                 toggleButton3.setChecked(port3.signal);
+                textViewLabelPort3.setText(port3.label);
             }
             if (listPorts.get(3) != null) {
                 PortEntity port4 = listPorts.get(3);
                 editTextPort4.setText(String.valueOf(port4.pin));
                 toggleButton4.setChecked(port4.signal);
+                textViewLabelPort4.setText(port4.label);
             }
         }
     }
 
-    private void updatePortsToDatabase() {
-        AppDatabase db = BluetoothCommandDatabase.getInstance(appContext);
-        PortDao portDao = db.portDao();
+    private void insertPortsToDatabase() {
 
-        portDao.deleteAll();
+        List<PortEntity> listPorts = portDao.getAll();
 
-        PortEntity port1 = new PortEntity();
-        String pinPort1 = editTextPort1.getText().toString();
-        try {
-            port1.pin = Integer.parseInt(pinPort1);
-        } catch (Exception e) {
-            port1.pin = 0;
+        if (listPorts.size() == 0) {
+            PortEntity port1 = new PortEntity();
+            String pinPort1 = editTextPort1.getText().toString();
+            try {
+                port1.pin = Integer.parseInt(pinPort1);
+            } catch (Exception e) {
+                port1.pin = 0;
+            }
+            port1.signal = toggleButton1.isChecked();
+            port1.label = textViewLabelPort1.getText().toString();
+
+            PortEntity port2 = new PortEntity();
+            String pinPort2 = editTextPort1.getText().toString();
+            try {
+                port2.pin = Integer.parseInt(pinPort2);
+            } catch (Exception e) {
+                port2.pin = 0;
+            }
+            port2.signal = toggleButton2.isChecked();
+            port2.label = textViewLabelPort2.getText().toString();
+
+            PortEntity port3 = new PortEntity();
+            String pinPort3 = editTextPort3.getText().toString();
+            try {
+                port3.pin = Integer.parseInt(pinPort3);
+            } catch (Exception e) {
+                port3.pin = 0;
+            }
+            port3.signal = toggleButton3.isChecked();
+            port3.label = textViewLabelPort3.getText().toString();
+
+            PortEntity port4 = new PortEntity();
+            String pinPort4 = editTextPort4.getText().toString();
+            try {
+                port4.pin = Integer.parseInt(pinPort4);
+            } catch (Exception e) {
+                port4.pin = 0;
+            }
+            port4.signal = toggleButton4.isChecked();
+            port4.label = textViewLabelPort4.getText().toString();
+
+            portDao.insertAll(port1, port2, port3, port4);
+
         }
-        port1.signal = toggleButton1.isChecked();
-
-        PortEntity port2 = new PortEntity();
-        String pinPort2 = editTextPort2.getText().toString();
-        try {
-            port2.pin = Integer.parseInt(pinPort2);
-        } catch (Exception e) {
-            port2.pin = 0;
-        }
-        port2.signal = toggleButton2.isChecked();
-
-        PortEntity port3 = new PortEntity();
-        String pinPort3 = editTextPort3.getText().toString();
-        try {
-            port3.pin = Integer.parseInt(pinPort3);
-        } catch (Exception e) {
-            port3.pin = 0;
-        }
-        port3.signal = toggleButton3.isChecked();
-
-        PortEntity port4 = new PortEntity();
-        String pinPort4 = editTextPort4.getText().toString();
-        try {
-            port4.pin = Integer.parseInt(pinPort4);
-
-        } catch (Exception e) {
-            port4.pin = 0;
-        }
-        port4.signal = toggleButton4.isChecked();
-
-        portDao.insertAll(port1, port2, port3, port4);
-
     }
 
     @Override
@@ -292,6 +334,12 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
     @Override
     public void postDataReceived(String dataReceived) {
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updatePortsToView();
     }
 
     @Override

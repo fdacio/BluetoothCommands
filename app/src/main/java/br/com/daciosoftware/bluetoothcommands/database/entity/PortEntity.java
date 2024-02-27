@@ -12,4 +12,7 @@ public class PortEntity {
     public int pin;
     @ColumnInfo(name="signal")
     public boolean signal;
+    @ColumnInfo(name="label")
+    public String label;
+
 }
