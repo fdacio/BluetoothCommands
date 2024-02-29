@@ -81,6 +81,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
 
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_edit_label) {
+                updatePortsToDatabase();
                 PortsEditLabelDialog portsEditLabelDialog = new PortsEditLabelDialog(appContext, OnOffFragment.this);
                 portsEditLabelDialog.show();
                 return true;

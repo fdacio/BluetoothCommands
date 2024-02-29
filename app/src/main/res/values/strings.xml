@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bluetooth Commands</string>
+    <string name="app_name">Bluetooth Commands Plus</string>
     <string name="title_bluetooth">Bluetooth</string>
     <string name="title_commands">Comandos</string>
     <string name="title_on_off">On/Off</string>
