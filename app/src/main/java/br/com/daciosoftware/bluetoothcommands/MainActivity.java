@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         if (bluetoothManagerControl.getDevicePaired() != null) {
             bluetoothManagerControl.disconnect();
         }

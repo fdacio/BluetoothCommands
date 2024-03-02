@@ -20,7 +20,7 @@ import java.util.List;
 
 import br.com.daciosoftware.bluetoothcommands.R;
 import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogAppPlus;
-import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogInformation;
+import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogInformationOnOff;
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 import br.com.daciosoftware.bluetoothcommands.database.AppDatabase;
 import br.com.daciosoftware.bluetoothcommands.database.BluetoothCommandDatabase;
@@ -88,7 +88,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
             }
 
             if (item.getItemId() == R.id.action_information_command) {
-                AlertDialogInformation dialogInformation = new AlertDialogInformation(appContext);
+                AlertDialogInformationOnOff dialogInformation = new AlertDialogInformationOnOff(appContext);
                 dialogInformation.show();
                 return true;
             }
@@ -312,12 +312,12 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
     }
 
     @Override
-    public void initConnection() {
+    public void initConnection(BluetoothDevice device) {
 
     }
 
     @Override
-    public void postDeviceConnection() {
+    public void postDeviceConnection(BluetoothDevice device) {
 
     }
 

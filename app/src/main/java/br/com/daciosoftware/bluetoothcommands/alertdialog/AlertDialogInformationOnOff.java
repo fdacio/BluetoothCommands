@@ -8,14 +8,16 @@ import androidx.appcompat.app.AlertDialog;
 
 import br.com.daciosoftware.bluetoothcommands.R;
 
-public class AlertDialogInformation {
+public class AlertDialogInformationOnOff {
     private final AlertDialog.Builder builder;
     private final AlertDialog dialog;
 
-    public AlertDialogInformation(Context context, String message) {
+    public AlertDialogInformationOnOff(Context context) {
         builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.app_name);
-        builder.setMessage(message);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View convertView = inflater.inflate(R.layout.alert_dialog_information_on_off,null);
+        builder.setView(convertView);
         builder.setCancelable(true);
         builder.setNeutralButton(R.string.dialog_neutral_button, (d, w) -> {
             d.dismiss();
@@ -23,7 +25,6 @@ public class AlertDialogInformation {
         dialog = builder.create();
 
     }
-
     public void show() {
         dialog.show();
     }

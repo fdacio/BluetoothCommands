@@ -94,6 +94,8 @@ public class BluetoothManagerControl {
         bluetoothManager.getAdapter().startDiscovery();
     }
 
+
+    @SuppressLint("MissingPermission")
     public void connect(BluetoothDevice device) {
 
         if (!checkPermissionAccessLocation()) {
@@ -109,9 +111,10 @@ public class BluetoothManagerControl {
             return;
         }
 
-        listenerConnection.initConnection();
+        listenerConnection.initConnection(device);
+        BluetoothManager bluetoothManager = (BluetoothManager) appContext.getSystemService(Context.BLUETOOTH_SERVICE);
+        bluetoothManager.getAdapter().cancelDiscovery();
         bluetoothConnectionExecutor.executeConnection(device);
-
     }
 
     public void disconnect() {
@@ -133,7 +136,7 @@ public class BluetoothManagerControl {
     @SuppressLint("MissingPermission")
     public List<BluetoothDevice> getBoundedDevices() {
         List<BluetoothDevice> listDevices = new ArrayList<>();
-        if (checkBlutoothPermissionConnect()) {
+        if (checkBluetoothPermissionConnect()) {
             BluetoothManager bluetoothManager = (BluetoothManager) appContext.getSystemService(Context.BLUETOOTH_SERVICE);
             listDevices.addAll(bluetoothManager.getAdapter().getBondedDevices());
         }
@@ -191,7 +194,7 @@ public class BluetoothManagerControl {
         return true;
     }
 
-    public boolean checkBlutoothPermissionConnect() {
+    public boolean checkBluetoothPermissionConnect() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             int permissionBluetoothConnect = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_CONNECT);
             return (permissionBluetoothConnect == PackageManager.PERMISSION_GRANTED);
@@ -215,8 +218,8 @@ public class BluetoothManagerControl {
     }
 
     public interface ConnectionDevice {
-        void initConnection();
-        void postDeviceConnection();
+        void initConnection(BluetoothDevice device);
+        void postDeviceConnection(BluetoothDevice device);
         void postDeviceDisconnection();
         void postFailConnection();
         void postDataReceived(String dataReceived);

@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.daciosoftware.bluetoothcommands.R;
+import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogDevicePaired;
+import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogInformation;
+import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogDevicePairing;
 import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogProgress;
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 
@@ -30,7 +33,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     private Toolbar toolbar;
     private BluetoothManagerControl bluetoothManagerControl;
     private AlertDialogProgress alertDialogProgressStartDiscovery;
-    private AlertDialogProgress alertDialogProgressPairDevice;
+    private AlertDialogDevicePairing alertDialogProgressPairDevice;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -42,7 +45,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         bluetoothManagerControl.setListenerConnectionDevice(BluetoothFragment.this);
 
         alertDialogProgressStartDiscovery = new AlertDialogProgress(context, AlertDialogProgress.TypeDialog.SEARCH_DEVICE);
-        alertDialogProgressPairDevice = new AlertDialogProgress(context, AlertDialogProgress.TypeDialog.PAIR_DEVICE);
+        alertDialogProgressPairDevice = new AlertDialogDevicePairing(context, bluetoothManagerControl);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -130,15 +133,16 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     @Override
-    public void initConnection() {
-        alertDialogProgressPairDevice.show();
+    public void initConnection(BluetoothDevice device) {
+        alertDialogProgressPairDevice.show(device.getName());
     }
 
     @Override
-    public void postDeviceConnection() {
-        updateMenuBluetooth();
+    public void postDeviceConnection(BluetoothDevice device) {
         alertDialogProgressPairDevice.dismiss();
-        Toast.makeText(appContext, R.string.message_pair_device_sucess, Toast.LENGTH_SHORT).show();
+        AlertDialogDevicePaired alertDialogDevicePaired = new AlertDialogDevicePaired(appContext);
+        alertDialogDevicePaired.show(device.getName());
+        updateMenuBluetooth();
     }
 
     @Override
