@@ -8,14 +8,13 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import br.com.daciosoftware.bluetoothcommands.R;
-import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 
 public class AlertDialogDevicePairing {
 
     private final AlertDialog dialog;
     private final TextView textViewDeviceName;
 
-    public AlertDialogDevicePairing(Context context, BluetoothManagerControl bluetoothManagerControl) {
+    public AlertDialogDevicePairing(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.app_name);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

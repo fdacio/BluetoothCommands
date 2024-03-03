@@ -31,6 +31,8 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     private ListView listViewDevices;
     private Context appContext;
     private Toolbar toolbar;
+    private View buttonSearch;
+    private View buttonDisconnect;
     private BluetoothManagerControl bluetoothManagerControl;
     private AlertDialogProgress alertDialogProgressStartDiscovery;
     private AlertDialogDevicePairing alertDialogProgressPairDevice;
@@ -45,7 +47,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         bluetoothManagerControl.setListenerConnectionDevice(BluetoothFragment.this);
 
         alertDialogProgressStartDiscovery = new AlertDialogProgress(context, AlertDialogProgress.TypeDialog.SEARCH_DEVICE);
-        alertDialogProgressPairDevice = new AlertDialogDevicePairing(context, bluetoothManagerControl);
+        alertDialogProgressPairDevice = new AlertDialogDevicePairing(context);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,21 +57,12 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         View root = inflater.inflate(R.layout.fragment_bluetooth, container, false);
 
         toolbar = root.findViewById(R.id.toolbarBluetooth);
-        toolbar.inflateMenu(R.menu.menu_bluetooth);
-        toolbar.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.action_bluetooth_discovery: {
-                    bluetoothManagerControl.initDiscovery();
-                    return true;
-                }
-                case R.id.action_bluetooth_disconnect: {
-                    bluetoothManagerControl.disconnect();
-                    return true;
-                }
-                default:
-                    return false;
-            }
-        });
+
+        buttonSearch = root.findViewById(R.id.action_button_search);
+        buttonDisconnect = root.findViewById(R.id.action_button_disconnect);
+
+        buttonSearch.setOnClickListener((v) -> bluetoothManagerControl.initDiscovery());
+        buttonDisconnect.setOnClickListener((v) -> bluetoothManagerControl.disconnect());
 
         listViewDevices = root.findViewById(R.id.listViewDevices);
         listViewDevices.setOnItemClickListener(this);
@@ -80,16 +73,14 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     @SuppressLint({"MissingPermission"})
     private void updateMenuBluetooth() {
         BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
-        toolbar.getMenu().findItem(R.id.action_bluetooth_disconnect).setVisible(devicePaired != null);
-        toolbar.getMenu().findItem(R.id.action_bluetooth_discovery).setVisible(devicePaired == null);
+        buttonDisconnect.setVisibility((devicePaired != null) ? View.VISIBLE : View.GONE);
+        buttonSearch.setVisibility((devicePaired == null) ? View.VISIBLE : View.GONE);
         toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
     }
 
     @SuppressLint({"MissingPermission"})
     private void loadDevicesBonded() {
-        if (listDevices.size() == 0 ) {
-            listDevices = bluetoothManagerControl.getBoundedDevices();
-        }
+        listDevices = bluetoothManagerControl.getBoundedDevices();
         BluetoothDevicesAdapter devicesBluetoothAdapter = new BluetoothDevicesAdapter(appContext, listDevices);
         listViewDevices.setAdapter(devicesBluetoothAdapter);
     }
@@ -140,7 +131,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void postDeviceConnection(BluetoothDevice device) {
         alertDialogProgressPairDevice.dismiss();
-        AlertDialogDevicePaired alertDialogDevicePaired = new AlertDialogDevicePaired(appContext);
+        AlertDialogDevicePaired alertDialogDevicePaired = new AlertDialogDevicePaired(appContext, AlertDialogDevicePaired.TypeDialog.SUCCESS_PAIR);
         alertDialogDevicePaired.show(device.getName());
         updateMenuBluetooth();
     }
@@ -152,9 +143,11 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     @Override
-    public void postFailConnection() {
-        Toast.makeText(appContext, R.string.message_fail_connection, Toast.LENGTH_SHORT).show();
+    public void postFailConnection(BluetoothDevice device) {
         alertDialogProgressPairDevice.dismiss();
+        AlertDialogDevicePaired alertDialogDevicePaired = new AlertDialogDevicePaired(appContext, AlertDialogDevicePaired.TypeDialog.FAIL_PAIR);
+        alertDialogDevicePaired.show(device.getName());
+
     }
 
     @Override

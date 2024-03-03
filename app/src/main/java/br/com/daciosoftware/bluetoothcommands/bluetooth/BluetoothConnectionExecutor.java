@@ -12,8 +12,6 @@ import java.io.OutputStream;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 public class BluetoothConnectionExecutor {
 
@@ -46,7 +44,7 @@ public class BluetoothConnectionExecutor {
                     }
                     mmOutStream = tmpOut;
                     mmInputStream = tmpIn;
-                    //Método é bloqueante por 12 segundos de timeout
+                    //Metodo é bloqueante por 12 segundos de timeout
                     bluetoothSocket.connect();
                     connected = bluetoothSocket.isConnected();
                 } catch (IOException e) {
@@ -59,7 +57,7 @@ public class BluetoothConnectionExecutor {
                         mmBluetoothManagerControl.getListenerConnectionDevice().postDeviceConnection(device);
                         new BluetoothConnectionDataReceived().executeDataReceived();
                     } else {
-                        mmBluetoothManagerControl.getListenerConnectionDevice().postFailConnection();
+                        mmBluetoothManagerControl.getListenerConnectionDevice().postFailConnection(device);
                     }
                 });
             });
@@ -73,14 +71,14 @@ public class BluetoothConnectionExecutor {
         }
     }
 
+
     public void executeDisconnect() {
         if (!connected) return;
         ExecutorService executorDisconnect = Executors.newSingleThreadExecutor();
         try {
             Handler handlerDisconnect = new Handler(Looper.getMainLooper());
             executorDisconnect.execute(() -> {
-                connected = false;
-                closeSocketAndStream();
+                disconnect();
                 handlerDisconnect.post(() -> {
                     mmBluetoothManagerControl.setDevicePaired(null);
                     mmBluetoothManagerControl.getListenerConnectionDevice().postDeviceDisconnection();
@@ -122,6 +120,11 @@ public class BluetoothConnectionExecutor {
         }
     }
 
+    private void disconnect() {
+        connected = false;
+        closeSocketAndStream();
+    }
+
     private class BluetoothConnectionDataReceived {
         StringBuilder dataReceived;
 
@@ -146,9 +149,7 @@ public class BluetoothConnectionExecutor {
                                         }
                                     }
                                     if (dataReceived.length() > 0) {
-                                        handlerDataReceived.post(() -> {
-                                            mmBluetoothManagerControl.getListenerConnectionDevice().postDataReceived(dataReceived.toString());
-                                        });
+                                        handlerDataReceived.post(() -> mmBluetoothManagerControl.getListenerConnectionDevice().postDataReceived(dataReceived.toString()));
                                     }
                                 }
                             } catch (IOException e) {

@@ -328,7 +328,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
     }
 
     @Override
-    public void postFailConnection() {
+    public void postFailConnection(BluetoothDevice device) {
 
     }
 

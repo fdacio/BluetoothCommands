@@ -158,7 +158,7 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     }
 
     @Override
-    public void postFailConnection() {
+    public void postFailConnection(BluetoothDevice device) {
     }
 
     @Override

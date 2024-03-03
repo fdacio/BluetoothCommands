@@ -10,16 +10,10 @@ import androidx.annotation.NonNull;
 
 public class BluetoothBroadcastReceive extends BroadcastReceiver {
 
-    private final Context appContext;
     private final BluetoothManagerControl.DiscoveryDevices listenerDiscoveryDevices;
 
-    private final BluetoothManagerControl.ConnectionDevice listenerConnectionDevice;
-
-    public BluetoothBroadcastReceive (Context context, @NonNull BluetoothManagerControl.DiscoveryDevices listenerDiscoveryDevices,
-                                      @NonNull BluetoothManagerControl.ConnectionDevice listenerConnectionDevice ) {
-        this.appContext = context;
+    public BluetoothBroadcastReceive (@NonNull BluetoothManagerControl.DiscoveryDevices listenerDiscoveryDevices ) {
         this.listenerDiscoveryDevices = listenerDiscoveryDevices;
-        this.listenerConnectionDevice = listenerConnectionDevice;
     }
 
     @Override

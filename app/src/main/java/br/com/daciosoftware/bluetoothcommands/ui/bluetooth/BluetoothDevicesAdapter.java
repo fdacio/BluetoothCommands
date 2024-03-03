@@ -35,6 +35,7 @@ public class BluetoothDevicesAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("InflateParams")
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder;

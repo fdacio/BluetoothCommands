@@ -62,18 +62,13 @@ public class MainActivity extends AppCompatActivity {
         bluetoothManagerControl.registerBluetoothBroadcastReceive();
     }
 
-   @Override
+    @Override
     public void onStop() {
         super.onStop();
-        bluetoothManagerControl.unregisterBluetoothBroadcastReceive();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
         if (bluetoothManagerControl.getDevicePaired() != null) {
             bluetoothManagerControl.disconnect();
         }
+        bluetoothManagerControl.unregisterBluetoothBroadcastReceive();
     }
 
 }

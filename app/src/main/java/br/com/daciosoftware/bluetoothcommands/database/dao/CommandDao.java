@@ -1,7 +1,6 @@
 package br.com.daciosoftware.bluetoothcommands.database.dao;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -20,9 +19,5 @@ public interface CommandDao {
 
     @Insert
     void insert(CommandEntity command);
-
-    @Delete
-    void delete(CommandEntity command);
-
 
 }

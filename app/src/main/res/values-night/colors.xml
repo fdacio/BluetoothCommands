@@ -9,4 +9,7 @@
     <color name="comando_enviado">#2196F3</color>
     <color name="comando_recebido">#FFEB3B</color>
     <color name="ic_launcher_background">#B4F5DB</color>
+    <color name="red">#F44336</color>
+    <color name="green">#FF009688</color>
+    <color name="button_menu">#FF009688</color>
 </resources>

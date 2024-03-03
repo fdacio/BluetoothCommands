@@ -16,28 +16,23 @@ import br.com.daciosoftware.bluetoothcommands.database.dao.PortDao;
 import br.com.daciosoftware.bluetoothcommands.database.entity.PortEntity;
 
 public class PortsEditLabelDialog {
-    private final AlertDialog.Builder builder;
     private final AlertDialog dialog;
     private EditText editTextLabelPort1;
     private EditText editTextLabelPort2;
     private EditText editTextLabelPort3;
     private EditText editTextLabelPort4;
-    private PortDao portDao;
-
-    private OnOffFragment fragment;
+    private final PortDao portDao;
 
     public PortsEditLabelDialog(Context context, OnOffFragment fragment) {
 
         AppDatabase db = BluetoothCommandDatabase.getInstance(context);
         portDao = db.portDao();
 
-        builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.edit_label);
 
         builder.setCancelable(false);
-        builder.setNegativeButton(R.string.dialog_negative_button, (d, w) -> {
-            d.dismiss();
-        });
+        builder.setNegativeButton(R.string.dialog_negative_button, (d, w) -> d.dismiss());
         builder.setPositiveButton(R.string.dialog_save_button, (d, w) -> {
 
             List<PortEntity> listPorts = portDao.getAll();
@@ -127,7 +122,4 @@ public class PortsEditLabelDialog {
         dialog.show();
     }
 
-    public void dismiss() {
-        dialog.dismiss();
-    }
 }

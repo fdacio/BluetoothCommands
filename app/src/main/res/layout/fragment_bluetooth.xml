@@ -16,7 +16,14 @@
         app:titleTextColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent">
+        <include android:id="@+id/actions_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            layout="@layout/menu_bluetooth_buttons"/>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <ListView
         android:id="@+id/listViewDevices"

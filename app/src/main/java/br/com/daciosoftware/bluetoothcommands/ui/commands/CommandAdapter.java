@@ -1,5 +1,6 @@
 package br.com.daciosoftware.bluetoothcommands.ui.commands;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ public class CommandAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         Command comando = lista.get(position);
