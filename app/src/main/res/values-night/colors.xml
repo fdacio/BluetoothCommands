@@ -6,6 +6,7 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="gray">#B3B3B3</color>
+    <color name="text_device">#2196F3</color>
     <color name="comando_enviado">#2196F3</color>
     <color name="comando_recebido">#FFEB3B</color>
     <color name="ic_launcher_background">#B4F5DB</color>

@@ -130,15 +130,25 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     }
 
     private void updateCommandsToDatabase() {
-        commandDao.deleteAll();
-        int index = commandsSender.size() - 1;
-        for (int i = index; i >= 0; i--) {
-            String command = commandsSender.get(i).getTexto();
-            if ((index - i) < 10) {
-                CommandEntity commandEntity = new CommandEntity();
-                commandEntity.command = command;
-                commandDao.insert(commandEntity);
+        int firstIndex = - 1;
+        int flagIndex = 10;
+        int index = 1;
+        for (int i = (commandsSender.size() -1); i >= 0; i--) {
+            if (index == flagIndex) {
+                firstIndex = commandsSender.indexOf(commandsSender.get(i));
+                break;
             }
+            index++;
+        }
+        if (firstIndex == -1) {
+            firstIndex = 0;
+        }
+        commandDao.deleteAll();
+        for (int i = firstIndex; i < commandsSender.size(); i++) {
+            String command = commandsSender.get(i).getTexto();
+            CommandEntity commandEntity = new CommandEntity();
+            commandEntity.command = command;
+            commandDao.insert(commandEntity);
         }
     }
 
