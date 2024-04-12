@@ -44,7 +44,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
     private ToggleButton toggleButton2;
     private ToggleButton toggleButton3;
     private ToggleButton toggleButton4;
-    private final boolean appPlus = false;
+    private final boolean appPlus = true;
 
     @Override
     public void onAttach(@NonNull Context context) {

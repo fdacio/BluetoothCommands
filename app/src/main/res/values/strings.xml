@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bluetooth Commands</string>
+    <string name="app_name">Bluetooth Commands Plus</string>
     <string name="title_bluetooth">Bluetooth</string>
     <string name="title_commands">Comandos</string>
     <string name="title_on_off">On/Off</string>
@@ -12,7 +12,6 @@
     <string name="button_clear">Limpar</string>
     <string name="button_on">On</string>
     <string name="button_off">Off</string>
-
     <string name="text_list_clear">Lista de Comandos Vazia</string>
     <string name="message_search_device">Aguarde, procurando por dispositivos</string>
     <string name="message_pair_device">Aguarde, pareando dispositivo</string>
@@ -39,7 +38,6 @@
     <string name="label_port4">Porta 4</string>
     <string name="edit_label">Editar Rótulos</string>
     <string name="title_information_command">Informações sobre o comando enviado</string>
-    <string name="text_information_command">O Aplicativo envia para o dispositivo pareado o comando no padrão <b>"porta;sinal</b>\n\nPor exemplo:\n1) Ao clicar no botão em estado <b>ON</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13;1</b>\n"2) Ao clicar no botão em estado <b>OFF</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13;0</b>\n"
-    </string>
+    <string name="text_information_command">O Aplicativo envia para o dispositivo pareado o comando no padrão <b>"porta;sinal</b>\n\nPor exemplo:\n1) Ao clicar no botão em estado <b>ON</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13;1</b>\n"2) Ao clicar no botão em estado <b>OFF</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13;0</b>\n"</string>
     <string name="text_app_plus" formatted="true">Funcionalidade disponível somente na versão <b>Bluetooth Commands Plus</b>. Baixe &lt;a href=\"https://play.google.com/store/apps/details?id=br.com.daciosoftware.bluetoothcommandsplus\"&gt;aqui&lt;/a&gt;  no Google Play Store</string>
 </resources>

@@ -92,9 +92,9 @@ public class BluetoothManagerControl {
                 requestEnableBluetoothAdapter();
                 return;
             }
-
         }
         BluetoothManager bluetoothManager = (BluetoothManager) appContext.getSystemService(Context.BLUETOOTH_SERVICE);
+        bluetoothManager.getAdapter().cancelDiscovery();
         bluetoothManager.getAdapter().startDiscovery();
     }
 

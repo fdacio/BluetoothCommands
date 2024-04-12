@@ -7,11 +7,11 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "br.com.daciosoftware.bluetoothcommands"
+        applicationId "br.com.daciosoftware.bluetoothcommandsplus"
         minSdkVersion 21
         targetSdkVersion 34
         versionCode 7
-        versionName "7.0"
+        versionName "7.0(Plus)"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

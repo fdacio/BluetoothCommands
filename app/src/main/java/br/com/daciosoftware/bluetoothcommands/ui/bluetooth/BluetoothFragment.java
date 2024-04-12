@@ -76,6 +76,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         buttonDisconnect.setVisibility((devicePaired != null) ? View.VISIBLE : View.GONE);
         buttonSearch.setVisibility((devicePaired == null) ? View.VISIBLE : View.GONE);
         toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
+        loadDevicesBonded();
     }
 
     @SuppressLint({"MissingPermission"})
