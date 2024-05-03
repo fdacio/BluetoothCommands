@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import java.util.List;
 
 import br.com.daciosoftware.bluetoothcommands.R;
-import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogAppPlus;
 import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogInformationOnOff;
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 import br.com.daciosoftware.bluetoothcommands.database.AppDatabase;
@@ -44,7 +43,6 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
     private ToggleButton toggleButton2;
     private ToggleButton toggleButton3;
     private ToggleButton toggleButton4;
-    private final boolean appPlus = true;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -74,10 +72,6 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         toggleButton2 = root.findViewById(R.id.toggleButton2);
         toggleButton3 = root.findViewById(R.id.toggleButton3);
         toggleButton4 = root.findViewById(R.id.toggleButton4);
-
-        if (!appPlus) {
-            new AlertDialogAppPlus(appContext).show();
-        }
 
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_edit_label) {
@@ -114,11 +108,6 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         });
 
         toggleButton1.setOnClickListener(v -> {
-            if (!appPlus) {
-                new AlertDialogAppPlus(appContext).show();
-                toggleButton1.setChecked(true);
-                return;
-            }
             if (bluetoothManagerControl.getDevicePaired() == null) {
                 Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
                 toggleButton1.setChecked(true);
@@ -131,11 +120,6 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         });
 
         toggleButton2.setOnClickListener(v -> {
-            if (!appPlus) {
-                new AlertDialogAppPlus(appContext).show();
-                toggleButton2.setChecked(true);
-                return;
-            }
             if (bluetoothManagerControl.getDevicePaired() == null) {
                 Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
                 toggleButton2.setChecked(true);
@@ -148,11 +132,6 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         });
 
         toggleButton3.setOnClickListener(v -> {
-            if (!appPlus) {
-                new AlertDialogAppPlus(appContext).show();
-                toggleButton3.setChecked(true);
-                return;
-            }
             if (bluetoothManagerControl.getDevicePaired() == null) {
                 Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
                 toggleButton3.setChecked(true);
@@ -165,11 +144,6 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         });
 
         toggleButton4.setOnClickListener(v -> {
-            if (!appPlus) {
-                new AlertDialogAppPlus(appContext).show();
-                toggleButton4.setChecked(true);
-                return;
-            }
             if (bluetoothManagerControl.getDevicePaired() == null) {
                 Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
                 toggleButton4.setChecked(true);

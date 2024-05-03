@@ -16,4 +16,13 @@
         android:icon="@drawable/ic_baseline_toggle_on_off_24"
         android:title="@string/title_on_off"/>
 
+    <item
+        android:id="@+id/navigation_roboarm"
+        android:icon="@drawable/ic_baseline_roboarm_24"
+        android:title="@string/title_roboarm" />
+
+    <item
+        android:id="@+id/navigation_robocar"
+        android:icon="@drawable/ic_baseline_robocar_24"
+        android:title="@string/title_robocar" />
 </menu>
