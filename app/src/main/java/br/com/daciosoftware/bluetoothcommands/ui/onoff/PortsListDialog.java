@@ -14,14 +14,14 @@ import java.util.List;
 
 import br.com.daciosoftware.bluetoothcommands.R;
 
-public class PortsDialog implements AdapterView.OnItemClickListener {
+public class PortsListDialog implements AdapterView.OnItemClickListener {
 
     private final AlertDialog dialog;
 
     private final EditText editText;
     private final PortsAdapter adapterPorts;
 
-    public PortsDialog(Context context, EditText editText, String label) {
+    public PortsListDialog(Context context, EditText editText, String label) {
 
         this.editText = editText;
 

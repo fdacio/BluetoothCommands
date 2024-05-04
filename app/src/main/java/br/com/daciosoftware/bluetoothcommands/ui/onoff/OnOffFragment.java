@@ -91,19 +91,19 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         });
 
         editTextPort1.setOnClickListener(v -> {
-            PortsDialog dialogPorts = new PortsDialog(appContext, editTextPort1, textViewLabelPort1.getText().toString());
+            PortsListDialog dialogPorts = new PortsListDialog(appContext, editTextPort1, textViewLabelPort1.getText().toString());
             dialogPorts.show();
         });
         editTextPort2.setOnClickListener(v -> {
-            PortsDialog dialogPorts = new PortsDialog(appContext, editTextPort2, textViewLabelPort2.getText().toString());
+            PortsListDialog dialogPorts = new PortsListDialog(appContext, editTextPort2, textViewLabelPort2.getText().toString());
             dialogPorts.show();
         });
         editTextPort3.setOnClickListener(v -> {
-            PortsDialog dialogPorts = new PortsDialog(appContext, editTextPort3, textViewLabelPort3.getText().toString());
+            PortsListDialog dialogPorts = new PortsListDialog(appContext, editTextPort3, textViewLabelPort3.getText().toString());
             dialogPorts.show();
         });
         editTextPort4.setOnClickListener(v -> {
-            PortsDialog dialogPorts = new PortsDialog(appContext, editTextPort4, textViewLabelPort4.getText().toString());
+            PortsListDialog dialogPorts = new PortsListDialog(appContext, editTextPort4, textViewLabelPort4.getText().toString());
             dialogPorts.show();
         });
 

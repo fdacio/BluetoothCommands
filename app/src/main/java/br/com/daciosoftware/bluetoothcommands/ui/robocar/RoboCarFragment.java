@@ -61,6 +61,11 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
                 new AlertDialogAppPlus(appContext).show();
                 return;
             }
+            BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
+            if (devicePaired == null) {
+                Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
+                return;
+            }
             bluetoothManagerControl.write(String.format("%s\n", "up").getBytes());
         });
 
@@ -68,6 +73,11 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
         imageButtonRight.setOnClickListener(v -> {
             if (!appPlus) {
                 new AlertDialogAppPlus(appContext).show();
+                return;
+            }
+            BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
+            if (devicePaired == null) {
+                Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
                 return;
             }
             bluetoothManagerControl.write(String.format("%s\n", "rgt").getBytes());
@@ -79,6 +89,11 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
                 new AlertDialogAppPlus(appContext).show();
                 return;
             }
+            BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
+            if (devicePaired == null) {
+                Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
+                return;
+            }
             bluetoothManagerControl.write(String.format("%s\n", "dwn").getBytes());
         });
 
@@ -88,6 +103,11 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
                 new AlertDialogAppPlus(appContext).show();
                 return;
             }
+            BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
+            if (devicePaired == null) {
+                Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
+                return;
+            }
             bluetoothManagerControl.write(String.format("%s\n", "lft").getBytes());
         });
 
@@ -95,6 +115,11 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
         imageButtonStop.setOnClickListener(v -> {
             if (!appPlus) {
                 new AlertDialogAppPlus(appContext).show();
+                return;
+            }
+            BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
+            if (devicePaired == null) {
+                Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
                 return;
             }
             bluetoothManagerControl.write(String.format("%s\n", "stp").getBytes());
