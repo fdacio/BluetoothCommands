@@ -57,11 +57,42 @@
     <string name="speed_now">0</string>
     <string name="_0Distance">0</string>
     <string name="title_information_command">Informações sobre o comando enviado</string>
-    <string name="text_information_command">O Aplicativo envia para o dispositivo pareado o comando no padrão <b>"porta;sinal</b>\n\nPor exemplo:\n1) Ao clicar no botão em estado <b>ON</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13;1</b>\n"2) Ao clicar no botão em estado <b>OFF</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13;0</b>\n"</string>
-    <string name="text_information_command_roboarm">O Aplicativo envia para o dispositivo pareado o comando no padrão <b>"Servo:Angulo</b>\n\nPor exemplo:\n1) Ao arrastar o controle da <b>BASE</b> para o angulo de 90º, o comando enviado será <b>bs:90</b>\n\n"2) Ao arrastar o controle da <b>ALTURA</b> para o angulo de 45º, o comando enviado será <b>at:45</b>\n\n"3) Ao arrastar o controle do <b>ALCANCE</b> para o angulo de 60º, o comando enviado será <b>ac:60</b>\n\n"4) Ao arrastar o controle da <b>GARRA</b> para o angulo de 100º, o comando enviado será <b>gr:100</b></string>
-    <string name="text_information_command_roboarm_obs">Observação: Pode-se enviar do microcontrolador para o celular um comando no padrão:\n<b>ags:ang1-ang2-ang3-ang4</b>\nOnde:\n1) <b>ang1</b> é valor do ângulo da <b>BASE</b>\n2) <b>ang2</b> é valor do ângulo da <b>ALTURA</b>\n3) <b>ang3</b> é valor do ângulo dO <b>ALCANCE</b>\n4) <b>ang4</b> é valor do ângulo da <b>GARRA</b>\n\nIsso fará com que o aplicativo reposicione os controles de acordo com os valores de ângulos informados</string>
-    <string name="text_information_command_robocar">1) Pressionando (&#8593;) envia para o dispositivo pareado o comando <b>up</b>\n2) Pressionando (&#8594;) envia para o dispositivo pareado o comando <b>rgt</b>\n3) Pressionando (&#8595;) envia para o dispositivo pareado o comando <b>dwn</b>\n4) Pressionando (&#8592;) envia para o dispositivo pareado o comando <b>lft</b>\n5) Pressionando (x) envia para o dispositivo pareado o comando <b>stp</b>\n\nO comando de velocidade é enviado no padrão <b>spd:valor</b>\nPor exemplo: spd:125</string>
-    <string name="text_information_command_robocar_obs">Observação: Pode-se enviar do microcontrolador para o celular um comando no padrão:\n<b>dtc:valor</b>\nOnde: <b>valor</b> é o valor da distância marcada por um sensor como por exemplo o HC-SR04</string>
+
+    <string name="text_information_command">
+        O Aplicativo envia para o dispositivo pareado o comando no padrão <b>"Porta:Sinal</b>\n\n
+        Por exemplo:\n
+        1) Ao clicar no botão em estado <b>ON</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13:1</b>\n\n
+        2) Ao clicar no botão em estado <b>OFF</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13:0</b>\n\n
+    </string>
+
+    <string name="text_information_command_roboarm">
+        O Aplicativo envia para o dispositivo pareado o comando no padrão <b>"Servo:Angulo</b>\n\n
+        Por exemplo:\n
+        1) Ao arrastar o controle da <b>BASE</b> para o angulo de 90º, o comando enviado será <b>bs:90</b>\n\n
+        2) Ao arrastar o controle da <b>ALTURA</b> para o angulo de 45º, o comando enviado será <b>at:45</b>\n\n
+        3) Ao arrastar o controle do <b>ALCANCE</b> para o angulo de 60º, o comando enviado será <b>ac:60</b>\n\n
+        4) Ao arrastar o controle da <b>GARRA</b> para o angulo de 100º, o comando enviado será <b>gr:100</b>\n\n
+        5) O dispositivo pareado pode enviar para o aplicativo um comando no padrão:<b>ags:ang1-ang2-ang3-ang4</b>\n
+        Onde:\n
+        a) <b>ang1</b> é valor do ângulo da <b>BASE</b>\n
+        b) <b>ang2</b> é valor do ângulo da <b>ALTURA</b>\n
+        c) <b>ang3</b> é valor do ângulo dO <b>ALCANCE</b>\n
+        d) <b>ang4</b> é valor do ângulo da <b>GARRA</b>\n
+        Isso fará com que o aplicativo reposicione os controles de acordo com os valores de ângulos informados
+    </string>
+
+    <string name="text_information_command_robocar">
+        1) Ao pressionar <b>(&#8593;)</b> envia para o dispositivo pareado o comando <b>up</b>\n\n
+        2) Ao pressionar <b>(&#8594;)</b> envia para o dispositivo pareado o comando <b>rgt</b>\n\n
+        3) Ao pressionar <b>(&#8595;)</b> envia para o dispositivo pareado o comando <b>dwn</b>\n\n
+        4) Ao pressionar <b>(&#8592;)</b> envia para o dispositivo pareado o comando <b>lft</b>\n\n
+        5) Ao pressionar <b>(x)</b> envia para o dispositivo pareado o comando <b>stp</b>\n\n
+        6) Ao arrastar o controle da <b>Velocidade</b> o comando enviado será <b>spd:valor.</b>\n
+        Por exemplo: <b>spd:125</b>\n\n
+        7) O dispositivo pareado pode enviar para o aplicativo um comando no padrão <b>dtc:valor.</b>\n
+        Onde: <b>valor</b> é a distância lida por um sensor do tipo HC-SR04 ou outro sensor que mede aproximação
+    </string>
 
     <string name="text_app_plus" formatted="true">Funcionalidade disponível somente na versão <b>Plus</b>. Considere comprá-la no Google Play Store clicando &lt;a href=\"https://play.google.com/store/apps/details?id=br.com.daciosoftware.bluetoothcommandsplus\"&gt;aqui&lt;/a&gt;</string>
+
 </resources>

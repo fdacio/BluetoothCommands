@@ -27,7 +27,7 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
     private Context appContext;
     private Toolbar toolbar;
     private TextView textViewDistanceValue;
-    private final Boolean appPlus = false;
+    private final Boolean appPlus = true;
     private BluetoothManagerControl bluetoothManagerControl;
 
     public void onAttach(@NonNull Context context) {
@@ -104,6 +104,8 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
         TextView textViewSendSpeed = root.findViewById(R.id.textViewSendSpeed);
         seekBarSpeed.setOnSeekBarChangeListener(new SeekBarChange(textViewSendSpeed));
 
+        updateStatusDevicePaired();
+
         if (!appPlus) {
             new AlertDialogAppPlus(appContext).show();
         }
@@ -146,6 +148,7 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
             textViewDistanceValue.setText(distance);
         }
     }
+
     private class SeekBarChange implements SeekBar.OnSeekBarChangeListener {
         private final TextView text;
         public SeekBarChange(TextView text) {

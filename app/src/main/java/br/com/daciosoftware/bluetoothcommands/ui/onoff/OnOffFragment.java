@@ -115,7 +115,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
             }
             String port = editTextPort1.getText().toString();
             int signal = !toggleButton1.isChecked() ? 1 : 0;
-            byte[] dado = (port + ";" + signal + "\n").getBytes();
+            byte[] dado = (port + ":" + signal + "\n").getBytes();
             bluetoothManagerControl.write(dado);
         });
 
@@ -127,7 +127,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
             }
             String port = editTextPort2.getText().toString();
             int signal = !toggleButton2.isChecked() ? 1 : 0;
-            byte[] dado = (port + ";" + signal + "\n").getBytes();
+            byte[] dado = (port + ":" + signal + "\n").getBytes();
             bluetoothManagerControl.write(dado);
         });
 
@@ -139,7 +139,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
             }
             String port = editTextPort3.getText().toString();
             int signal = !toggleButton3.isChecked() ? 1 : 0;
-            byte[] dado = (port + ";" + signal + "\n").getBytes();
+            byte[] dado = (port + ":" + signal + "\n").getBytes();
             bluetoothManagerControl.write(dado);
         });
 
@@ -151,7 +151,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
             }
             String port = editTextPort4.getText().toString();
             int signal = !toggleButton4.isChecked() ? 1 : 0;
-            byte[] dado = (port + ";" + signal + "\n").getBytes();
+            byte[] dado = (port + ":" + signal + "\n").getBytes();
             bluetoothManagerControl.write(dado);
         });
 

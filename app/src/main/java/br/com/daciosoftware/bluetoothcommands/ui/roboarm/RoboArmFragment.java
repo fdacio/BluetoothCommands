@@ -31,7 +31,7 @@ public class RoboArmFragment extends Fragment implements BluetoothManagerControl
     private SeekBar seekBarServoGarra;
     private Toolbar toolbar;
     private BluetoothManagerControl bluetoothManagerControl;
-    private final boolean appPlus = false;
+    private final boolean appPlus = true;
 
     @Override
     public void onAttach(@NonNull Context context) {
