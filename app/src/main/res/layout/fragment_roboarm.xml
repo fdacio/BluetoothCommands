@@ -16,9 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:subtitleTextColor="@color/white"
         app:title="@string/title_roboarm"
-        app:titleTextColor="@color/white">
-
-    </androidx.appcompat.widget.Toolbar>
+        app:titleTextColor="@color/white"/>
 
     <TextView
         android:id="@+id/textServoBase"
@@ -139,7 +137,7 @@
         tools:text="@string/servo_garra" />
 
     <SeekBar
-        android:id="@+id/seekBarServoGarra"
+        android:id="@+id/seekBarSpeed"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -210,7 +208,7 @@
         android:layout_marginStart="32dp"
         android:text="@string/_0angle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarServoGarra" />
+        app:layout_constraintTop_toBottomOf="@+id/seekBarSpeed" />
 
     <TextView
         android:id="@+id/textView7"
@@ -228,7 +226,7 @@
         android:layout_marginEnd="32dp"
         android:text="@string/_180angle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarServoGarra" />
+        app:layout_constraintTop_toBottomOf="@+id/seekBarSpeed" />
 
     <TextView
         android:id="@+id/textViewValorAnguloBase"
@@ -284,7 +282,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarServoGarra" />
+        app:layout_constraintTop_toBottomOf="@+id/seekBarSpeed" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,7 +15,7 @@ public class AlertDialogInformationRoboCar {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.app_name);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = inflater.inflate(R.layout.alert_dialog_information_roboarm,null);
+        View convertView = inflater.inflate(R.layout.alert_dialog_information_robocar,null);
         builder.setView(convertView);
         builder.setCancelable(true);
         builder.setNeutralButton(R.string.dialog_neutral_button, (d, w) -> d.dismiss());

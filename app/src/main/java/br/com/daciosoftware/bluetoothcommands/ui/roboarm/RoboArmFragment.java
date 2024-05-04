@@ -60,7 +60,7 @@ public class RoboArmFragment extends Fragment implements BluetoothManagerControl
         seekBarServoBase = root.findViewById(R.id.seekBarServoBase);
         seekBarServoAltura = root.findViewById(R.id.seekBarServoAltura);
         seekBarServoAlcance = root.findViewById(R.id.seekBarServoAlcance);
-        seekBarServoGarra = root.findViewById(R.id.seekBarServoGarra);
+        seekBarServoGarra = root.findViewById(R.id.seekBarSpeed);
 
         TextView textViewValorBase = root.findViewById(R.id.textViewValorAnguloBase);
         TextView textViewValorAltura = root.findViewById(R.id.textViewValorAnguloAltura);
@@ -178,22 +178,22 @@ public class RoboArmFragment extends Fragment implements BluetoothManagerControl
                 return;
             }
             if (seekBar.getId() == R.id.seekBarServoBase) {
-                String command = String.format(Locale.getDefault(), "bs;%d\n", seekBar.getProgress());
+                String command = String.format(Locale.getDefault(), "bs:%d\n", seekBar.getProgress());
                 bluetoothManagerControl.write(command.getBytes());
                 return;
             }
             if (seekBar.getId() == R.id.seekBarServoAltura) {
-                String command = String.format(Locale.getDefault(), "at;%d\n", seekBar.getProgress());
+                String command = String.format(Locale.getDefault(), "at:%d\n", seekBar.getProgress());
                 bluetoothManagerControl.write(command.getBytes());
                 return;
             }
             if (seekBar.getId() == R.id.seekBarServoAlcance) {
-                String command = String.format(Locale.getDefault(), "ac;%d\n", seekBar.getProgress());
+                String command = String.format(Locale.getDefault(), "ac:%d\n", seekBar.getProgress());
                 bluetoothManagerControl.write(command.getBytes());
                 return;
             }
-            if (seekBar.getId() == R.id.seekBarServoGarra) {
-                String command = String.format(Locale.getDefault(), "gr;%d\n", seekBar.getProgress());
+            if (seekBar.getId() == R.id.seekBarSpeed) {
+                String command = String.format(Locale.getDefault(), "gr:%d\n", seekBar.getProgress());
                 bluetoothManagerControl.write(command.getBytes());
             }
 

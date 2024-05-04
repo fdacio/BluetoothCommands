@@ -40,7 +40,7 @@
         android:id="@+id/button_send"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="@drawable/background_ic_send_button"
+        android:background="@drawable/background_button_send"
         android:contentDescription="@string/button_send"
         android:src="@drawable/ic_baseline_send_24"
         app:layout_constraintBottom_toBottomOf="@+id/editTextCommand"

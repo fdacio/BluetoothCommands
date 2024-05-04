@@ -5,15 +5,157 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarRoboCar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:subtitleTextColor="@color/white"
+        app:title="@string/title_robocar"
+        app:titleTextColor="@color/white" />
+
+    <TextView
+        android:id="@+id/textViewDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/distance_label"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonDown" />
+
+    <TextView
+        android:id="@+id/textViewDistanceValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/_0Distance"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textViewDistance"
+        app:layout_constraintTop_toTopOf="@+id/textViewDistance" />
+
+    <ImageButton
+        android:id="@+id/imageButtonUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/background_button_robocar"
+        android:contentDescription="@string/up_label"
+        android:padding="4dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_baseline_robocar_up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarRoboCar" />
+
+    <ImageButton
+        android:id="@+id/imageButtonStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="4dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/background_button_robocar"
+        android:contentDescription="@string/stop_label"
+        android:src="@drawable/ic_baseline_robocar_stop"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonUp"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonUp"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonUp" />
+
+    <ImageButton
+        android:id="@+id/imageButtonRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:padding="4dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/background_button_robocar"
+        android:contentDescription="@string/right_label"
+        android:src="@drawable/ic_baseline_robocar_right"
+        app:layout_constraintStart_toEndOf="@+id/imageButtonStop"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonStop" />
+
+    <ImageButton
+        android:id="@+id/imageButtonDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/background_button_robocar"
+        android:contentDescription="@string/down_label"
+        android:padding="4dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_baseline_robocar_down"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonStop"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonStop"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonStop" />
+
+    <ImageButton
+        android:id="@+id/imageButtonLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:padding="4dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/background_button_robocar"
+        android:contentDescription="@string/left_label"
+        android:src="@drawable/ic_baseline_robocar_left"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonStop"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonStop" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/speed_label"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonDown"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonDown"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDistance" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/speed_0"
+        app:layout_constraintStart_toStartOf="@+id/seekBarSpeed"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarSpeed" />
+
+    <TextView
+        android:id="@+id/textViewSendSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/speed_now"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/seekBarSpeed"
+        app:layout_constraintStart_toStartOf="@+id/seekBarSpeed"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarSpeed" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/speed_255"
+        app:layout_constraintEnd_toEndOf="@+id/seekBarSpeed"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarSpeed" />
+
     <SeekBar
-        android:id="@+id/seekBarServoGarra"
+        android:id="@+id/seekBarSpeed"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:labelFor="@id/textServoBase"
-        android:max="180"
+        android:max="255"
         android:maxHeight="3dp"
         android:minHeight="3dp"
         android:paddingStart="24sp"
@@ -25,143 +167,5 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarRoboCar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:subtitleTextColor="@color/white"
-        app:title="@string/title_robocar"
-        app:titleTextColor="@color/white">
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <TextView
-        android:id="@+id/textViewDistance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/distance_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarRoboCar" />
-
-    <TextView
-        android:id="@+id/textViewValorDistancia"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/textViewDistance"
-        android:layout_marginStart="8dp"
-        android:text="@string/_0Distance"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="@+id/textViewDistance" />
-
-    <ImageButton
-        android:id="@+id/imageButtonUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@null"
-        android:contentDescription="@string/up_label"
-        android:paddingVertical="4dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_baseline_robocar_up"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDistance" />
-
-    <ImageButton
-        android:id="@+id/imageButtonStop"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:background="@null"
-        android:contentDescription="@string/stop_label"
-        android:src="@drawable/ic_baseline_robocar_stop"
-        app:layout_constraintEnd_toEndOf="@+id/imageButtonUp"
-        app:layout_constraintStart_toStartOf="@+id/imageButtonUp"
-        app:layout_constraintTop_toBottomOf="@+id/imageButtonUp" />
-
-    <ImageButton
-        android:id="@+id/imageButtonRight"
-        android:layout_width="96dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:background="@null"
-        android:contentDescription="@string/right_label"
-        android:src="@drawable/ic_baseline_robocar_right"
-        app:layout_constraintStart_toEndOf="@+id/imageButtonStop"
-        app:layout_constraintTop_toTopOf="@+id/imageButtonStop" />
-
-    <ImageButton
-        android:id="@+id/imageButtonDown"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@null"
-        android:contentDescription="@string/down_label"
-        android:src="@drawable/ic_baseline_robocar_down"
-        app:layout_constraintEnd_toEndOf="@+id/imageButtonStop"
-        app:layout_constraintStart_toStartOf="@+id/imageButtonStop"
-        app:layout_constraintTop_toBottomOf="@+id/imageButtonStop" />
-
-    <ImageButton
-        android:id="@+id/imageButtonLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:background="@null"
-        android:contentDescription="@string/left_label"
-        android:src="@drawable/ic__baseline_robocar_left"
-        app:layout_constraintEnd_toStartOf="@+id/imageButtonStop"
-        app:layout_constraintTop_toTopOf="@+id/imageButtonStop" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/speed_label"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/imageButtonDown"
-        app:layout_constraintStart_toStartOf="@+id/imageButtonDown"
-        app:layout_constraintTop_toBottomOf="@+id/imageButtonDown" />
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/speed_0"
-        app:layout_constraintStart_toStartOf="@+id/seekBarServoGarra"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarServoGarra" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/speed_now"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/seekBarServoGarra"
-        app:layout_constraintStart_toStartOf="@+id/seekBarServoGarra"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarServoGarra" />
-
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/speed_255"
-        app:layout_constraintEnd_toEndOf="@+id/seekBarServoGarra"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarServoGarra" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
