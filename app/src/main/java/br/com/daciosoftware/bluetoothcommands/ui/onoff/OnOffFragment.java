@@ -161,6 +161,12 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        bluetoothManagerControl.setListenerConnectionDevice(OnOffFragment.this);
+    }
+
     @SuppressLint({"MissingPermission"})
     private void updateStatusDevicePaired() {
         BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
@@ -171,7 +177,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
 
         List<PortEntity> listPorts = portDao.getAll();
 
-        if (listPorts.size() > 0) {
+        if (!listPorts.isEmpty()) {
             if (listPorts.get(0) != null) {
                 PortEntity port1 = listPorts.get(0);
                 port1.pin = Integer.parseInt(editTextPort1.getText().toString());
@@ -207,7 +213,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
 
         List<PortEntity> listPorts = portDao.getAll();
 
-        if (listPorts.size() > 0) {
+        if (!listPorts.isEmpty()) {
             if (listPorts.get(0) != null) {
                 PortEntity port1 = listPorts.get(0);
                 editTextPort1.setText(String.valueOf(port1.pin));
@@ -239,7 +245,7 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
 
         List<PortEntity> listPorts = portDao.getAll();
 
-        if (listPorts.size() == 0) {
+        if (listPorts.isEmpty()) {
             PortEntity port1 = new PortEntity();
             String pinPort1 = editTextPort1.getText().toString();
             try {

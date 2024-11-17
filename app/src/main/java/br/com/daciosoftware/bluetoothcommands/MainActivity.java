@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         bluetoothManagerControl = BluetoothManagerControl.getInstance(this);
+
     }
 
     @Override

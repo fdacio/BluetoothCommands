@@ -27,6 +27,7 @@ import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 
 public class BluetoothFragment extends Fragment implements AdapterView.OnItemClickListener, BluetoothManagerControl.DiscoveryDevices, BluetoothManagerControl.ConnectionDevice {
 
+    private View root;
     private List<BluetoothDevice> listDevices = new ArrayList<>();
     private ListView listViewDevices;
     private Context appContext;
@@ -37,15 +38,16 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     private AlertDialogProgress alertDialogProgressStartDiscovery;
     private AlertDialogDevicePairing alertDialogProgressPairDevice;
 
+    public BluetoothFragment(){}
+
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         appContext = context;
-
         bluetoothManagerControl = BluetoothManagerControl.getInstance(context);
         bluetoothManagerControl.setListenerDiscoveryDevices(BluetoothFragment.this);
         bluetoothManagerControl.setListenerConnectionDevice(BluetoothFragment.this);
-
         alertDialogProgressStartDiscovery = new AlertDialogProgress(context, AlertDialogProgress.TypeDialog.SEARCH_DEVICE);
         alertDialogProgressPairDevice = new AlertDialogDevicePairing(context);
     }
@@ -54,7 +56,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View root = inflater.inflate(R.layout.fragment_bluetooth, container, false);
+        root = inflater.inflate(R.layout.fragment_bluetooth, container, false);
 
         toolbar = root.findViewById(R.id.toolbarBluetooth);
 
@@ -77,6 +79,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         buttonSearch.setVisibility((devicePaired == null) ? View.VISIBLE : View.GONE);
         toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
         loadDevicesBonded();
+        root.refreshDrawableState();
     }
 
     @SuppressLint({"MissingPermission"})
@@ -89,8 +92,9 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onResume() {
         super.onResume();
+        bluetoothManagerControl.setListenerDiscoveryDevices(BluetoothFragment.this);
+        bluetoothManagerControl.setListenerConnectionDevice(BluetoothFragment.this);
         updateMenuBluetooth();
-        loadDevicesBonded();
     }
 
     @Override
@@ -131,7 +135,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         alertDialogProgressPairDevice.dismiss();
         AlertDialogDevicePaired alertDialogDevicePaired = new AlertDialogDevicePaired(appContext, AlertDialogDevicePaired.TypeDialog.SUCCESS_PAIR);
         alertDialogDevicePaired.show(device.getName());
-        loadDevicesBonded();
         updateMenuBluetooth();
     }
 

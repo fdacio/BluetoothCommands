@@ -75,31 +75,45 @@ public class BluetoothManagerControl {
 
     @SuppressLint("MissingPermission")
     public void initDiscovery() {
+
         if (checkNotBluetoothAdapterEnable()) {
             requestEnableBluetoothAdapter();
             return;
         }
+
         if (checkNotPermissionAccessLocation()) {
             requestPermissionAccessLocation();
             return;
         }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (checkNotBluetoothPermissionScan()) {
                 requestPermissionBluetooth();
                 return;
             }
-            if (checkNotBluetoothAdapterEnable()) {
-                requestEnableBluetoothAdapter();
+        } else {
+
+            if (checkNotBluetoothAdminPermission()) {
+                requestPermissionBluetooth();
                 return;
             }
+
+            if (checkNotBluetoothPermission()) {
+                requestPermissionBluetooth();
+                return;
+            }
+
         }
+
         BluetoothManager bluetoothManager = (BluetoothManager) appContext.getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothManager.getAdapter().cancelDiscovery();
         bluetoothManager.getAdapter().startDiscovery();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     @SuppressLint("MissingPermission")
     public void connect(BluetoothDevice device) {
+
         if (checkNotBluetoothAdapterEnable()) {
             requestEnableBluetoothAdapter();
             return;
@@ -110,14 +124,23 @@ public class BluetoothManagerControl {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (checkNotBluetoothPermissionScan()) {
+            if (checkNotBluetoothPermissionConnect()) {
                 requestPermissionBluetooth();
                 return;
             }
-            if (checkNotBluetoothAdapterEnable()) {
-                requestEnableBluetoothAdapter();
+
+        } else {
+
+            if (checkNotBluetoothAdminPermission()) {
+                requestPermissionBluetooth();
                 return;
             }
+
+            if (checkNotBluetoothPermission()) {
+                requestPermissionBluetooth();
+                return;
+            }
+
         }
 
         listenerConnection.initConnection(device);
@@ -162,13 +185,15 @@ public class BluetoothManagerControl {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             ActivityCompat.requestPermissions((Activity) appContext, new String[]{
                     Manifest.permission.BLUETOOTH_CONNECT,
-                    Manifest.permission.BLUETOOTH_SCAN}, REQUEST_PERMISSION_BLUETOOTH);
-        } else {
-            ActivityCompat.requestPermissions((Activity) appContext, new String[]{
-                    Manifest.permission.BLUETOOTH,
-                    Manifest.permission.BLUETOOTH_ADMIN,
+                    Manifest.permission.BLUETOOTH_SCAN,
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_PERMISSION_BLUETOOTH);
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+            }, REQUEST_PERMISSION_BLUETOOTH);
+        } else {
+            ActivityCompat.requestPermissions((Activity) appContext, new String[] {
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_ADMIN
+            }, REQUEST_PERMISSION_BLUETOOTH);
         }
     }
 
@@ -210,8 +235,17 @@ public class BluetoothManagerControl {
     public boolean checkNotBluetoothPermissionConnect() {
         int permissionBluetoothConnect = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_CONNECT);
         return (permissionBluetoothConnect != PackageManager.PERMISSION_GRANTED);
-
     }
+
+    public boolean checkNotBluetoothPermission() {
+        int permissionBluetoothScan = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH);
+        return (permissionBluetoothScan != PackageManager.PERMISSION_GRANTED);
+    }
+    public boolean checkNotBluetoothAdminPermission() {
+        int permissionBluetoothScan = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_ADMIN);
+        return (permissionBluetoothScan != PackageManager.PERMISSION_GRANTED);
+    }
+
 
     public boolean checkNotPermissionAccessLocation() {
         int permissionCoarseLocation = ContextCompat.checkSelfPermission(appContext, Manifest.permission.ACCESS_COARSE_LOCATION);

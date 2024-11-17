@@ -1,14 +1,27 @@
 package br.com.daciosoftware.bluetoothcommands.bluetooth;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Application;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
+
+import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,29 +40,43 @@ public class BluetoothConnectionExecutor {
 
     @SuppressLint("MissingPermission")
     public void executeConnection(BluetoothDevice device) {
+
         Handler handlerConnection = new Handler(Looper.getMainLooper());
         ExecutorService executorConnection = Executors.newSingleThreadExecutor();
+
         try {
+
             executorConnection.execute(() -> {
+
                 BluetoothSocket tmp;
                 String _uuid = "00001101-0000-1000-8000-00805F9B34FB";
+
                 try {
                     tmp = device.createRfcommSocketToServiceRecord(UUID.fromString(_uuid));
                     bluetoothSocket = tmp;
                     OutputStream tmpOut = null;
                     InputStream tmpIn = null;
+
                     if (bluetoothSocket != null) {
                         tmpOut = bluetoothSocket.getOutputStream();
                         tmpIn = bluetoothSocket.getInputStream();
                     }
+
                     mmOutStream = tmpOut;
                     mmInputStream = tmpIn;
                     //Metodo é bloqueante por 12 segundos de timeout
                     bluetoothSocket.connect();
                     connected = bluetoothSocket.isConnected();
+
                 } catch (IOException e) {
                     connected = false;
+                    try {
+                        bluetoothSocket.close();
+                    } catch (IOException closeException) {
+                       throw new RuntimeException(closeException);
+                    }
                 }
+
                 //Aqui seta a conexao
                 handlerConnection.post(() -> {
                     if (connected) {
@@ -101,7 +128,7 @@ public class BluetoothConnectionExecutor {
             }
         } catch (IOException e) {
             connected = false;
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -116,7 +143,7 @@ public class BluetoothConnectionExecutor {
                 bluetoothSocket = null;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

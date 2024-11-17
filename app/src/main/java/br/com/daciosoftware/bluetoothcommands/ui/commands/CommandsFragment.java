@@ -38,6 +38,7 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
     private int lastIndexCommand = 0;
     private BluetoothManagerControl bluetoothManagerControl;
     private CommandDao commandDao;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -63,7 +64,7 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
         //Menu repetir comandos
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_command_repeat) {
-                String lastCommand = (commandsSender.size() > 0) ? commandsSender.get(lastIndexCommand).getTexto() : "";
+                String lastCommand = (!commandsSender.isEmpty()) ? commandsSender.get(lastIndexCommand).getTexto() : "";
                 editTextCommand.setText(lastCommand);
                 lastIndexCommand--;
                 if (lastIndexCommand < 0) lastIndexCommand = commandsSender.size() - 1;
@@ -107,6 +108,12 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
         getCommandsFromDatabase();
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        bluetoothManagerControl.setListenerConnectionDevice(CommandsFragment.this);
     }
 
     @SuppressLint({"MissingPermission"})

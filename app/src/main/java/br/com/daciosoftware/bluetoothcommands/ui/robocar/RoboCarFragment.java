@@ -55,6 +55,7 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
 
         textViewDistanceValue = root.findViewById(R.id.textViewDistanceValue);
 
+        //UP
         ImageButton imageButtonUp = root.findViewById(R.id.imageButtonUp);
         imageButtonUp.setOnClickListener(v -> {
             if (!appPlus) {
@@ -69,6 +70,7 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
             bluetoothManagerControl.write(String.format("%s\n", "up").getBytes());
         });
 
+        //RIGHT
         ImageButton imageButtonRight = root.findViewById(R.id.imageButtonRight);
         imageButtonRight.setOnClickListener(v -> {
             if (!appPlus) {
@@ -83,6 +85,7 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
             bluetoothManagerControl.write(String.format("%s\n", "rgt").getBytes());
         });
 
+        //DOWN
         ImageButton imageButtonDown = root.findViewById(R.id.imageButtonDown);
         imageButtonDown.setOnClickListener(v -> {
             if (!appPlus) {
@@ -97,6 +100,7 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
             bluetoothManagerControl.write(String.format("%s\n", "dwn").getBytes());
         });
 
+        //LEFT
         ImageButton imageButtonLeft = root.findViewById(R.id.imageButtonLeft);
         imageButtonLeft.setOnClickListener(v -> {
             if (!appPlus) {
@@ -111,6 +115,7 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
             bluetoothManagerControl.write(String.format("%s\n", "lft").getBytes());
         });
 
+        //STOP
         ImageButton imageButtonStop = root.findViewById(R.id.imageButtonStop);
         imageButtonStop.setOnClickListener(v -> {
             if (!appPlus) {
