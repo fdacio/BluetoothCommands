@@ -27,7 +27,6 @@ import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 
 public class BluetoothFragment extends Fragment implements AdapterView.OnItemClickListener, BluetoothManagerControl.DiscoveryDevices, BluetoothManagerControl.ConnectionDevice {
 
-    private View root;
     private List<BluetoothDevice> listDevices = new ArrayList<>();
     private ListView listViewDevices;
     private Context appContext;
@@ -56,7 +55,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
         super.onCreateView(inflater, container, savedInstanceState);
 
-        root = inflater.inflate(R.layout.fragment_bluetooth, container, false);
+        View root = inflater.inflate(R.layout.fragment_bluetooth, container, false);
 
         toolbar = root.findViewById(R.id.toolbarBluetooth);
 
@@ -79,7 +78,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         buttonSearch.setVisibility((devicePaired == null) ? View.VISIBLE : View.GONE);
         toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
         loadDevicesBonded();
-        root.refreshDrawableState();
     }
 
     @SuppressLint({"MissingPermission"})

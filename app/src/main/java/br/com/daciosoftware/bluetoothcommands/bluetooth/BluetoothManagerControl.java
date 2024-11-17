@@ -27,7 +27,7 @@ public class BluetoothManagerControl {
     private BluetoothDevice devicePaired;
     private BluetoothBroadcastReceive bluetoothBroadcastReceiver;
     private DiscoveryDevices listenerDiscoveryDevices;
-    private ConnectionDevice listenerConnection;
+    private ConnectionDevice listenerConnectionDevice;
     private final Context appContext;
 
     private static BluetoothManagerControl bluetoothManagerControl;
@@ -47,7 +47,7 @@ public class BluetoothManagerControl {
     }
 
     public void registerBluetoothBroadcastReceive() {
-        bluetoothBroadcastReceiver = new BluetoothBroadcastReceive(listenerDiscoveryDevices);
+        bluetoothBroadcastReceiver = new BluetoothBroadcastReceive(listenerDiscoveryDevices, listenerConnectionDevice);
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         filter.addAction(BluetoothDevice.ACTION_FOUND);
@@ -66,11 +66,11 @@ public class BluetoothManagerControl {
     }
 
     public ConnectionDevice getListenerConnectionDevice() {
-        return this.listenerConnection;
+        return this.listenerConnectionDevice;
     }
 
     public void setListenerConnectionDevice(ConnectionDevice listenerConnection) {
-        this.listenerConnection = listenerConnection;
+        this.listenerConnectionDevice = listenerConnection;
     }
 
     @SuppressLint("MissingPermission")
@@ -143,7 +143,7 @@ public class BluetoothManagerControl {
 
         }
 
-        listenerConnection.initConnection(device);
+        listenerConnectionDevice.initConnection(device);
         BluetoothManager bluetoothManager = (BluetoothManager) appContext.getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothManager.getAdapter().cancelDiscovery();
         bluetoothConnectionExecutor.executeConnection(device);
