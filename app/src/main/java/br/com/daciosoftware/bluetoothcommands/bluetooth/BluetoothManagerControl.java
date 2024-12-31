@@ -103,6 +103,11 @@ public class BluetoothManagerControl {
                 return;
             }
 
+            if (checkNotBluetoothAccessFineLocation()) {
+                requestPermissionAccessLocation();
+                return;
+            }
+
         }
 
         BluetoothManager bluetoothManager = (BluetoothManager) appContext.getSystemService(Context.BLUETOOTH_SERVICE);
@@ -243,6 +248,11 @@ public class BluetoothManagerControl {
     }
     public boolean checkNotBluetoothAdminPermission() {
         int permissionBluetoothScan = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_ADMIN);
+        return (permissionBluetoothScan != PackageManager.PERMISSION_GRANTED);
+    }
+
+    public boolean checkNotBluetoothAccessFineLocation() {
+        int permissionBluetoothScan = ContextCompat.checkSelfPermission(appContext, Manifest.permission.ACCESS_FINE_LOCATION);
         return (permissionBluetoothScan != PackageManager.PERMISSION_GRANTED);
     }
 

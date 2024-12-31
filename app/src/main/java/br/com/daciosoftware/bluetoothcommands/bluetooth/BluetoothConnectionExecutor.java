@@ -1,27 +1,14 @@
 package br.com.daciosoftware.bluetoothcommands.bluetooth;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Application;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
-
-import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -65,8 +52,10 @@ public class BluetoothConnectionExecutor {
                     mmOutStream = tmpOut;
                     mmInputStream = tmpIn;
                     //Metodo é bloqueante por 12 segundos de timeout
-                    bluetoothSocket.connect();
-                    connected = bluetoothSocket.isConnected();
+                    while(!connected) {
+                        bluetoothSocket.connect();
+                        connected = bluetoothSocket.isConnected();
+                    }
 
                 } catch (IOException e) {
                     connected = false;
@@ -97,7 +86,6 @@ public class BluetoothConnectionExecutor {
             }
         }
     }
-
 
     public void executeDisconnect() {
         if (!connected) return;

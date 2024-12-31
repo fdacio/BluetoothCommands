@@ -24,15 +24,15 @@ public class BluetoothDevicesAdapter extends BaseAdapter {
     private final BluetoothManagerControl bluetoothManagerControl;
 
     @SuppressLint("MissingPermission")
-    public BluetoothDevicesAdapter(Context context, List<BluetoothDevice> devices) {
+    public BluetoothDevicesAdapter(Context context, List<BluetoothDevice> devicesBonded) {
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
-        for (BluetoothDevice device : devices) {
+        for (BluetoothDevice device : devicesBonded) {
             if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
                 this.devices.add(device);
             }
         }
-        for (BluetoothDevice device : devices) {
+        for (BluetoothDevice device : devicesBonded) {
             if (device.getBondState() == BluetoothDevice.BOND_NONE) {
                 this.devices.add(device);
             }
