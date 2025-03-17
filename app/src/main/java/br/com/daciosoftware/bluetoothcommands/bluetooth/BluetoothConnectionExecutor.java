@@ -52,17 +52,14 @@ public class BluetoothConnectionExecutor {
                     mmOutStream = tmpOut;
                     mmInputStream = tmpIn;
                     //Metodo é bloqueante por 12 segundos de timeout
-                    while(!connected) {
-                        bluetoothSocket.connect();
-                        connected = bluetoothSocket.isConnected();
-                    }
+                    bluetoothSocket.connect();
 
                 } catch (IOException e) {
                     connected = false;
                     try {
                         bluetoothSocket.close();
                     } catch (IOException closeException) {
-                       throw new RuntimeException(closeException);
+                        throw new RuntimeException(closeException);
                     }
                 }
 
