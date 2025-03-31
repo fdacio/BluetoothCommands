@@ -68,16 +68,22 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         listViewDevices = root.findViewById(R.id.listViewDevices);
         listViewDevices.setOnItemClickListener(this);
 
+        updateMenuBluetooth();
+        updateStatusDevicePaired();
+
         return root;
     }
 
     @SuppressLint({"MissingPermission"})
     private void updateMenuBluetooth() {
         BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
-        buttonDisconnect.setVisibility((devicePaired != null) ? View.VISIBLE : View.GONE);
-        buttonSearch.setVisibility((devicePaired == null) ? View.VISIBLE : View.GONE);
-        toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
-        loadDevicesBonded();
+        if (devicePaired != null) {
+            buttonDisconnect.setVisibility(View.VISIBLE);
+            buttonSearch.setVisibility(View.GONE);
+        } else {
+            buttonDisconnect.setVisibility(View.GONE);
+            buttonSearch.setVisibility(View.VISIBLE);
+        }
     }
 
     @SuppressLint({"MissingPermission"})
@@ -92,7 +98,13 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         super.onResume();
         bluetoothManagerControl.setListenerDiscoveryDevices(BluetoothFragment.this);
         bluetoothManagerControl.setListenerConnectionDevice(BluetoothFragment.this);
-        updateMenuBluetooth();
+        loadDevicesBonded();
+    }
+
+    @SuppressLint({"MissingPermission"})
+    private void updateStatusDevicePaired() {
+        BluetoothDevice devicePaired = bluetoothManagerControl.getDevicePaired();
+        toolbar.setSubtitle((devicePaired != null) ? devicePaired.getName() : null);
     }
 
     @Override
@@ -134,12 +146,15 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         AlertDialogDevicePaired alertDialogDevicePaired = new AlertDialogDevicePaired(appContext, AlertDialogDevicePaired.TypeDialog.SUCCESS_PAIR);
         alertDialogDevicePaired.show(device.getName());
         updateMenuBluetooth();
+        updateStatusDevicePaired();
     }
 
     @Override
     public void postDeviceDisconnection() {
         Toast.makeText(appContext, R.string.message_despair_device, Toast.LENGTH_SHORT).show();
         updateMenuBluetooth();
+        updateStatusDevicePaired();
+        loadDevicesBonded();
     }
 
     @Override
