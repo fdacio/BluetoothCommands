@@ -145,8 +145,10 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         alertDialogProgressPairDevice.dismiss();
         AlertDialogDevicePaired alertDialogDevicePaired = new AlertDialogDevicePaired(appContext, AlertDialogDevicePaired.TypeDialog.SUCCESS_PAIR);
         alertDialogDevicePaired.show(device.getName());
+        loadDevicesBonded();
         updateMenuBluetooth();
         updateStatusDevicePaired();
+
     }
 
     @Override
