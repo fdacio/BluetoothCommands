@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -57,6 +58,19 @@ public class AlertDialogProgress  {
 
     public void show() {
         dialog.show();
+    }
+
+    public void show(Integer seconds) {
+        dialog.show();
+        new CountDownTimer(seconds * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+            @Override
+            public void onFinish() {
+                dialog.dismiss();
+            }
+        }.start();
     }
 
     public void dismiss() {

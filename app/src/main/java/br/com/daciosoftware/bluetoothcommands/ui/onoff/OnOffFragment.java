@@ -20,6 +20,7 @@ import java.util.List;
 
 import br.com.daciosoftware.bluetoothcommands.R;
 import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogInformationOnOff;
+import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogProgress;
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 import br.com.daciosoftware.bluetoothcommands.database.AppDatabase;
 import br.com.daciosoftware.bluetoothcommands.database.BluetoothCommandDatabase;
@@ -76,6 +77,12 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         toolbar.setOnMenuItemClickListener(item -> {
 
             if (item.getItemId() == R.id.action_reload_stats) {
+                if (bluetoothManagerControl.getDevicePaired() == null) {
+                    Toast.makeText(appContext, R.string.message_dont_device_pair, Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                AlertDialogProgress dialog = new AlertDialogProgress(appContext, AlertDialogProgress.TypeDialog.WAIT);
+                dialog.show(6);
                 bluetoothManagerControl.write(String.format("%s\n", "tab:3").getBytes());
                 return true;
             }
