@@ -14,7 +14,7 @@ import br.com.daciosoftware.bluetoothcommands.R;
 
 public class AlertDialogProgress  {
     public enum TypeDialog {
-        SEARCH_DEVICE, PAIR_DEVICE
+        SEARCH_DEVICE, PAIR_DEVICE, WAIT
     }
     private final AlertDialog dialog;
 
@@ -44,6 +44,13 @@ public class AlertDialogProgress  {
                 message.setText(R.string.message_pair_device);
                 break;
             }
+
+            case WAIT: {
+                builder.setCancelable(false);
+                message.setText(R.string.message_wait);
+                break;
+            }
+
         }
         dialog = builder.create();
     }

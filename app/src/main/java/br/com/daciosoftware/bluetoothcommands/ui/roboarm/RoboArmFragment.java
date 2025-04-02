@@ -79,7 +79,7 @@ public class RoboArmFragment extends Fragment implements BluetoothManagerControl
 
         updateStatusDevicePaired();
 
-        bluetoothManagerControl.write(String.format("%s\n", "F2").getBytes());
+        bluetoothManagerControl.write(String.format("%s\n", "tab:4").getBytes());
 
         if (!appPlus) {
             new AlertDialogAppPlus(appContext).show();

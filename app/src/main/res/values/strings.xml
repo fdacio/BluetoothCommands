@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Bluetooth Commands</string>
     <string name="title_bluetooth">Bluetooth</string>
     <string name="title_commands">Comandos</string>
@@ -17,6 +17,7 @@
     <string name="text_list_clear">Lista de Comandos Vazia</string>
     <string name="message_search_device">Aguarde, procurando por dispositivos</string>
     <string name="message_pair_device">Aguarde, pareando dispositivo</string>
+    <string name="message_wait">Aguarde ...</string>
     <string name="dialog_negative_button">Cancelar</string>
     <string name="dialog_neutral_button">OK</string>
     <string name="dialog_save_button">Salvar</string>
@@ -45,6 +46,7 @@
     <string name="label_port3">Porta 3</string>
     <string name="label_port4">Porta 4</string>
     <string name="edit_label">Editar Rótulos</string>
+    <string name="reload_stats_label">Recarregar</string>
     <string name="distance_label">Distância:</string>
     <string name="up_label">Up</string>
     <string name="right_label">Right</string>
@@ -56,7 +58,7 @@
     <string name="speed_255">255</string>
     <string name="speed_now">0</string>
     <string name="_0Distance">0</string>
-    <string name="title_information_command">Informações sobre o comando enviado</string>
+    <string name="title_information_command" tools:ignore="Typos">Informações sobre o comando enviado</string>
 
     <string name="text_information_command">
         O Aplicativo envia para o dispositivo pareado o comando no padrão <b>"Porta:Sinal</b>\n\n
@@ -65,7 +67,7 @@
         2) Ao clicar no botão em estado <b>OFF</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13:0</b>\n\n
     </string>
 
-    <string name="text_information_command_roboarm">
+    <string name="text_information_command_roboarm" tools:ignore="Typos">
         O Aplicativo envia para o dispositivo pareado o comando no padrão <b>"Servo:Angulo</b>\n\n
         Por exemplo:\n
         1) Ao arrastar o controle da <b>BASE</b> para o angulo de 90º, o comando enviado será <b>bs:90</b>\n\n

@@ -34,10 +34,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (requestCode == REQUEST_PERMISSION_BLUETOOTH) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (permissions[0].equals(Manifest.permission.BLUETOOTH_CONNECT)) {
                     bluetoothManagerControl.requestEnableBluetoothAdapter();
+                }
+                if (permissions[0].equals(Manifest.permission.BLUETOOTH)) {
+                    bluetoothManagerControl.requestPermissionBluetooth();
+                }
+                if (permissions[0].equals(Manifest.permission.BLUETOOTH_ADMIN)) {
+                    bluetoothManagerControl.requestPermissionBluetooth();
                 }
             } else {
                 Toast.makeText(MainActivity.this, R.string.message_permission_important, Toast.LENGTH_LONG).show();

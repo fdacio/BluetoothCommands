@@ -140,6 +140,8 @@ public class RoboCarFragment extends Fragment implements BluetoothManagerControl
             new AlertDialogAppPlus(appContext).show();
         }
 
+        bluetoothManagerControl.write(String.format("%s\n", "tab:5").getBytes());
+
         return root;
     }
 

@@ -71,6 +71,8 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         updateMenuBluetooth();
         updateStatusDevicePaired();
 
+        bluetoothManagerControl.write(String.format("%s\n", "tab:1").getBytes());
+
         return root;
     }
 

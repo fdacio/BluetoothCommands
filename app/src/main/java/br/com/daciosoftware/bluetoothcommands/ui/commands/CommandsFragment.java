@@ -107,6 +107,8 @@ public class CommandsFragment extends Fragment implements BluetoothManagerContro
         updateStatusDevicePaired();
         getCommandsFromDatabase();
 
+        bluetoothManagerControl.write(String.format("%s\n", "tab:2").getBytes());
+
         return root;
     }
 

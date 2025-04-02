@@ -20,6 +20,7 @@ import java.util.List;
 
 import br.com.daciosoftware.bluetoothcommands.R;
 import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogInformationOnOff;
+import br.com.daciosoftware.bluetoothcommands.alertdialog.AlertDialogProgress;
 import br.com.daciosoftware.bluetoothcommands.bluetooth.BluetoothManagerControl;
 import br.com.daciosoftware.bluetoothcommands.database.AppDatabase;
 import br.com.daciosoftware.bluetoothcommands.database.BluetoothCommandDatabase;
@@ -74,6 +75,12 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
         toggleButton4 = root.findViewById(R.id.toggleButton4);
 
         toolbar.setOnMenuItemClickListener(item -> {
+
+            if (item.getItemId() == R.id.action_reload_stats) {
+                bluetoothManagerControl.write(String.format("%s\n", "tab:3").getBytes());
+                return true;
+            }
+
             if (item.getItemId() == R.id.action_edit_label) {
                 updatePortsToDatabase();
                 PortsEditLabelDialog portsEditLabelDialog = new PortsEditLabelDialog(appContext, OnOffFragment.this);
@@ -86,7 +93,6 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
                 dialogInformation.show();
                 return true;
             }
-
             return false;
         });
 
@@ -314,6 +320,32 @@ public class OnOffFragment extends Fragment implements BluetoothManagerControl.C
 
     @Override
     public void postDataReceived(String dataReceived) {
+        String[] data = dataReceived.split(":");
+        String port = data[0];
+        String signal = data[1];
+        List<PortEntity> listPorts = portDao.getAll();
+        if (!listPorts.isEmpty()) {
+            if (listPorts.get(0) != null) {
+                PortEntity port1 = listPorts.get(0);
+                if (port1.pin == Integer.parseInt(port))
+                    toggleButton1.setChecked(signal.equals("0"));
+            }
+            if (listPorts.get(1) != null) {
+                PortEntity port2 = listPorts.get(1);
+                if (port2.pin == Integer.parseInt(port))
+                    toggleButton2.setChecked(signal.equals("0"));
+            }
+            if (listPorts.get(2) != null) {
+                PortEntity port3 = listPorts.get(2);
+                if (port3.pin == Integer.parseInt(port))
+                    toggleButton3.setChecked(signal.equals("0"));
+            }
+            if (listPorts.get(3) != null) {
+                PortEntity port4 = listPorts.get(3);
+                if (port4.pin == Integer.parseInt(port))
+                    toggleButton4.setChecked(signal.equals("0"));
+            }
+        }
 
     }
 
