@@ -115,20 +115,22 @@ public class BluetoothManagerControl {
         bluetoothManager.getAdapter().startDiscovery();
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     @RequiresApi(api = Build.VERSION_CODES.S)
-    @SuppressLint("MissingPermission")
     public void connect(BluetoothDevice device) {
 
         if (checkNotBluetoothAdapterEnable()) {
             requestEnableBluetoothAdapter();
             return;
         }
+        
         if (checkNotPermissionAccessLocation()) {
             requestPermissionAccessLocation();
             return;
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+
             if (checkNotBluetoothPermissionConnect()) {
                 requestPermissionBluetooth();
                 return;
@@ -145,9 +147,7 @@ public class BluetoothManagerControl {
                 requestPermissionBluetooth();
                 return;
             }
-
         }
-
         listenerConnectionDevice.initConnection(device);
         BluetoothManager bluetoothManager = (BluetoothManager) appContext.getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothManager.getAdapter().cancelDiscovery();
@@ -195,7 +195,7 @@ public class BluetoothManagerControl {
                     Manifest.permission.ACCESS_COARSE_LOCATION
             }, REQUEST_PERMISSION_BLUETOOTH);
         } else {
-            ActivityCompat.requestPermissions((Activity) appContext, new String[] {
+            ActivityCompat.requestPermissions((Activity) appContext, new String[]{
                     Manifest.permission.BLUETOOTH,
                     Manifest.permission.BLUETOOTH_ADMIN
             }, REQUEST_PERMISSION_BLUETOOTH);
@@ -246,6 +246,7 @@ public class BluetoothManagerControl {
         int permissionBluetoothScan = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH);
         return (permissionBluetoothScan != PackageManager.PERMISSION_GRANTED);
     }
+
     public boolean checkNotBluetoothAdminPermission() {
         int permissionBluetoothScan = ContextCompat.checkSelfPermission(appContext, Manifest.permission.BLUETOOTH_ADMIN);
         return (permissionBluetoothScan != PackageManager.PERMISSION_GRANTED);
