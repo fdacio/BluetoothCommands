@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.commands.CommandsFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarOnOff"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:subtitleTextColor="@color/white"
+        app:title="@string/title_on_off"
+        app:titleTextColor="@color/white"/>
+
+    <!--BLOCO 1 -->
+    <TextView
+        android:id="@+id/textViewLabelPort1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/label_port1"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarOnOff" />
+
+    <EditText
+        android:id="@+id/editTextPort1"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/background_edit_port"
+        android:focusable="false"
+        android:hint="@string/label_port1"
+        android:inputType="none"
+        android:textIsSelectable="true"
+        app:layout_constraintEnd_toStartOf="@+id/toggleButton1"
+        app:layout_constraintStart_toStartOf="@+id/textViewLabelPort1"
+        app:layout_constraintTop_toBottomOf="@+id/textViewLabelPort1"
+        android:autofillHints="" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton1"
+        style="@android:style/Widget.Material.Button.Toggle"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/background_button_toggle_on_off"
+        android:textColor="@color/white"
+        android:checked="true"
+        android:text="@string/button_on"
+        android:textOff="@string/button_off"
+        android:textOn="@string/button_on"
+        android:theme="@style/Theme.BluetoothCommands"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextPort1"
+        app:layout_constraintTop_toTopOf="@+id/editTextPort1" />
+
+    <!--BLOCO 2 -->
+    <TextView
+        android:id="@+id/textViewLabelPort2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/label_port2"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toggleButton1" />
+
+    <EditText
+        android:id="@+id/editTextPort2"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/background_edit_port"
+        android:focusable="false"
+        android:hint="@string/label_port2"
+        android:inputType="none"
+        android:textIsSelectable="true"
+        android:autofillHints=""
+        app:layout_constraintEnd_toStartOf="@+id/toggleButton2"
+        app:layout_constraintStart_toStartOf="@+id/textViewLabelPort2"
+        app:layout_constraintTop_toBottomOf="@+id/textViewLabelPort2" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton2"
+        style="@android:style/Widget.Material.Button.Toggle"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:layout_marginEnd="8dp"
+        android:checked="true"
+        android:text="@string/button_on"
+        android:background="@drawable/background_button_toggle_on_off"
+        android:textColor="@color/white"
+        android:textOff="@string/button_off"
+        android:textOn="@string/button_on"
+        android:theme="@style/Theme.BluetoothCommands"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextPort2"
+        app:layout_constraintTop_toTopOf="@+id/editTextPort2"
+        tools:text="@string/button_on" />
+
+
+    <!--BLOCO 3 -->
+    <TextView
+        android:id="@+id/textViewLabelPort3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/label_port3"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toggleButton2" />
+
+    <EditText
+        android:id="@+id/editTextPort3"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/background_edit_port"
+        android:focusable="false"
+        android:hint="@string/label_port3"
+        android:inputType="none"
+        android:autofillHints=""
+        android:textIsSelectable="true"
+        app:layout_constraintEnd_toStartOf="@+id/toggleButton3"
+        app:layout_constraintStart_toStartOf="@+id/textViewLabelPort3"
+        app:layout_constraintTop_toBottomOf="@+id/textViewLabelPort3" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton3"
+        style="@android:style/Widget.Material.Button.Toggle"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:layout_marginEnd="8dp"
+        android:checked="true"
+        android:text="@string/button_on"
+        android:background="@drawable/background_button_toggle_on_off"
+        android:textColor="@color/white"
+        android:textOff="@string/button_off"
+        android:textOn="@string/button_on"
+        android:theme="@style/Theme.BluetoothCommands"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextPort3"
+        app:layout_constraintTop_toTopOf="@+id/editTextPort3"
+        tools:text="@string/button_on" />
+
+
+
+    <!--BLOCO 4 -->
+    <TextView
+        android:id="@+id/textViewLabelPort4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/label_port4"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toggleButton3" />
+
+    <EditText
+        android:id="@+id/editTextPort4"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/background_edit_port"
+        android:focusable="false"
+        android:hint="@string/label_port4"
+        android:inputType="none"
+        android:autofillHints=""
+        android:textIsSelectable="true"
+        app:layout_constraintEnd_toStartOf="@+id/toggleButton4"
+        app:layout_constraintStart_toStartOf="@+id/textViewLabelPort4"
+        app:layout_constraintTop_toBottomOf="@+id/textViewLabelPort4" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton4"
+        style="@android:style/Widget.Material.Button.Toggle"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:layout_marginEnd="8dp"
+        android:checked="true"
+        android:text="@string/button_on"
+        android:background="@drawable/background_button_toggle_on_off"
+        android:textColor="@color/white"
+        android:textOff="@string/button_off"
+        android:textOn="@string/button_on"
+        android:theme="@style/Theme.BluetoothCommands"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextPort4"
+        app:layout_constraintTop_toTopOf="@+id/editTextPort4"
+        tools:text="@string/button_on" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

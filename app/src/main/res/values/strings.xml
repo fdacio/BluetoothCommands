@@ -1,0 +1,100 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Bluetooth Commands</string>
+    <string name="title_bluetooth">Bluetooth</string>
+    <string name="title_commands">Comandos</string>
+    <string name="title_on_off">On/Off</string>
+    <string name="title_roboarm">RoboArm</string>
+    <string name="title_robocar">RoboCar</string>
+    <string name="edit_commands">Comando</string>
+    <string name="repeat_commands">Repetir o Comando</string>
+    <string name="button_send">Enviar</string>
+    <string name="scan">Procurar</string>
+    <string name="device">Dispositivo</string>
+    <string name="disconnect">Desparear</string>
+    <string name="button_clear">Limpar</string>
+    <string name="button_on">On</string>
+    <string name="button_off">Off</string>
+    <string name="text_list_clear">Lista de Comandos Vazia</string>
+    <string name="message_search_device">Aguarde, procurando por dispositivos</string>
+    <string name="message_pair_device">Aguarde, pareando dispositivo</string>
+    <string name="message_wait">Aguarde ...</string>
+    <string name="dialog_negative_button">Cancelar</string>
+    <string name="dialog_neutral_button">OK</string>
+    <string name="dialog_save_button">Salvar</string>
+    <string name="message_despair_device">Dispositivo despareado</string>
+    <string name="message_pair_device_success">Dispositivo pareado com sucesso</string>
+    <string name="message_fail_connection">Não foi possível parear com dispositivo</string>
+    <string name="message_paired_device_already_exists">Já existe um dispositivo pareado</string>
+    <string name="message_permission_important">Permissão solicitada é importante para o uso da aplicação</string>
+    <string name="message_bluetooth_activate_success">Bluetooth ativido com sucesso</string>
+    <string name="message_bluetooth_activate_important">Ativar o Bluetooth é importante para o uso da aplicação</string>
+    <string name="message_dont_device_pair">Não há dispositivo pareado</string>
+    <string name="information_commands">Informações</string>
+    <string name="text_name_device">Nome do Dispositivo</string>
+    <string name="text_address_device">Endereço do Dispositivo</string>
+    <string name="text_devices_header_pair">Dispositivos Salvos</string>
+    <string name="text_devices_header_found">Dispositivos Encontrados</string>
+    <string name="servo_base">Base</string>
+    <string name="servo_altura">Altura</string>
+    <string name="servo_alcance">Alcance</string>
+    <string name="servo_garra">Garra</string>
+    <string name="_0angle">0°</string>
+    <string name="_180angle">180°</string>
+    <string name="text_port">Porta</string>
+    <string name="label_port1">Porta 1</string>
+    <string name="label_port2">Porta 2</string>
+    <string name="label_port3">Porta 3</string>
+    <string name="label_port4">Porta 4</string>
+    <string name="edit_label">Editar Rótulos</string>
+    <string name="reload_stats_label">Recarregar</string>
+    <string name="distance_label">Distância:</string>
+    <string name="up_label">Up</string>
+    <string name="right_label">Right</string>
+    <string name="down_label">Down</string>
+    <string name="left_label">Left</string>
+    <string name="stop_label">Stop</string>
+    <string name="speed_label">Velocidade</string>
+    <string name="speed_0">0</string>
+    <string name="speed_255">255</string>
+    <string name="speed_now">0</string>
+    <string name="_0Distance">0</string>
+    <string name="title_information_command" tools:ignore="Typos">Informações sobre o comando enviado</string>
+
+    <string name="text_information_command">
+        O Aplicativo envia para o dispositivo pareado o comando no padrão <b>"Porta:Sinal</b>\n\n
+        Por exemplo:\n
+        1) Ao clicar no botão em estado <b>ON</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13:1</b>\n\n
+        2) Ao clicar no botão em estado <b>OFF</b> e a porta estiver selecionada com <b>13</b>, o comando enviado será <b>13:0</b>\n\n
+    </string>
+
+    <string name="text_information_command_roboarm" tools:ignore="Typos">
+        O Aplicativo envia para o dispositivo pareado o comando no padrão <b>"Servo:Angulo</b>\n\n
+        Por exemplo:\n
+        1) Ao arrastar o controle da <b>BASE</b> para o angulo de 90º, o comando enviado será <b>bs:90</b>\n\n
+        2) Ao arrastar o controle da <b>ALTURA</b> para o angulo de 45º, o comando enviado será <b>at:45</b>\n\n
+        3) Ao arrastar o controle do <b>ALCANCE</b> para o angulo de 60º, o comando enviado será <b>ac:60</b>\n\n
+        4) Ao arrastar o controle da <b>GARRA</b> para o angulo de 100º, o comando enviado será <b>gr:100</b>\n\n
+        5) O dispositivo pareado pode enviar para o aplicativo um comando no padrão:<b>ags:ang1-ang2-ang3-ang4</b>\n
+        Onde:\n
+        a) <b>ang1</b> é valor do ângulo da <b>BASE</b>\n
+        b) <b>ang2</b> é valor do ângulo da <b>ALTURA</b>\n
+        c) <b>ang3</b> é valor do ângulo dO <b>ALCANCE</b>\n
+        d) <b>ang4</b> é valor do ângulo da <b>GARRA</b>\n
+        Isso fará com que o aplicativo reposicione os controles de acordo com os valores de ângulos informados
+    </string>
+
+    <string name="text_information_command_robocar">
+        1) Ao pressionar <b>(&#8593;)</b> envia para o dispositivo pareado o comando <b>up</b>\n\n
+        2) Ao pressionar <b>(&#8594;)</b> envia para o dispositivo pareado o comando <b>rgt</b>\n\n
+        3) Ao pressionar <b>(&#8595;)</b> envia para o dispositivo pareado o comando <b>dwn</b>\n\n
+        4) Ao pressionar <b>(&#8592;)</b> envia para o dispositivo pareado o comando <b>lft</b>\n\n
+        5) Ao pressionar <b>(x)</b> envia para o dispositivo pareado o comando <b>stp</b>\n\n
+        6) Ao arrastar o controle da <b>Velocidade</b> o comando enviado será <b>spd:valor.</b>\n
+        Por exemplo: <b>spd:125</b>\n\n
+        7) O dispositivo pareado pode enviar para o aplicativo um comando no padrão <b>dtc:valor.</b>\n
+        Onde: <b>valor</b> é a distância lida por um sensor do tipo HC-SR04 ou outro sensor que mede aproximação
+    </string>
+
+    <string name="text_app_plus" formatted="true">Funcionalidade disponível somente na versão <b>Plus</b>. Considere comprá-la no Google Play Store clicando &lt;a href=\"https://play.google.com/store/apps/details?id=br.com.daciosoftware.bluetoothcommandsplus\"&gt;aqui&lt;/a&gt;</string>
+
+</resources>

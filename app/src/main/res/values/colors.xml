@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black_700">#070707</color>
+    <color name="teal_700">#FF009688</color>
+    <color name="teal_200">#00BCD4</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gray">#B3B3B3</color>
+    <color name="text_device">#0C0C70</color>
+    <color name="comando_enviado">#0C0C70</color>
+    <color name="comando_recebido">#FF9800</color>
+    <color name="red">#F44336</color>
+    <color name="green">#FF009688</color>
+    <color name="ic_launcher_background">#B4F5DB</color>
+    <color name="button_menu">#070707</color>
+</resources>

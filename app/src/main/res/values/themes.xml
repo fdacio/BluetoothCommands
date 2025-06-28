@@ -1,0 +1,25 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.BluetoothCommands" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#000000</item>
+        <item name="colorPrimaryVariant">#1F2020</item>
+        <item name="colorOnPrimary">#ffffff</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#FF03DAC5</item>
+        <item name="colorSecondaryVariant">#FF018786</item>
+        <item name="colorOnSecondary">#ffffff</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:actionMenuTextColor">@color/white</item>
+
+    </style>
+
+</resources>

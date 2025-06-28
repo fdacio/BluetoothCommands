@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_bluetooth">
+
+    <fragment
+        android:id="@+id/navigation_bluetooth"
+        android:name="br.com.daciosoftware.bluetoothcommands.ui.bluetooth.BluetoothFragment"
+        android:label="@string/title_bluetooth"
+        tools:layout="@layout/fragment_bluetooth" />
+
+    <fragment
+        android:id="@+id/navigation_commands"
+        android:name="br.com.daciosoftware.bluetoothcommands.ui.commands.CommandsFragment"
+        android:label="@string/title_commands"
+        tools:layout="@layout/fragment_commands" />
+
+    <fragment
+        android:id="@+id/navigation_on_off"
+        android:name="br.com.daciosoftware.bluetoothcommands.ui.onoff.OnOffFragment"
+        android:label="@string/title_on_off"
+        tools:layout="@layout/fragment_on_off"/>
+
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_roboarm"-->
+<!--        android:name="br.com.daciosoftware.bluetoothcommands.ui.roboarm.RoboArmFragment"-->
+<!--        android:label="@string/title_roboarm"-->
+<!--        tools:layout="@layout/fragment_roboarm" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_robocar"-->
+<!--        android:name="br.com.daciosoftware.bluetoothcommands.ui.robocar.RoboCarFragment"-->
+<!--        android:label="@string/title_robocar"-->
+<!--        tools:layout="@layout/fragment_robocar" />-->
+
+</navigation>
