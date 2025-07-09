@@ -39,7 +39,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
     public BluetoothFragment(){}
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

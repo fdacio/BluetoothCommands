@@ -184,36 +184,4 @@ public class BluetoothConnectionExecutor {
             }
         }
     }
-
-    @Deprecated
-    private class BluetoothConnectionListenerServer implements Runnable {
-        @Override
-        public void run() {
-            while (connected) {
-                try {
-                    if (mmInputStream != null) {
-                        byte[] buffer = new byte[1024];
-                        int byteLidos = mmInputStream.read(buffer);
-                        if (byteLidos > 0) {
-                            StringBuilder leitura = new StringBuilder();
-                            for (int i = 0; i < 1024; i++) {
-                                if ((buffer[i] != '\n') && (buffer[i] != '\r')) {
-                                    leitura.append((char) buffer[i]);
-                                } else {
-                                    if (leitura.length() > 0) {
-                                        mmBluetoothManagerControl.getListenerConnectionDevice().postDataReceived(leitura.toString());
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                } catch (IOException e) {
-                    break;
-                }
-            }
-            executeDisconnect();
-        }
-    }
-
 }
